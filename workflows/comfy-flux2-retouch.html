@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>《Flux.2产品精修工作流指南》</title>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'AaFengKuangYuanShiRen';
+      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-card: rgba(255,255,255,0.06);
+      --bg-card-hover: rgba(255,255,255,0.1);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.7);
+      --text-muted: rgba(255,255,255,0.4);
+      --accent: #0071e3;
+      --accent-green: #30D158;
+      --pink: #ff375f;
+      --border-radius: 16px;
+      --border-radius-sm: 8px;
+      --border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .brand-yahee { color: #046ccc; }
+    .brand-tech { color: #cc0504; }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      line-height: 1.8;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #fff;
+      width: 0%;
+      transform-origin: left center;
+      transition: width 0.3s ease-out;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      z-index: 100;
+      background: rgba(255,255,255,0.08);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      border-bottom: var(--border);
+    }
+    .nav a { color: var(--text-primary); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.12em; font-weight: 600; transition: 0.2s; }
+    .nav a:hover { color: rgba(255,255,255,0.7); }
+
+    /* Container */
+    .container { max-width: 1000px; margin: 0 auto; padding: 14vh 2rem 12vh; }
+
+    /* Title */
+    .main-title {
+      font-family: 'AaFengKuangYuanShiRen', 'Inter', sans-serif;
+      font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .main-subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+
+    /* Image styling */
+    .img-fluid {
+      width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      border: var(--border);
+      display: block;
+    }
+
+    .img-caption {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      margin: 0.8rem 0 2rem;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    /* Section */
+    .section-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: var(--border);
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Chapter */
+    .chapter {
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+    }
+
+    .chapter-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .chapter-number {
+      font-size: 0.75rem;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .chapter-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    /* Tech Card */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      padding: 1.2rem;
+    }
+
+    .tech-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .tech-card.accent-green {
+      border-color: rgba(48, 209, 88, 0.3);
+      background: rgba(48, 209, 88, 0.08);
+    }
+
+    .tech-card.accent-green h3 {
+      color: var(--accent-green);
+    }
+
+    /* Step Cards */
+    .step-card {
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--accent);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+    }
+
+    .step-card.final-step {
+      border-left-color: var(--accent-green);
+    }
+
+    .step-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .step-card.final-step .step-tag {
+      color: var(--accent-green);
+    }
+
+    .step-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .step-desc strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Image Grid */
+    .img-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .img-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .img-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .img-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .img-grid img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      border: var(--border);
+    }
+
+    /* Flex Row Layout (Step 7) */
+    .flex-row {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      margin-top: 1.2rem;
+    }
+
+    .flex-row .text-content {
+      flex: 1;
+    }
+
+    .flex-row .image-content {
+      flex: 1;
+    }
+
+    .flex-row img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      border: var(--border);
+    }
+
+    /* Arrow */
+    .step-arrow {
+      text-align: center;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      margin: 1rem 0;
+    }
+
+    /* Compliance Section */
+    .compliance-box {
+      background: rgba(48, 209, 88, 0.08);
+      border: 1px solid rgba(48, 209, 88, 0.3);
+      border-radius: var(--border-radius);
+      padding: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .compliance-box p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .license-header {
+      border-color: rgba(48, 209, 88, 0.3);
+    }
+
+    .license-header .chapter-number {
+      color: var(--accent-green);
+    }
+
+    /* Architecture Image */
+    .arch-section {
+      margin: 3rem 0;
+    }
+
+    /* Image with round corners and border */
+    .rounded-img {
+      border-radius: var(--border-radius);
+      border: var(--border);
+      /* overflow:hidden removed — clip via img border-radius so mb-card::after mask works */
+    }
+
+    .rounded-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--border-radius);
+      border: none;
+    }
+
+    /* Comparison Grid */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .comparison-item {
+      text-align: center;
+    }
+
+    .comparison-item img {
+      width: 100%;
+      border-radius: var(--border-radius);
+      border: var(--border);
+    }
+
+    .comparison-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.6rem;
+      display: block;
+    }
+
+    /* Mnemonic Box */
+    .mnemonic-box {
+      background: linear-gradient(135deg, rgba(0,113,227,0.15), rgba(0,113,227,0.05));
+      border: 1px solid rgba(0,113,227,0.3);
+      border-radius: var(--border-radius);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .mnemonic-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.8rem;
+    }
+
+    .mnemonic-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Code Highlight */
+    .code-highlight {
+      background: var(--bg-card);
+      border: var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--border-radius);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .code-highlight code {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* Shortcut Grid */
+    .shortcut-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 1.2rem;
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: var(--border-radius-sm);
+    }
+
+    .shortcut-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .kbd-group { display: flex; gap: 4px; }
+
+    .kbd {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-family: 'SF Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    /* QA Card */
+    .qa-card {
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .qa-q {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .qa-a {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Stage Card */
+    .stage-card {
+      background: var(--bg-card);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      padding: 1.2rem;
+    }
+
+    .stage-card.highlight {
+      border-color: rgba(0,122,255,0.2);
+    }
+
+    .stage-card.master {
+      background: var(--bg-card);
+      border: var(--border);
+    }
+
+    .stage-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .flex-row {
+        flex-direction: column;
+      }
+      .img-grid.cols-2,
+      .img-grid.cols-3,
+      .img-grid.cols-4 {
+        grid-template-columns: 1fr;
+      }
+      .comparison-grid,
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 图片点击放大样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(255,255,255,0.08);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      cursor: zoom-out;
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      transition: transform 0.3s ease;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .modal.show .modal-content {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .chapter img,
+    .arch-section img {
+      cursor: zoom-in;
+      transition: opacity 0.3s;
+    }
+    .chapter img:hover,
+    .arch-section img:hover {
+      opacity: 0.9;
+    }
+    html, body {
+      overscroll-behavior: none;
+    }
+
+    /* ---- THANKS FOR WATCHING ---- */
+    .thanks-section {
+      text-align: center;
+      padding: 10vh 2rem 14vh;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .thanks-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .thanks-sub {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.25);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+    .thanks-title {
+      font-family: 'Roboto Flex', system-ui, sans-serif;
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      font-weight: 400;
+      font-variation-settings: 'wght' 400, 'opsz' 9;
+      color: var(--text-primary);
+      letter-spacing: 0.12em;
+      line-height: 1;
+      margin: 0 0 2rem;
+      text-transform: uppercase;
+    }
+    .thanks-title .vp-word { display: inline-block; white-space: nowrap; }
+    .thanks-title .vp-word + .vp-word { margin-left: 0.25em; }
+    .thanks-title span span { display: inline-block; transition: font-variation-settings 0.3s ease; }
+    .thanks-divider {
+      width: 48px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin-bottom: 2rem;
+    }
+    .thanks-meta {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      margin: 0;
+    }
+    /* Scroll-reveal animation (same as index.html about-line) */
+    .reveal-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(2em);
+      transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-line.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .thanks-credit {
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      margin-top: 2.5rem;
+      font-weight: 500;
+    }
+
+    /* ---- MAGIC BENTO ---- */
+    .mb-card {
+      position: relative;
+      overflow: hidden;
+      --glow-x: 50%;
+      --glow-y: 50%;
+      --glow-intensity: 0;
+      --glow-radius: 200px;
+      --glow-color: 255, 255, 255;
+      transition: transform 0.15s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+    }
+    /* Border glow via ::after mask */
+    .mb-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 4px;
+      background: radial-gradient(
+        var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.45)) 30%,
+        transparent 60%
+      );
+      border-radius: inherit;
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+      transition: opacity 0.3s ease;
+    }
+    /* Ripple */
+    .mb-ripple {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10;
+      transform: scale(0);
+      opacity: 1;
+    }
+  </style>
+  <!-- Liquid Glass SVG Filter -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feColorMatrix in="blurred" type="saturate" values="1.15" />
+      </filter>
+    </defs>
+  </svg>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/">← HOME</a>
+    <span>Flux.2 工作流 FLUX.2 WORKFLOW</span>
+  </nav>
+
+  <div class="container">
+    <h1 class="main-title">《Flux.2产品精修工作流指南》</h1>
+    <p class="main-subtitle">Flux.2 Workflow: Industrial Precision Design & Execution</p>
+
+    <!-- COMPLIANCE: 生产合规与模型授权说明 -->
+    <section class="chapter license-header">
+      <div class="chapter-header">
+        <span class="chapter-number">COMPLIANCE</span>
+        <h2 class="chapter-title">生产合规与模型授权说明</h2>
+        <p class="section-subtitle">Production Compliance & Model Licensing</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h3>4B 型号 (基础商用)</h3>
+          <p><strong>协议：</strong><a href="https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md" target="_blank" style="color: var(--accent);">Apache 2.0</a></p>
+          <p>开源协议保障，支持全渠道商业化分发，适用于对生成速度有较高要求的生产场景。</p>
+        </div>
+        <div class="tech-card accent-green">
+          <h3>9B 型号 (核心高精生产)</h3>
+          <p><strong>协议：</strong><a href="https://github.com/black-forest-labs/flux2/blob/main/model_licenses/LICENSE-FLUX-DEV" target="_blank" style="color: var(--accent-green);">FLUX.2-dev 验证版</a></p>
+          <p>经过内部全链路验证，9B 模型生成的图像资产已达到商业交付级精度。支持在当前企业工作流框架下进行大规模数字资产产出。</p>
+        </div>
+      </div>
+      <div class="compliance-box">
+        <p><strong style="color: var(--accent-green);">✓ 商用结论：</strong>本手册以 <strong>9B 模型</strong> 作为核心生产引擎。基于本工作流产出的图像资产，已通过标准化生产效能对齐，其视觉表现与物理准度符合高规格商业交付需求，可支持现阶段正式业务场景下的资产产出与协作流程。</p>
+      </div>
+    </section>
+
+    <!-- 01. 影像重构逻辑 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">影像重构逻辑：基于 Flux.2 的编辑范式</h2>
+        <p class="section-subtitle">Neural Imaging Principles: Flux.2 Editing Paradigm</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        这是 Flux.2 模型的介绍。
+      </p>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        模型地址：<a href="https://github.com/black-forest-labs/flux2" target="_blank" style="color: var(--accent);">https://github.com/black-forest-labs/flux2</a>
+      </p>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h3>身份锚点 (Anchor)</h3>
+          <p>保持产品外形、几何比例和工业细节绝对不变，通过像素级重新编码实现场景切换。</p>
+        </div>
+        <div class="tech-card">
+          <h3>物理融合 (Physical Fusion)</h3>
+          <p>AI 理解产品材质与体积后，重新编写环境脚本，确保真实的光影反弹与反射。</p>
+        </div>
+      </div>
+      <div class="rounded-img" style="margin-top: 1.5rem;">
+        <img loading="lazy" src="/tutorial-imgs/teaser_editing.png" alt="影像重构原理" class="img-fluid">
+      </div>
+      <p class="img-caption">保持产品锚点不变，实现环境与氛围的像素级重写</p>
+    </section>
+
+    <!-- 01. 核心架构逻辑总览 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">01.</span>
+        <h2 class="chapter-title">核心架构逻辑总览</h2>
+        <p class="section-subtitle">Master Workflow Architecture</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        本工作流是一套严谨的<strong>数字资产提纯管线</strong>。通过双路采样器锁定几何形状，分步采样控制材质物理属性 (PBR)。
+      </p>
+      <div class="rounded-img">
+        <img loading="lazy" src="/tutorial-imgs/7f7e4471e9a6418ea1805000be44e60b.png" alt="架构总览" class="img-fluid">
+      </div>
+      <p class="img-caption">Complete Node Pipeline / 完整节点拓扑与逻辑链路</p>
+    </section>
+
+    <!-- 02. 实战路径：七步精修法 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number" style="color: #b3d4ff;">02.</span>
+        <h2 class="chapter-title">七步精修法</h2>
+        <p class="section-subtitle">Seven-Step Refinement Workflow</p>
+      </div>
+
+      <!-- STEP 01 -->
+      <div class="step-card">
+        <span class="step-tag">STEP 01 → 资产上传</span>
+        <p class="step-desc">
+          直接在 <strong>#79 节点</strong> 点击 'upload' 上传你的产品原图，作为精修的唯一物理依据。
+        </p>
+        <div class="img-grid">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/first step.png" alt="STEP 01">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-arrow">↓</div>
+
+      <!-- STEP 02 -->
+      <div class="step-card">
+        <span class="step-tag">STEP 02 → 提示词分工</span>
+        <p class="step-desc">
+          在 <strong>#93 节点</strong> 写「逻辑」（定位置/定空间），在 <strong>#77 节点</strong> 写「美学」（定质感/定光影）。简单来说：<strong>#93 告诉 AI 东西在哪，光往哪走；#77 告诉 AI 画面要多高级</strong>。参考词库中的词汇。完成后点击运行。由于增强和放大默认关闭，这一步极速出预览图。
+        </p>
+        <div class="img-grid cols-2" style="align-items: start;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/step 2.png" alt="STEP 02 节点">
+          </div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-08_15-59-09.png" alt="词汇参考">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-arrow">↓</div>
+
+      <!-- STEP 03 -->
+      <div class="step-card">
+        <span class="step-tag">STEP 03 → 快速交付</span>
+        <p class="step-desc">
+          观察「前后对比」。如果预览效果已经满足需求，直接在直出图节点右键保存，收工。
+        </p>
+        <div class="img-grid">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/steps 3.png" alt="STEP 03">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-arrow">↓</div>
+
+      <!-- STEP 04 -->
+      <div class="step-card">
+        <span class="step-tag">STEP 04 → 进阶加压</span>
+        <p class="step-desc">
+          如果觉得质感还差点意思，通过<strong>#208</strong>节点控制点选 <strong>#133 增强节点</strong> 和 <strong>SeedVR2 放大模块</strong>的开关。
+        </p>
+        <div class="img-grid cols-3" style="align-items: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/steps 4.png" alt="控制器">
+          </div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/steps 4 1.png" alt="#133 节点">
+          </div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/steps 4 2.png" alt="放大模块">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-arrow">↓</div>
+
+      <!-- STEP 05 -->
+      <div class="step-card">
+        <span class="step-tag">STEP 05 → 关键核心：提示词提纯</span>
+        <p class="step-desc">
+          这是本流的核心：<strong>提示词才是真正的画笔</strong>。利用 <strong>#192 节点</strong> 反推原图特征，将 <strong>#189 节点</strong> 生成的文字挑选核心部分复制到 <strong>#93</strong>，让 AI 帮我们「读图」，再用读出来的内容去修饰画面。
+        </p>
+        <div class="img-grid cols-2">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/detailed_caption.png" alt="detailed caption">
+          </div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/e29350a4683046f0a4d9e6e1b657979a.png" alt="特征反推">
+          </div>
+        </div>
+        <div class="comparison-grid" style="margin-top: 1rem;">
+          <div style="text-align: center;">
+            <div class="rounded-img">
+              <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-08_09-34-33.png" alt="detail_caotion">
+            </div>
+            <span class="comparison-label">detail_caotion</span>
+          </div>
+          <div style="text-align: center;">
+            <div class="rounded-img">
+              <img loading="lazy" src="/tutorial-imgs/detailed_caption product.png" alt="more_detail_caption">
+            </div>
+            <span class="comparison-label">more_detail_caption</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-arrow">↓</div>
+
+      <!-- STEP 06 -->
+      <div class="step-card">
+        <span class="step-tag">STEP 06 → 画布协作逻辑</span>
+        <p class="step-desc">
+          <strong>深度理解：</strong>AI 反推的词不能死照抄，必须根据你的需求微调。本工作流的本质是：模型读取原图后生成一张「空白画布」，再根据你的指令把像素「复刻」回去。我们现在是在和模型一起完成这幅画布，提示词就是给 AI 的修补说明书。不满意就改词或调 <strong>#133</strong> 数值，直到满意为止。
+        </p>
+        <div class="img-grid">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/steps 6.png" alt="STEP 06">
+          </div>
+        </div>
+      </div>
+
+      <div class="step-arrow">↓</div>
+
+      <!-- STEP 07 -->
+      <div class="step-card final-step">
+        <span class="step-tag">STEP 07 → 总结与导出</span>
+        <div class="flex-row">
+          <div class="text-content">
+            <p class="step-desc">
+              <strong>操作总结：</strong>本流程已将繁琐的节点操作极致简化。<strong>上传图片→写好双节点提示词→不满意就加压（增强+放大）→最后用 AI 帮我们读图再优化</strong>。满意后在最右侧的「4倍放大图」节点右键保存。
+            </p>
+            <p class="step-desc" style="margin-top: 1rem; color: var(--text-muted);">
+              记住：操作越少，逻辑越纯。提示词才是真正的画笔，节点只是工具。
+            </p>
+          </div>
+          <div class="image-content">
+            <div class="rounded-img">
+              <img loading="lazy" src="/tutorial-imgs/steps 7.png" alt="STEP 07">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. 双文本编码器深度解析 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">02.</span>
+        <h2 class="chapter-title">双文本编码器深度解析</h2>
+        <p class="section-subtitle">Dual Text Encoder Deep Dive</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        FLUX.2 的发布彻底终结了"咒语乱堆"的时代。理解 <strong>T5XXL</strong> 与 <strong>CLIP_L</strong> 的分工，是掌握商业出图的关键：
+      </p>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h3>T5XXL</h3>
+          <p>它拥有 11B 参数的巨型语言模型。它负责"听懂人话"。在节点 <strong>#93</strong> 中，你应该输入所有的空间关系。例如："一把扶手椅位于正中央，影子向右斜后方投射"。T5 确保了画面的<strong>空间逻辑</strong>。</p>
+        </div>
+        <div class="tech-card">
+          <h3>CLIP_L</h3>
+          <p>它更偏向于视觉特征。在节点 <strong>#77</strong> 中，重点在于输入美学词。如："High-end Commercial Photography"、"Perfect Reflections"。CLIP 确保了画面的<strong>光影质感</strong>。</p>
+        </div>
+      </div>
+      <div class="img-grid cols-2" style="margin-top: 1.5rem; align-items: start;">
+        <div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-06_15-47-06.png" alt="T5XXL">
+          </div>
+          <p class="img-caption">Fig 3-1. Node #93 — T5XXL Spatial Logic Input</p>
+        </div>
+        <div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/c2e85f0713994345ac7ac6a0fe8870d4.png" alt="CLIP_L">
+          </div>
+          <p class="img-caption">Fig 3-2. Node #77 — CLIP_L Aesthetic Style Input</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. LoRA的应用 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">03.</span>
+        <h2 class="chapter-title">LoRA的应用</h2>
+        <p class="section-subtitle">LoRA Application</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        模型介绍：采用 UnifiedReward-Flex 模型。该模型基于奖励模型对齐技术（Reward Model Alignment），能显著提升图像的审美评分与 PBR 材质拟真度。
+      </p>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        模型地址：<a href="https://github.com/CodeGoat24/UnifiedReward" target="_blank" style="color: var(--accent);">https://github.com/CodeGoat24/UnifiedReward</a>
+      </p>
+      <div class="tech-grid" style="margin-bottom: 1.5rem;">
+        <div class="tech-card">
+          <h3 style="color: var(--accent-green);">✓ 细节增强</h3>
+          <p>旨在强化物理真实感。在处理金属高光反射、皮革纹理深度或商业摄影中的"落地阴影"等需要增强时开启。它能消除 AI 感。</p>
+        </div>
+        <div class="tech-card">
+          <h3 style="color: var(--pink);">✗ 结构优先</h3>
+          <p>本节点在工作流中默认为关闭状态。核心逻辑是优先利用 9B 原生语义锁定家具整体，排除高频细节对模型的视觉产生误导。在处理大部分材质时保持关闭即可，需要增强细节时再 Ctrl+B 开启。</p>
+        </div>
+      </div>
+      <div class="img-grid cols-2" style="margin-bottom: 1.5rem;">
+        <div class="rounded-img">
+          <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_14-48-32.png" alt="UnifiedReward ON">
+        </div>
+        <div class="rounded-img">
+          <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_14-51-50.png" alt="UnifiedReward OFF">
+        </div>
+      </div>
+      <div class="img-grid cols-4">
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/comfyui_02546_.png" alt="W0.8">
+          </div>
+          <p class="step-desc" style="font-size: 0.85rem;">Weight: 0.8</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/comfyui_02553_.png" alt="W1.0">
+          </div>
+          <p class="step-desc" style="font-size: 0.85rem;">Weight: 1.0</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/comfyui_02550_.png" alt="W1.8">
+          </div>
+          <p class="step-desc" style="font-size: 0.85rem;">Weight: 1.8</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/comfyui_02554_.png" alt="W3.0">
+          </div>
+          <p class="step-desc" style="font-size: 0.85rem;">Weight: 3.0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. 效率与模式选择 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">04.</span>
+        <h2 class="chapter-title">效率与模式选择</h2>
+        <p class="section-subtitle">Efficiency & Mode Selection</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card accent-green">
+          <h3>⚡ 快速模式 (关闭放大)</h3>
+          <p>出图均在 <strong>1min</strong> 左右，适合快速迭代</p>
+        </div>
+        <div class="tech-card">
+          <h3>🏆 商业模式 (开启放大)</h3>
+          <p>出图约 <strong>91s</strong>，产出 4K 级商业资产</p>
+        </div>
+      </div>
+      <div class="rounded-img" style="margin-top: 1.5rem;">
+        <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_14-55-53.png" alt="SeedVR2 Module" class="img-fluid">
+      </div>
+      <p class="img-caption">SeedVR2 Upscale 模块</p>
+      <div class="img-grid cols-2" style="margin-top: 1.5rem;">
+        <div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_15-00-50.png" alt="Fast Mode">
+          </div>
+          <p class="img-caption">关闭效率</p>
+        </div>
+        <div>
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_15-02-31.png" alt="HQ Mode">
+          </div>
+          <p class="img-caption">开启效率</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. 物理保真度深度解析 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">05.</span>
+        <h2 class="chapter-title">物理保真度深度解析</h2>
+        <p class="section-subtitle">Fidelity vs. Refinement</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.2rem;">
+        以下为通用精修提示词参考，适用于大多数家具产品的物理瑕疵修复场景：
+      </p>
+      <div class="tech-grid" style="margin-bottom: 1.5rem;">
+        <div class="tech-card">
+          <h3>节点 #93 — 主提示词 <span style="color:var(--text-muted);font-weight:400;">(T5XXL)</span></h3>
+          <p>Non-destructive retouch. 绝对保留产品原始几何结构，清除表面灰尘、褶皱、划痕与凹陷，还原至<strong>无瑕疵的商业级完美状态</strong>，不引入任何形变或结构重建。</p>
+        </div>
+        <div class="tech-card accent-green">
+          <h3>节点 #77 — 画风提示词 <span style="color:var(--text-muted);font-weight:400;">(CLIP_L)</span></h3>
+          <p>Commercial High-End Furniture Photography，<strong>isolated on pure white background</strong>，中性纯白光源，完美 PBR 物理反光质感，边缘锐利清晰，8K 超高分辨率输出。</p>
+        </div>
+      </div>
+      <div class="comparison-grid">
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/lqlpjxwdlucizmxnc8dneacwmwvbvufbs-kjolrzzvqtaa_4096_3008.png" alt="Tent Raw">
+          </div>
+          <p class="comparison-label">Raw — 原始褶皱：光影逻辑混乱</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/lqlpkh-_0-keqqxnbtdnbxcwnkxy6-cu-nqjolvm-cxyaa_1808_1328.png" alt="Tent Refined">
+          </div>
+          <p class="comparison-label">Refined — 提纯输出：完美的布料张力</p>
+        </div>
+      </div>
+      <div class="comparison-grid" style="margin-top: 1.5rem;">
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/md9a2321.jpg" alt="Wheel Raw">
+          </div>
+          <p class="comparison-label">Wheel Raw — 实拍原图：充斥物理划痕</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/lqlpkhfl2ckj6oxneadneacw5gx8zz_ialojolzagjfzaa_4096_4096.png" alt="Wheel Refined">
+          </div>
+          <p class="comparison-label">Wheel Refined — 商业级重构：完美橡胶PBR</p>
+        </div>
+      </div>
+      <div class="comparison-grid" style="margin-top: 1.5rem;">
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/md9a2313.jpg" alt="Chair Raw">
+          </div>
+          <p class="comparison-label">Raw — 原始工业实物：金属疲劳</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="rounded-img">
+            <img loading="lazy" src="/tutorial-imgs/chair_refined.png" alt="Chair Refined">
+          </div>
+          <p class="comparison-label">Refined — 商业级重构：金属推车PBR质感</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. 实战路径：从白模到商业成品 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">06.</span>
+        <h2 class="chapter-title">实战路径：从白模到商业成品</h2>
+        <p class="section-subtitle">Practical Action Path</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        只需四个步骤，即可完成从原始素材到商业大图的蜕变：
+      </p>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 1: 载入定架 (Base Input)</span>
+        <p class="step-desc">在 Load Image 节点载入家具白模或实拍原图。这是生成的<span style="color: var(--accent);">「地基」</span>，决定了物体的基本轮廓与空间占比。</p>
+      </div>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 2: 语义注入 (Logic & Soul)</span>
+        <p class="step-desc">在节点 <strong>#93</strong> 输入空间逻辑，在节点 <strong>#77</strong> 输入美学风格。让 AI 的<span style="color: var(--accent);">「双脑」</span>开始协同工作。</p>
+      </div>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 3: 材质微调 (Material Dial)</span>
+        <p class="step-desc">通过节点 <strong>#208</strong> Fast Groups Bypasser 控制 <strong>#133</strong> 增强模块和 <strong>SeedVR2</strong> 放大模块的开关。如需加压开启增强和放大，只需在 <strong>#208</strong> 中勾选对应模块即可。</p>
+      </div>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 4: 一键出图 (Master Output)</span>
+        <p class="step-desc">执行提示词 <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span>。工作流将自动完成三段式渲染：从构图草案到高清提纯，最终产出商业级 PNG 资产。</p>
+      </div>
+
+    </section>
+
+    <!-- 07. 核心快捷键全表 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">07.</span>
+        <h2 class="chapter-title">ComfyUI 核心快捷键全表</h2>
+        <p class="section-subtitle">ComfyUI Full Keyboard Shortcuts Matrix</p>
+      </div>
+      <div class="shortcut-grid">
+        <div class="shortcut-item"><span class="shortcut-desc">打开工作流</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">O</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">保存工作流</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">S</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">中断生成</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Alt</span><span class="kbd">Enter</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">转换为子图</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">E</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">刷新节点定义</span><div class="kbd-group"><span class="kbd">R</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">添加框(Group)</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">G</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">静音/取消静音</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">M</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">忽略/取消忽略</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">B</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">执行提示词</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Enter</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">执行提示词(前)</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">Enter</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">放大视图</span><div class="kbd-group"><span class="kbd">Alt</span><span class="kbd">=</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">缩小视图</span><div class="kbd-group"><span class="kbd">Alt</span><span class="kbd">-</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">适应选中节点</span><div class="kbd-group"><span class="kbd">.</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">锁定画布</span><div class="kbd-group"><span class="kbd">H</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">系统设置</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">,</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">快捷键面板</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">K</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">资产侧边栏</span><div class="kbd-group"><span class="kbd">A</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">节点库侧边栏</span><div class="kbd-group"><span class="kbd">N</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">模型库侧边栏</span><div class="kbd-group"><span class="kbd">M</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">工作流侧边栏</span><div class="kbd-group"><span class="kbd">W</span></div></div>
+        <div class="shortcut-item"><span class="shortcut-desc">日志底部面板</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">`</span></div></div>
+      </div>
+    </section>
+
+    <!-- 08. 常见瑕疵自查手册 -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">08.</span>
+        <h2 class="chapter-title">常见瑕疵自查手册</h2>
+        <p class="section-subtitle">Visual Troubleshooting Guide</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        在 Flux.2 的高精度生成中，细微的参数偏差可能导致物理逻辑崩溃。以下是商业生产中最常遇到的三类瑕疵及其修正方案：
+      </p>
+
+      <div class="qa-card">
+        <p class="qa-q">Q: 家具结构解构（如：椅腿融合、扶手断裂）？ / Structural Collapse</p>
+        <div class="qa-a">
+          <strong>原因分析：</strong> 提示词中对产品结构的描述不够明确，导致 AI 对几何拓扑产生歧义。<br>
+          <strong>解决方案：</strong>
+          1. 检查 <strong>T5XXL</strong> 节点，确保加入了明确的结构描述词（如：four separate metal legs, independent armrests）。<br>
+          2. 在 <strong>CLIP_L</strong> 节点中加入材质边界词。<br>
+          3. 适当降低 <strong>FluxGuidance</strong> 值至 2.8-3.0，减少对比度过高导致的结构粘连。
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <p class="qa-q">Q: 皮革/织物纹理过度平滑，缺乏商业质感？ / Over-smoothed Textures</p>
+        <div class="qa-a">
+          <strong>原因分析：</strong> UnifiedReward 权重过低或 Guidance 压缩了动态范围。<br>
+          <strong>解决方案：</strong>
+          1. 检查节点 <strong>#133</strong>，将 <strong>UnifiedReward Weight</strong> 步进式调高（建议 1.0 - 1.2）。<br>
+          2. 尝试切换采样器为 <strong>Euler A</strong> 以获取更丰富的细节颗粒度。<br>
+          3. 在 <strong>CLIP_L</strong> 提示词中加入强力材质词：macro photography, pore details, visible fiber grain。
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <p class="qa-q">Q: 边缘重影或背景颜色溢出？ / Ghosting & Color Bleeding</p>
+        <div class="qa-a">
+          <strong>原因分析：</strong> FluxGuidance 过高导致对比度过载。<br>
+          <strong>解决方案：</strong>
+          1. 将 <strong>FluxGuidance</strong> 的值从 3.5 降至 2.8 - 3.0。<br>
+          2. 在提示词中强调：isolated on pure white background, no shadows, no ghosting。<br>
+          3. 若开启了 Upscale，请确保 <strong>Denoise</strong> 幅度不要超过 0.35。
+        </div>
+      </div>
+    </section>
+
+    <!-- Thanks for Watching -->
+    <section class="thanks-section" id="thanks-section">
+      <div class="thanks-inner">
+        <p class="thanks-sub reveal-line">— END OF DOCUMENT —</p>
+        <h1 class="thanks-title reveal-line" id="thanks-vp-text">THANKS FOR WATCHING</h1>
+        <div class="thanks-divider reveal-line"></div>
+        <p class="thanks-meta reveal-line">FLUX.2 PRODUCT RETOUCH WORKFLOW</p>
+        <p class="thanks-meta reveal-line" style="margin-top:0.4rem;">
+          <span class="brand-yahee">YAHEE</span><span class="brand-tech">TECH</span> DESIGN DEPARTMENT &nbsp;·&nbsp; 2026
+        </p>
+        <p class="thanks-credit reveal-line">DESIGN BY CORVIN CHIANG</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="modal" onclick="this.style.display='none'">
+    <img class="modal-content" id="imgFull">
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('imgFull');
+
+      const images = document.querySelectorAll('.chapter img, .arch-section img');
+
+      images.forEach(img => {
+        img.onclick = function() {
+          modal.style.display = "block";
+          modalImg.src = this.src;
+          setTimeout(() => modal.classList.add('show'), 10);
+        }
+      });
+
+      modal.onclick = function() {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = "none", 300);
+      };
+    });
+  </script>
+
+  <script>
+    // Liquid Glass displacement map
+    (function() {
+      const W = 200, H = 100;
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.createImageData(W, H);
+      const d = imgData.data;
+      function smoothStep(e0, e1, x) { const t = Math.max(0, Math.min(1, (x-e0)/(e1-e0))); return t*t*(3-2*t); }
+      function sdf(px, py, hw, hh, r) { const qx=Math.abs(px)-hw+r, qy=Math.abs(py)-hh+r; return Math.min(Math.max(qx,qy),0)+Math.sqrt(Math.max(qx,0)**2+Math.max(qy,0)**2)-r; }
+      for (let y=0;y<H;y++) for (let x=0;x<W;x++) {
+        const px=x/W-0.5, py=y/H-0.5;
+        const dist=sdf(px,py,0.42,0.35,0.35);
+        const m=smoothStep(0.08,-0.02,dist);
+        const i=(y*W+x)*4;
+        d[i]=Math.round(128+px*m*160); d[i+1]=Math.round(128+py*m*160); d[i+2]=128; d[i+3]=255;
+      }
+      ctx.putImageData(imgData,0,0);
+      document.getElementById('lg-disp-image').setAttribute('href',canvas.toDataURL());
+    })();
+
+    // Smooth scroll (Lenis-style) + scrollbar drag support
+    (function() {
+      let scrollTarget = window.scrollY;
+      let scrollPos = window.scrollY;
+      let wheelActive = false, wheelTimer;
+      function lerp(a,b,t){return a+(b-a)*t;}
+      window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        wheelActive = true;
+        clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(() => { wheelActive = false; }, 200);
+        let delta = e.deltaY;
+        if (delta > 80) delta = 80;
+        if (delta < -80) delta = -80;
+        scrollTarget += delta * 0.8;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        scrollTarget = Math.max(0, Math.min(scrollTarget, max));
+      }, { passive: false });
+      // Scrollbar drag: sync to native position
+      window.addEventListener('scroll', () => {
+        if (!wheelActive) {
+          scrollTarget = window.scrollY;
+          scrollPos = window.scrollY;
+        }
+      });
+      (function anim() {
+        if (wheelActive) {
+          scrollPos = lerp(scrollPos, scrollTarget, 0.05);
+          window.scrollTo(0, scrollPos);
+        }
+        requestAnimationFrame(anim);
+      })();
+    })();
+  </script>
+
+  <!-- MagicBento: spotlight + border glow + tilt + magnetism + click ripple -->
+  <script>
+  (function initMagicBento() {
+    var GLOW_COLOR = '255, 255, 255';
+    var SPOTLIGHT_RADIUS = 200;
+
+    // Targets: text cards, path steps, individual images (NOT seven-step step-card containers)
+    var SELECTORS = ['.tech-card', '.path-step', '.rounded-img', '.shortcut-item', '.qa-card', '.comparison-item', '.stage-card', '.compliance-box'];
+
+    // Collect all target elements and tag them
+    var cards = [];
+    SELECTORS.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        el.classList.add('mb-card');
+        el.style.setProperty('--glow-color', GLOW_COLOR);
+        cards.push(el);
+      });
+    });
+
+    // Also add every individual image inside chapters as its own MagicBento target
+    document.querySelectorAll('.chapter img, .arch-section img').forEach(function (img) {
+      // Skip if already inside a MagicBento card
+      if (img.closest('.mb-card')) return;
+      img.classList.add('mb-card');
+      img.style.setProperty('--glow-color', GLOW_COLOR);
+      img.style.display = 'block';
+      img.style.position = 'relative';
+      img.style.borderRadius = 'var(--border-radius)';
+      cards.push(img);
+    });
+    if (!cards.length) return;
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    // Proximity helpers
+    var proximity = SPOTLIGHT_RADIUS * 0.5;
+    var fadeDistance = SPOTLIGHT_RADIUS * 0.75;
+
+    function updateCardGlow(card, mx, my, intensity) {
+      var rect = card.getBoundingClientRect();
+      var rx = ((mx - rect.left) / rect.width) * 100;
+      var ry = ((my - rect.top) / rect.height) * 100;
+      card.style.setProperty('--glow-x', rx + '%');
+      card.style.setProperty('--glow-y', ry + '%');
+      card.style.setProperty('--glow-intensity', intensity.toFixed(3));
+      card.style.setProperty('--glow-radius', SPOTLIGHT_RADIUS + 'px');
+    }
+
+    document.addEventListener('mousemove', function (e) {
+      cards.forEach(function (card) {
+        var rect = card.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dist = Math.hypot(e.clientX - cx, e.clientY - cy) - Math.max(rect.width, rect.height) / 2;
+        dist = Math.max(0, dist);
+
+        var intensity = 0;
+        if (dist <= proximity) {
+          intensity = 1;
+        } else if (dist <= fadeDistance) {
+          intensity = (fadeDistance - dist) / (fadeDistance - proximity);
+        }
+        updateCardGlow(card, e.clientX, e.clientY, intensity);
+      });
+    });
+
+    document.addEventListener('mouseleave', function () {
+      cards.forEach(function (card) { card.style.setProperty('--glow-intensity', '0'); });
+    });
+
+    // Per-card: tilt + magnetism + click ripple
+    cards.forEach(function (card) {
+      var tiltX = 0, tiltY = 0, magX = 0, magY = 0;
+      var animRaf;
+
+      function applyTransform() {
+        card.style.transform = [
+          'perspective(1200px)',
+          'rotateX(' + tiltX.toFixed(2) + 'deg)',
+          'rotateY(' + tiltY.toFixed(2) + 'deg)',
+          'translate(' + magX.toFixed(2) + 'px,' + magY.toFixed(2) + 'px)'
+        ].join(' ');
+      }
+
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var cx = rect.width / 2;
+        var cy = rect.height / 2;
+
+        // Tilt
+        var targetTiltX = ((y - cy) / cy) * -6;
+        var targetTiltY = ((x - cx) / cx) * 6;
+        tiltX = lerp(tiltX, targetTiltX, 0.25);
+        tiltY = lerp(tiltY, targetTiltY, 0.25);
+
+        // Magnetism (subtle pull)
+        var targetMagX = (x - cx) * 0.04;
+        var targetMagY = (y - cy) * 0.04;
+        magX = lerp(magX, targetMagX, 0.15);
+        magY = lerp(magY, targetMagY, 0.15);
+
+        applyTransform();
+      });
+
+      card.addEventListener('mouseleave', function () {
+        // Spring back to zero
+        function springBack() {
+          tiltX = lerp(tiltX, 0, 0.15);
+          tiltY = lerp(tiltY, 0, 0.15);
+          magX = lerp(magX, 0, 0.15);
+          magY = lerp(magY, 0, 0.15);
+          applyTransform();
+          if (Math.abs(tiltX) > 0.01 || Math.abs(tiltY) > 0.01 || Math.abs(magX) > 0.01 || Math.abs(magY) > 0.01) {
+            animRaf = requestAnimationFrame(springBack);
+          } else {
+            tiltX = tiltY = magX = magY = 0;
+            card.style.transform = '';
+          }
+        }
+        cancelAnimationFrame(animRaf);
+        springBack();
+      });
+
+      // Click ripple
+      card.addEventListener('click', function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var maxR = Math.max(
+          Math.hypot(x, y),
+          Math.hypot(x - rect.width, y),
+          Math.hypot(x, y - rect.height),
+          Math.hypot(x - rect.width, y - rect.height)
+        );
+        var size = maxR * 2;
+        var ripple = document.createElement('div');
+        ripple.className = 'mb-ripple';
+        ripple.style.cssText = [
+          'width:' + size + 'px',
+          'height:' + size + 'px',
+          'left:' + (x - maxR) + 'px',
+          'top:' + (y - maxR) + 'px',
+          'background:radial-gradient(circle,rgba(' + GLOW_COLOR + ',0.35) 0%,rgba(' + GLOW_COLOR + ',0.15) 30%,transparent 70%)'
+        ].join(';');
+        card.appendChild(ripple);
+        ripple.animate(
+          [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+          { duration: 750, easing: 'ease-out' }
+        ).onfinish = function () { ripple.remove(); };
+      });
+    });
+  })();
+  </script>
+
+  <!-- Thanks scroll-reveal animation -->
+  <script>
+  (function () {
+    var thanksSection = document.getElementById('thanks-section');
+    if (!thanksSection) return;
+    var lines = thanksSection.querySelectorAll('.reveal-line');
+    var timers = [];
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        timers.forEach(clearTimeout);
+        timers = [];
+        if (entry.isIntersecting) {
+          lines.forEach(function (line, i) {
+            timers.push(setTimeout(function () {
+              line.classList.add('visible');
+            }, i * 160));
+          });
+        } else {
+          lines.forEach(function (line) { line.classList.remove('visible'); });
+        }
+      });
+    }, { threshold: 0.2 });
+    obs.observe(thanksSection);
+  })();
+  </script>
+
+  <!-- VariableProximity for THANKS FOR WATCHING -->
+  <script>
+  (function initThanksVP() {
+    var container = document.getElementById('thanks-vp-text');
+    if (!container) return;
+
+    var RADIUS = 150;
+    var FROM = { wght: 400, opsz: 9 };
+    var TO   = { wght: 1000, opsz: 40 };
+    var mouse = { x: -9999, y: -9999 };
+    var allCharSpans = [];
+
+    var text = container.textContent.trim();
+    container.textContent = '';
+
+    var words = text.split(' ');
+    words.forEach(function (word, wi) {
+      var wordSpan = document.createElement('span');
+      wordSpan.className = 'vp-word';
+
+      word.split('').forEach(function (ch) {
+        var charSpan = document.createElement('span');
+        charSpan.textContent = ch;
+        charSpan.style.fontVariationSettings = "'wght' " + FROM.wght + ", 'opsz' " + FROM.opsz;
+        wordSpan.appendChild(charSpan);
+        allCharSpans.push(charSpan);
+      });
+
+      container.appendChild(wordSpan);
+      if (wi < words.length - 1) {
+        container.appendChild(document.createTextNode(' '));
+      }
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    function vpAnimate() {
+      allCharSpans.forEach(function (span) {
+        var rect = span.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dist = Math.sqrt(Math.pow(mouse.x - cx, 2) + Math.pow(mouse.y - cy, 2));
+        var t = Math.max(0, 1 - dist / RADIUS);
+        var wght = Math.round(FROM.wght + (TO.wght - FROM.wght) * t);
+        var opsz = Math.round(FROM.opsz + (TO.opsz - FROM.opsz) * t);
+        span.style.fontVariationSettings = "'wght' " + wght + ", 'opsz' " + opsz;
+      });
+      requestAnimationFrame(vpAnimate);
+    }
+    vpAnimate();
+  })();
+  </script>
+
+  <!-- LightRays WebGL Effect -->
+  <script>
+  (function initLightRays() {
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;overflow:hidden;';
+    document.body.appendChild(wrap);
+
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'width:100%;height:100%;display:block;';
+    wrap.appendChild(canvas);
+
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return;
+
+    var vert = [
+      'attribute vec2 a_pos;',
+      'void main(){gl_Position=vec4(a_pos,0.,1.);}',
+    ].join('\n');
+
+    var frag = [
+      'precision highp float;',
+      'uniform float iTime;',
+      'uniform vec2 iRes;',
+      'uniform vec2 rayPos;',
+      'uniform vec2 rayDir;',
+      'uniform vec2 mousePos;',
+      'uniform float mouseInfluence;',
+      'uniform float lightSpread;',
+      'uniform float rayLength;',
+      'uniform float fadeDistance;',
+      'uniform float raysSpeed;',
+
+      'float rayStrength(vec2 src,vec2 refDir,vec2 coord,float sA,float sB,float spd){',
+      '  vec2 d=coord-src;',
+      '  float cosA=dot(normalize(d),refDir);',
+      '  float spread=pow(max(cosA,0.),1./max(lightSpread,0.001));',
+      '  float dist=length(d);',
+      '  float maxD=iRes.x*rayLength;',
+      '  float lenFall=clamp((maxD-dist)/maxD,0.,1.);',
+      '  float fadeFall=clamp((iRes.x*fadeDistance-dist)/(iRes.x*fadeDistance),0.5,1.);',
+      '  float base=clamp(',
+      '    (0.45+0.15*sin(cosA*sA+iTime*spd))+(0.3+0.2*cos(-cosA*sB+iTime*spd)),',
+      '    0.,1.);',
+      '  return base*lenFall*fadeFall*spread;',
+      '}',
+
+      'void main(){',
+      '  vec2 coord=vec2(gl_FragCoord.x,iRes.y-gl_FragCoord.y);',
+      '  vec2 dir=rayDir;',
+      '  if(mouseInfluence>0.){',
+      '    vec2 mp=mousePos*iRes;',
+      '    dir=normalize(mix(rayDir,normalize(mp-rayPos),mouseInfluence));',
+      '  }',
+      '  float r1=rayStrength(rayPos,dir,coord,36.2214,21.1135,1.5*raysSpeed);',
+      '  float r2=rayStrength(rayPos,dir,coord,22.3991,18.0234,1.1*raysSpeed);',
+      '  float v=r1*0.5+r2*0.4;',
+      '  float bright=1.-(coord.y/iRes.y);',
+      '  float r=v*(0.1+bright*0.8);',
+      '  float g=v*(0.3+bright*0.6);',
+      '  float b=v*(0.5+bright*0.5);',
+      '  gl_FragColor=vec4(r,g,b,v*0.7);',
+      '}',
+    ].join('\n');
+
+    function compile(type, src) {
+      var s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    }
+    var prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vert));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, frag));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    var aPos = gl.getAttribLocation(prog, 'a_pos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    var uTime     = gl.getUniformLocation(prog, 'iTime');
+    var uRes      = gl.getUniformLocation(prog, 'iRes');
+    var uRayPos   = gl.getUniformLocation(prog, 'rayPos');
+    var uRayDir   = gl.getUniformLocation(prog, 'rayDir');
+    var uMouse    = gl.getUniformLocation(prog, 'mousePos');
+    var uMouseInf = gl.getUniformLocation(prog, 'mouseInfluence');
+    var uSpread   = gl.getUniformLocation(prog, 'lightSpread');
+    var uLength   = gl.getUniformLocation(prog, 'rayLength');
+    var uFade     = gl.getUniformLocation(prog, 'fadeDistance');
+    var uSpeed    = gl.getUniformLocation(prog, 'raysSpeed');
+
+    gl.uniform1f(uMouseInf, 0.1);
+    gl.uniform1f(uSpread,   0.5);
+    gl.uniform1f(uLength,   3.0);
+    gl.uniform1f(uFade,     1.0);
+    gl.uniform1f(uSpeed,    1.0);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+
+    var mouse = { x: 0.5, y: 0.5 };
+    var smoothMouse = { x: 0.5, y: 0.5 };
+    window.addEventListener('mousemove', function(e) {
+      mouse.x = e.clientX / window.innerWidth;
+      mouse.y = e.clientY / window.innerHeight;
+    });
+
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio, 2);
+      canvas.width  = window.innerWidth  * dpr;
+      canvas.height = window.innerHeight * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform2f(uRayPos, canvas.width * 0.5, -canvas.height * 0.2);
+      gl.uniform2f(uRayDir, 0.0, 1.0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    var start = performance.now();
+    (function loop() {
+      var t = (performance.now() - start) * 0.001;
+      smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+      smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+      gl.uniform1f(uTime, t);
+      gl.uniform2f(uMouse, smoothMouse.x, 1.0 - smoothMouse.y);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      requestAnimationFrame(loop);
+    })();
+  })();
+  </script>
+
+  <script src="/assets/js/cmdk.js" defer></script>
+</body>
+</html>

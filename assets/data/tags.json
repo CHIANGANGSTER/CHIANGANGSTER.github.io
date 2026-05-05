@@ -1,0 +1,14 @@
+{
+  "tags": [
+    { "id": "平面组", "label": "平面组", "group": "team", "hint": "graphic" },
+    { "id": "3D 渲染组", "label": "3D 渲染组", "group": "team", "hint": "render" },
+    { "id": "摄制组", "label": "摄制组", "group": "team", "hint": "video" },
+    { "id": "产品设计组", "label": "产品设计组", "group": "team", "hint": "product" },
+    { "id": "ComfyUI", "label": "ComfyUI", "group": "tool", "hint": "comfy" },
+    { "id": "Flux", "label": "Flux", "group": "tool", "hint": "flux" },
+    { "id": "Midjourney", "label": "Midjourney", "group": "tool", "hint": "mj" },
+    { "id": "Stable Diffusion", "label": "Stable Diffusion", "group": "tool", "hint": "sd" },
+    { "id": "Photoshop AI", "label": "Photoshop AI", "group": "tool", "hint": "ps-ai" },
+    { "id": "LoRA", "label": "LoRA", "group": "tool", "hint": "lora" }
+  ]
+}

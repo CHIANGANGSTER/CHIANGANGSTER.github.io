@@ -1,0 +1,25 @@
+# Backups
+_backups/
+*.backup-*
+*.backup-*
+
+# Logs
+server.err.log
+server.out.log
+
+# Claude config
+.claude/
+.codex/
+
+# Browser profiles
+chrome-headless-profile/
+edge-profile-codex/
+edge-profile-codex-2/
+
+# Screenshots (not needed for site)
+screenshots/
+screenshot_2026-04-27_16-44-30.png
+F45A6783.png
+
+# Workflow configs (internal use only)
+flux2-product-retouch-v1.0.json

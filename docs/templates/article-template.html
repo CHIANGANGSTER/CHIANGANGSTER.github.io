@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}} — CHIANGANGSTER</title>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/nav.css">
+  <link rel="stylesheet" href="/assets/css/article.css">
+  <link rel="stylesheet" href="/assets/css/cmdk.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div data-include="nav"></div>
+  <div class="reading-progress"><div class="progress-bar"></div></div>
+  <main id="main" class="article-shell">
+    <header class="article-header">
+      <nav class="breadcrumb"><a href="/workflows/">工作流</a> / {{TITLE}}</nav>
+      <h1>{{TITLE}}</h1>
+      <p class="summary">{{SUMMARY}}</p>
+      <ul class="meta">
+        <li>状态：{{STATUS}}</li>
+        <li>负责人：{{OWNER}}</li>
+        <li>更新：{{UPDATED}}</li>
+      </ul>
+    </header>
+    <article class="content">
+      <!-- Article body -->
+    </article>
+  </main>
+  <div data-include="footer"></div>
+  <script src="/assets/js/nav.js" defer></script>
+  <script src="/assets/js/footer.js" defer></script>
+  <script src="/assets/js/progress.js" defer></script>
+  <script src="/assets/js/copy.js" defer></script>
+  <script src="/assets/js/cmdk.js" defer></script>
+</body>
+</html>

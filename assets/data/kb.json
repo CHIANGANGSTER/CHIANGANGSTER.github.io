@@ -1,0 +1,37 @@
+{
+  "version": "1",
+  "entries": [
+    {
+      "id": "comfy-flux2-retouch",
+      "title": "Flux.2 产品精修工作流",
+      "domain": "workflows",
+      "type": "workflow",
+      "tags": ["平面组", "ComfyUI", "Flux"],
+      "phase": 1,
+      "status": "published",
+      "difficulty": 3,
+      "timeCost": "30-60min",
+      "owner": "Corvin",
+      "updated": "2026-04-09",
+      "summary": "白底到场景修图全流程，含七步精修法与双文本编码器解析。",
+      "url": "/workflows/comfy-flux2-retouch.html",
+      "prerequisites": [],
+      "outputs": ["商业级成品图"],
+      "external": false
+    },
+    {
+      "id": "comfy-product-scene-builder",
+      "title": "Comfy 产品场景搭建工作流（占位）",
+      "domain": "workflows",
+      "type": "workflow",
+      "tags": ["平面组", "ComfyUI"],
+      "phase": 1,
+      "status": "planned",
+      "owner": "Corvin",
+      "updated": "2026-04-27",
+      "summary": "占位条目，正式版本将在后续 spec 中落地。",
+      "url": "#",
+      "external": false
+    }
+  ]
+}

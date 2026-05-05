@@ -1,0 +1,2886 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#111;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>AI For Design Knowledge</title>
+  <style id="critical-blackout">
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #111 !important;
+      color: #fefefe;
+      color-scheme: dark;
+    }
+    #boot-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      background: #111;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+    #unload-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      background: #111;
+      pointer-events: none;
+    }
+    body.boot-ready #boot-mask {
+      opacity: 0;
+    }
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+
+    @font-face {
+      font-family: 'Compressa VF';
+      src: url('https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2') format('woff2');
+      font-style: normal;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      background: #111;
+      color: #fefefe;
+      font-family: system-ui, -apple-system, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      overscroll-behavior: none;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    body:active {
+      cursor: grabbing;
+      cursor: -webkit-grabbing;
+    }
+    body.intro-pending:active,
+    body.intro-ready:active,
+    body.intro-entering:active {
+      cursor: default !important;
+    }
+
+    /* ---- GL Layer (fixed, behind content, no pointer events) ---- */
+    [data-gl] {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 10;
+      pointer-events: none;
+    }
+    /* Cursor layer: transparent, pointer-events none, only sets cursor on hover */
+    #cursor-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 25;
+      pointer-events: none;
+    }
+    #cursor-layer.grabbing { cursor: grabbing !important; }
+    canvas { width: 100%; height: 100%; }
+
+    /* Body cursor controlled by JS */
+    body { cursor: default; }
+    body.cursor-chair { cursor: pointer; }
+    body.cursor-grab { cursor: grab; cursor: -webkit-grab; }
+    body.cursor-grab:active { cursor: grabbing; cursor: -webkit-grabbing; }
+    body.intro-pending,
+    body.intro-ready,
+    body.intro-entering {
+      cursor: default !important;
+    }
+    body.intro-ready {
+      cursor: none !important;
+    }
+    body.intro-pending.cursor-chair,
+    body.intro-pending.cursor-grab,
+    body.intro-ready.cursor-chair,
+    body.intro-ready.cursor-grab,
+    body.intro-entering.cursor-chair,
+    body.intro-entering.cursor-grab {
+      cursor: default !important;
+    }
+    body.intro-ready.cursor-chair,
+    body.intro-ready.cursor-grab {
+      cursor: none !important;
+    }
+
+    /* ---- Content Layer (scrollable, above GL) ---- */
+    [data-layer="top"] {
+      position: relative;
+      z-index: 20;
+    }
+
+    main {
+      position: relative;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    main a, main [tabindex] {
+      pointer-events: auto;
+    }
+
+    body.intro-pending,
+    body.intro-ready,
+    body.intro-entering {
+      overflow: hidden;
+    }
+    html:has(body.intro-pending),
+    html:has(body.intro-ready),
+    html:has(body.intro-entering) {
+      overflow: hidden;
+      scrollbar-width: none;
+    }
+    html:has(body.intro-pending)::-webkit-scrollbar,
+    html:has(body.intro-ready)::-webkit-scrollbar,
+    html:has(body.intro-entering)::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+    body.intro-pending #hero-behind,
+    body.intro-pending main,
+    body.intro-pending .Archive,
+    body.intro-pending .About,
+    body.intro-pending #unicorn-section,
+    body.intro-pending #archive-front,
+    body.intro-pending .Footer {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #hero-behind,
+    main {
+      transition: opacity 1.1s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .intro-spotlight {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 52vw 48vh at 50% -6%, rgba(255,255,255,0.22), rgba(255,255,255,0.07) 34%, rgba(255,255,255,0) 68%),
+        #111;
+      opacity: 1;
+      transition: opacity 1s cubic-bezier(0.2, 0, 0, 1);
+    }
+    body.site-entered .intro-spotlight {
+      opacity: 0;
+    }
+    .intro-brand {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 55;
+      width: auto;
+      transform: translate3d(-50%, -42%, 0);
+      color: #fff;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      white-space: nowrap;
+      transition:
+        opacity 0.65s cubic-bezier(0.2, 0, 0, 1),
+        transform 0.9s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .intro-brand-name,
+    .intro-brand-dept {
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      line-height: 1;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(9px, 0.72vw, 12px);
+      font-weight: 760;
+      opacity: 0;
+      will-change: transform, opacity, filter;
+    }
+    .intro-brand-name {
+      transform: translate3d(18px, 0, 0);
+      filter: blur(5px);
+      transition:
+        opacity 1.05s cubic-bezier(0.2, 0, 0, 1),
+        transform 1.4s cubic-bezier(0.2, 0, 0, 1),
+        filter 1.4s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .intro-brand-dept {
+      margin-left: 0.35em;
+      color: #fff;
+      transform: translate3d(0, 12px, 0);
+      filter: blur(5px);
+      transition:
+        opacity 0.95s cubic-bezier(0.2, 0, 0, 1) 0.3s,
+        transform 1.15s cubic-bezier(0.2, 0, 0, 1) 0.3s,
+        filter 1.15s cubic-bezier(0.2, 0, 0, 1) 0.3s;
+    }
+    .intro-yahee { color: #046ccc; }
+    .intro-tech { color: #cc0504; }
+    .brand-yahee { color: #046ccc; }
+    .brand-tech { color: #cc0504; }
+    body.intro-ready .intro-brand {
+      opacity: 1;
+      transform: translate3d(-50%, -50%, 0);
+    }
+    body.intro-ready .intro-brand-name,
+    body.intro-ready .intro-brand-dept {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      filter: blur(0);
+    }
+    body.intro-entering .intro-brand,
+    body.site-entered .intro-brand {
+      opacity: 0;
+      transform: translate3d(-50%, -54%, 0);
+    }
+    .intro-enter {
+      position: fixed;
+      left: var(--intro-enter-x, 50vw);
+      top: var(--intro-enter-y, calc(100vh - clamp(2rem, 9vh, 6rem)));
+      z-index: 60;
+      width: clamp(54px, 4.8vw, 74px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%) scale(0.94);
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.92);
+      border-radius: 50%;
+      background: transparent;
+      color: #fff;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(7px, 0.56vw, 10px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: 0;
+      text-align: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.75s cubic-bezier(0.2, 0, 0, 1),
+        transform 0.75s cubic-bezier(0.2, 0, 0, 1),
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+    body.intro-ready .intro-enter {
+      opacity: 1;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .intro-enter:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    body.intro-entering .intro-enter,
+    body.site-entered .intro-enter {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -62%) scale(0.96);
+    }
+    body.intro-pending .preloader-title,
+    body.intro-pending .progress-track {
+      opacity: 0;
+    }
+    body.intro-pending #preloader {
+      background: transparent;
+    }
+    @keyframes heroLineEnter {
+      from {
+        opacity: 0;
+        filter: blur(16px);
+        transform: translate3d(0, 34px, 0);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    body.intro-pending .hero-title,
+    body.intro-pending .hero-desc-area,
+    body.intro-pending #about-text,
+    body.intro-pending .about-contacts,
+    body.intro-pending #archive-front,
+    body.intro-entering .hero-title,
+    body.intro-entering .hero-desc-area,
+    body.intro-entering #about-text,
+    body.intro-entering .about-contacts,
+    body.intro-entering #archive-front {
+      opacity: 0;
+    }
+    body.site-entered .hero-title-long {
+      animation: heroLineEnter 1.8s cubic-bezier(0.2, 0, 0, 1) 0.22s both;
+    }
+    body.site-entered .hero-row-future > .hero-title {
+      animation: heroLineEnter 1.8s cubic-bezier(0.2, 0, 0, 1) 0.52s both;
+    }
+    body.site-entered .hero-title-short {
+      animation: heroLineEnter 1.8s cubic-bezier(0.2, 0, 0, 1) 0.82s both;
+    }
+    body.site-entered .hero-desc-area {
+      animation: heroLineEnter 1.55s cubic-bezier(0.2, 0, 0, 1) 1.12s both;
+    }
+
+    /* ---- Spacing ---- */
+    .c {
+      margin-left: 2rem;
+      margin-right: 2rem;
+    }
+
+    .Section {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 2rem;
+      width: 100%;
+      font-size: 12px;
+      z-index: 50;
+    }
+    nav .c {
+      display: flex;
+      justify-content: space-between;
+    }
+    nav a {
+      color: #fefefe;
+      text-decoration: none;
+    }
+    nav .nav-right {
+      font-weight: bold;
+    }
+    nav .nav-right a:hover {
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+
+    .font-gs {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* ---- HERO ---- */
+    #hero-behind {
+      position: relative;
+      z-index: 5;
+    }
+    .Hero {
+      height: auto;
+      padding-top: 6vw;
+      padding-bottom: 0;
+    }
+    .Hero .c {
+      position: relative;
+      text-transform: uppercase;
+      line-height: 0.85;
+    }
+    .hero-title {
+      font-size: 14.5vw;
+      font-weight: 400;
+      display: block;
+      white-space: nowrap;
+    }
+    .hero-title-long {
+      font-size: 13.4vw;
+    }
+    .hero-title-short {
+      font-size: 13.8vw;
+    }
+    .hero-row-future {
+      display: flex;
+      align-items: baseline;
+      gap: 3vw;
+    }
+    .hero-desc-area {
+      position: absolute;
+      display: block;
+      align-items: flex-start;
+      padding-top: 0;
+      top: clamp(17.5rem, 24vw, 26.5rem);
+      right: 2rem;
+      width: clamp(360px, 32vw, 540px);
+      height: clamp(230px, 18vw, 320px);
+      z-index: 10;
+    }
+    .hero-desc-text {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: clamp(360px, 30vw, 500px);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      font-size: clamp(14px, 0.94vw, 18px);
+      line-height: 1.72;
+      font-weight: 700;
+      text-transform: none;
+      letter-spacing: 0;
+      max-width: none;
+    }
+    .hero-search-trigger {
+      position: absolute;
+      right: 0;
+      top: clamp(8.2rem, 10vw, 12rem);
+      display: grid;
+      place-items: center;
+      width: clamp(168px, 12vw, 230px);
+      height: clamp(168px, 12vw, 230px);
+      color: rgba(255,255,255,0.7);
+      background: transparent;
+      border: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: color 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+    }
+    .hero-search-trigger:hover {
+      color: #fff;
+    }
+    .search-lens {
+      width: clamp(56px, 4.4vw, 82px);
+      height: clamp(56px, 4.4vw, 82px);
+      position: relative;
+      z-index: 2;
+      border: clamp(3px, 0.28vw, 5px) solid currentColor;
+      border-radius: 50%;
+      transform: translate(-8%, -8%);
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+    .search-lens::after {
+      content: '';
+      position: absolute;
+      width: 45%;
+      height: clamp(3px, 0.28vw, 5px);
+      right: -34%;
+      bottom: 4%;
+      background: currentColor;
+      border-radius: 999px;
+      transform: rotate(45deg);
+      transform-origin: left center;
+    }
+    .hero-search-trigger:hover .search-lens {
+      transform: translate(-8%, -8%) scale(1.08);
+      filter: drop-shadow(0 0 14px rgba(255,255,255,0.35));
+      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), filter 0.4s ease;
+    }
+    .circular-search-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      border-radius: 50%;
+      color: rgba(255,255,255,0.78);
+      cursor: pointer;
+      transform-origin: 50% 50%;
+      transition: color 0.25s ease, filter 0.25s ease;
+    }
+    .circular-search-svg text {
+      fill: currentColor;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+    @keyframes circular-search-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .hero-desc-region {
+      font-size: 0.85vw;
+      line-height: 1.5;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ---- ARCHIVE ---- */
+    .Archive {
+      margin-bottom: 20vh;
+    }
+    #archive-front {
+      margin-top: 35vh;
+    }
+    #archive-behind {
+      position: relative;
+      z-index: 20;
+      margin-top: 42vh;
+      display: none;
+    }
+    #archive-behind .archive-item {
+      cursor: pointer;
+    }
+    .archive-heading {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .archive-heading h2 {
+      font-weight: bold;
+      font-style: italic;
+      font-size: 18px;
+    }
+    .archive-list {
+      list-style: none;
+      padding: 0;
+    }
+    .archive-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      cursor: pointer;
+      opacity: 1;
+      transition: none;
+      text-transform: uppercase;
+    }
+    .archive-item:hover {
+      opacity: 1;
+      transition: none;
+    }
+    #archive-front.archive-at-cta {
+      display: block;
+      position: relative;
+      z-index: 20;
+      margin-top: -3vh;
+    }
+    #archive-front.archive-at-cta .archive-item {
+      opacity: 1;
+    }
+    #archive-front.archive-at-cta .archive-item-meta-inner p {
+      white-space: nowrap;
+    }
+    .archive-link {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #fefefe;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .archive-item-title {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
+      font-size: 5vw;
+      line-height: 0.9em;
+      text-align: center;
+      max-width: 80vw;
+      text-transform: uppercase;
+    }
+    @media (max-width: 768px) {
+      .archive-item-title { font-size: 10vw; }
+    }
+    .archive-item-title .year {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(12px, 1.3vw, 16px);
+      vertical-align: middle;
+      margin-left: 0.5em;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.08em;
+    }
+    @media (max-width: 768px) {
+      .archive-item-title .year { display: none; }
+    }
+    .archive-item-meta {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+    .archive-item-meta-inner {
+      display: flex;
+      width: 50vw;
+      justify-content: space-between;
+      gap: 1.5rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(12px, 1.1vw, 15px);
+      letter-spacing: 0.04em;
+      text-transform: none;
+      color: rgba(255,255,255,0.72);
+    }
+    .archive-item-meta-inner .desktop-only {
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .archive-item-meta-inner .desktop-only { display: none; }
+    }
+    .archive-item-meta a {
+      color: #fefefe;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 400;
+      font-size: 12px;
+    }
+    #archive-behind .archive-item-meta-inner h3 {
+      font-weight: 400;
+    }
+    #archive-behind .archive-item-meta-inner p {
+      white-space: nowrap;
+    }
+    .archive-item-meta-inner.meta-left {
+      justify-content: flex-start;
+    }
+    .archive-item-meta-inner.meta-right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+    @media (max-width: 768px) {
+      .archive-item-meta-inner {
+        width: min(82vw, 520px);
+        justify-content: center;
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+      }
+      #archive-behind .archive-item-meta-inner p {
+        white-space: normal;
+      }
+    }
+    .start-tutorial-wrap {
+      position: relative;
+      display: inline-block;
+      pointer-events: auto;
+      border-radius: 30px;
+    }
+    .start-tutorial {
+      color: #fefefe;
+      text-decoration: none;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5em 2.5em;
+      width: 560px;
+      height: 160px;
+      position: relative;
+      z-index: 20;
+      transition: color 0.3s ease;
+    }
+    @media (max-width: 768px) {
+      .start-tutorial { width: 85vw; height: 120px; padding: 1em 1.5em; }
+    }
+    .start-tutorial:hover {
+      color: #ffffff;
+    }
+
+    /* TextPressure */
+    #text-pressure-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .archive-pressure {
+      position: relative;
+      width: min(82vw, 1180px);
+      height: clamp(96px, 12vw, 190px);
+      display: flex;
+      align-items: center;
+    }
+    .blur-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .meta-left .blur-text {
+      justify-content: flex-start;
+    }
+    .meta-right .blur-text {
+      justify-content: flex-end;
+    }
+    .blur-segment {
+      display: inline-block;
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(-50px);
+      will-change: transform, filter, opacity;
+      transition:
+        opacity 0.35s linear var(--blur-delay, 0ms),
+        filter 0.35s linear var(--blur-delay, 0ms),
+        transform 0.35s linear var(--blur-delay, 0ms);
+    }
+    .blur-text.is-visible .blur-segment {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+    .blur-text-manual {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.32em;
+    }
+    .blur-text-manual.is-visible .blur-segment {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+    .text-pressure-title {
+      font-family: 'Compressa VF', sans-serif;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+      user-select: none;
+      white-space: nowrap;
+      font-weight: 800;
+      width: 100%;
+      line-height: 1;
+      color: #ffffff;
+    }
+    .text-pressure-title span {
+      display: inline-block;
+    }
+    .liquid-glass {
+      position: absolute;
+      inset: 0;
+      border-radius: 30px;
+      overflow: hidden;
+      z-index: 1;
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+        0 10px 40px rgba(0, 0, 0, 0.3),
+        0 2px 10px rgba(0, 0, 0, 0.15);
+      transition: box-shadow 0.4s ease, transform 0.4s ease;
+    }
+    .start-tutorial-wrap:hover .liquid-glass {
+      box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+        0 14px 50px rgba(0, 0, 0, 0.35),
+        0 4px 14px rgba(0, 0, 0, 0.2);
+      transform: scale(1.02);
+    }
+
+    /* ---- ABOUT ---- */
+    .About {
+      margin-bottom: 30vh;
+      margin-top: 15vh;
+    }
+    .about-text {
+      text-transform: uppercase;
+      font-family: 'Roboto Flex', system-ui, sans-serif;
+      font-size: 4vw;
+      font-weight: 400;
+      line-height: 1.1em;
+      max-width: 30ch;
+      font-variation-settings: 'wght' 400, 'opsz' 9;
+    }
+    .about-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(2.5em);
+      transition: opacity 1.35s cubic-bezier(0.16, 1, 0.3, 1), transform 1.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .about-line-cn {
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      font-size: 0.44em;
+      line-height: 1.42;
+      font-weight: 700;
+      text-transform: none;
+      max-width: 38ch;
+      margin-top: 0.25em;
+    }
+    .about-line.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (max-width: 768px) {
+      .about-text { font-size: 6vw; }
+    }
+    .about-contacts {
+      list-style: none;
+      padding: 0;
+      font-size: 12px;
+      margin-top: 2rem;
+      margin-left: 1rem;
+    }
+    .about-contacts li {
+      display: flex;
+      margin: 0.5rem 0;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(1.4rem);
+      transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1), transform 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .about-contacts li.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .about-contacts .label {
+      font-weight: bold;
+      width: 10vw;
+      margin-right: 2rem;
+    }
+
+    /* ---- FOOTER ---- */
+    .Footer {
+      margin-top: 15vh;
+    }
+    .Footer .c {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      text-transform: none;
+      font-size: 12px;
+      padding-bottom: 4rem;
+    }
+    @media (max-width: 768px) {
+      .Footer .c {
+        flex-direction: column;
+      }
+    }
+    .footer-text {
+      max-width: 78ch;
+      line-height: 1.45;
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      font-weight: 650;
+    }
+    .footer-text a {
+      color: #fefefe;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+    .footer-text a:hover {
+      opacity: 0.5;
+    }
+    .footer-right {
+      margin-top: 1rem;
+      text-align: right;
+      text-transform: uppercase;
+    }
+    #footer-credit .blur-segment {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+
+    /* ---- Preloader ---- */
+    .preloader {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      z-index: 100;
+      transition: opacity 0.6s ease;
+    }
+    .preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .preloader-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 30vw;
+    }
+    @media (max-width: 768px) {
+      .preloader-inner { width: 66%; }
+    }
+    .preloader-title {
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+    .progress-track {
+      width: 100%;
+      height: 1px;
+      background: #5a5a5a;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #fff;
+      width: 0%;
+      transform-origin: left center;
+      transition: width 0.3s ease-out;
+    }
+
+    /* Unicorn Studio embed - scales the curated 1280x800 viewport without revealing the outer canvas. */
+    .us-embed-frame {
+      --us-embed-max-width: clamp(1280px, 92vw, 1760px);
+      --us-logic-height: 800px;
+      position: relative;
+      overflow: hidden;
+      width: min(100%, var(--us-embed-max-width));
+      max-width: calc(100vw - 4rem);
+      aspect-ratio: 16 / 10;
+      background: transparent;
+      z-index: 1;
+      isolation: isolate;
+      contain: layout paint style;
+    }
+
+    .us-reveal {
+      position: relative;
+      width: min(100%, var(--us-embed-max-width, clamp(1280px, 92vw, 1760px)));
+      max-width: calc(100vw - 4rem);
+      transform: translate3d(0, 72px, 0);
+      opacity: 0;
+      filter: blur(2px);
+      transition:
+        transform 3.2s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 2.6s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 2.2s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity, filter;
+    }
+
+    .us-reveal.is-visible {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    .us-reveal .us-embed-frame {
+      width: 100%;
+      max-width: none;
+    }
+
+    #us-embed-wrap {
+      --us-page-bg: #111;
+      --us-vignette-x: clamp(6vmin, 10vmin, 120px);
+      --us-vignette-y: clamp(6vmin, 10vmin, 120px);
+      --us-bottom-mask: clamp(52px, 6.5vmin, 82px);
+      --us-bottom-mask-fade: 18px;
+      --us-design-width: 1280px;
+      --us-design-height: 800px;
+      --us-runtime-scale: 1;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      overflow: hidden;
+      width: var(--us-design-width);
+      height: var(--us-design-height);
+      max-width: none;
+      max-height: none;
+      aspect-ratio: 16 / 10;
+      background: transparent;
+      transform: translate3d(-50%, -50%, 0) scale(var(--us-runtime-scale));
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    #us-embed-wrap > iframe,
+    #us-embed-wrap > canvas,
+    #us-embed-wrap > div {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 100% !important;
+      min-height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      border: 0 !important;
+      outline: 0 !important;
+      background: transparent !important;
+      transform-origin: center center !important;
+      transform: translateZ(0) !important;
+      will-change: transform;
+    }
+
+    #us-embed-wrap *,
+    #us-embed-wrap iframe,
+    #us-embed-wrap canvas {
+      border: 0 !important;
+      outline: 0 !important;
+      background-color: transparent !important;
+    }
+    #us-embed-wrap > div canvas,
+    #us-embed-wrap > div iframe,
+    #us-embed-wrap > div > div {
+      position: absolute !important;
+      inset: 0 !important;
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 100% !important;
+      min-height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      transform: none !important;
+    }
+    #us-embed-wrap::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(var(--us-bottom-mask) + var(--us-bottom-mask-fade));
+      z-index: 20;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(17,17,17,0) 0%, var(--us-page-bg) var(--us-bottom-mask-fade)) top / 100% var(--us-bottom-mask-fade) no-repeat,
+        linear-gradient(var(--us-page-bg), var(--us-page-bg)) bottom / 100% var(--us-bottom-mask) no-repeat;
+      transform: translateZ(0);
+    }
+    #us-embed-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      background:
+        linear-gradient(to right, var(--us-page-bg) 0%, rgba(17,17,17,0.72) 34%, rgba(17,17,17,0) 100%) left / var(--us-vignette-x) 100% no-repeat,
+        linear-gradient(to left, var(--us-page-bg) 0%, rgba(17,17,17,0.72) 34%, rgba(17,17,17,0) 100%) right / var(--us-vignette-x) 100% no-repeat,
+        linear-gradient(to bottom, var(--us-page-bg) 0%, rgba(17,17,17,0.72) 34%, rgba(17,17,17,0) 100%) top / 100% var(--us-vignette-y) no-repeat,
+        linear-gradient(to top, var(--us-page-bg) 0%, rgba(17,17,17,0.72) 34%, rgba(17,17,17,0) 100%) bottom / 100% var(--us-vignette-y) no-repeat;
+      transform: translateZ(0);
+    }
+    /* Hide any DOM watermark links */
+    #us-embed-wrap a,
+    a[href*="unicorn.studio"] {
+      display: none !important;
+      position: absolute !important;
+      clip: rect(0,0,0,0) !important;
+    }
+
+
+
+    /* VariableProximity */
+    .vp-word { display: inline-block; white-space: nowrap; }
+    .vp-char {
+      display: inline-block;
+      font-variation-settings: 'wght' 400, 'opsz' 9;
+      transition: font-variation-settings 0.1s ease;
+    }
+    .vp-space { display: inline-block; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap; border: 0;
+    }
+  </style>
+  <!-- Liquid Glass SVG Filter -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feColorMatrix in="blurred" type="saturate" values="1.15" />
+      </filter>
+    </defs>
+  </svg>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/cmdk.css">
+</head>
+<body class="intro-pending" style="background:#111;">
+  <div id="boot-mask" aria-hidden="true"></div>
+  <script>
+    document.documentElement.style.background = '#111';
+    document.documentElement.style.colorScheme = 'dark';
+    document.body.classList.remove('site-entered', 'intro-ready', 'intro-entering', 'cursor-chair', 'cursor-grab');
+    document.body.classList.add('intro-pending');
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) window.location.reload();
+    });
+    function forceBlackUnloadFrame() {
+      document.documentElement.style.background = '#111';
+      document.body.style.background = '#111';
+      document.body.classList.add('intro-pending');
+      document.body.classList.remove('site-entered', 'intro-ready', 'intro-entering');
+      var mask = document.getElementById('unload-mask');
+      if (!mask) {
+        mask = document.createElement('div');
+        mask.id = 'unload-mask';
+        document.body.appendChild(mask);
+      }
+    }
+    window.addEventListener('beforeunload', forceBlackUnloadFrame);
+    window.addEventListener('pagehide', forceBlackUnloadFrame);
+  </script>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-title">LOADING MODEL...</div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page exit overlay (for tutorial transition) -->
+  <div class="preloader" id="page-exit" style="opacity:0;pointer-events:none;">
+    <div class="preloader-inner">
+      <div class="preloader-title">LOADING TUTORIAL...</div>
+      <div class="progress-track">
+        <div class="progress-bar" id="exit-progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GL Layer (fixed behind everything) -->
+  <div data-gl="c">
+    <canvas id="gl-canvas"></canvas>
+  </div>
+  <div id="cursor-layer"></div>
+  <div class="intro-spotlight" aria-hidden="true"></div>
+  <div class="intro-brand" aria-hidden="true">
+    <span class="intro-brand-name"><span class="intro-yahee">YAHEE</span><span class="intro-tech">TECH</span></span>
+    <span class="intro-brand-dept">Design Department</span>
+  </div>
+  <button class="intro-enter" id="intro-enter" type="button" aria-label="进入网站">
+    <span>CLICK TO<br>ENTER</span>
+  </button>
+
+  <!-- HERO (behind chair) -->
+  <section class="Section Hero" id="hero-behind">
+    <div class="c">
+      <p class="hero-title hero-title-long">Knowledge</p>
+      <div class="hero-row-future">
+        <p class="hero-title">Design</p>
+        <div class="hero-desc-area">
+          <p class="hero-desc-text">
+            面向 <span class="brand-yaheetech"><span class="brand-yahee">YAHEE</span><span class="brand-tech">TECH</span></span> 设计部门的 AI 知识库，集中沉淀 ComfyUI 工作流、提示词模板、调研判断、营销脚本、画面叙事与跨组资源索引。让可复用的方法、案例和关键词被快速检索、稳定复现，并减少重复试错。
+          </p>
+          <button class="hero-search-trigger" type="button" aria-label="打开搜索">
+            <svg class="circular-search-svg" viewBox="0 0 200 200" aria-hidden="true">
+              <defs>
+                <path id="search-circle-path" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"></path>
+              </defs>
+              <text textLength="528" lengthAdjust="spacing">
+                <textPath href="#search-circle-path" startOffset="0%">SEARCH * KNOWLEDGE BASE * SEARCH * KNOWLEDGE BASE *</textPath>
+              </text>
+            </svg>
+            <span class="search-lens" aria-hidden="true"></span>
+          </button>
+          <!-- removed hero-desc-region to prevent horizontal overflow -->
+        </div>
+      </div>
+      <p class="hero-title hero-title-short">Systems</p>
+    </div>
+  </section>
+
+  <!-- Scrollable Content -->
+  <main>
+  </main>
+
+  <!-- ARCHIVE (behind chair) -->
+  <section class="Section Archive" id="archive-behind">
+      <div class="c">
+        <ul class="archive-list">
+          <li class="archive-item" data-index="1">
+            <a class="archive-link" href="/workflows/">
+              <div><h2 class="archive-item-title blur-text" data-blur-text="COMFYUI WORKFLOWS" data-blur-by="words">COMFYUI WORKFLOWS</h2></div>
+              <div class="archive-item-meta">
+                <div class="archive-item-meta-inner meta-right">
+                  <p class="blur-text" data-blur-text="沉淀可复用的节点流程，让产品精修稳定复现。" data-blur-by="words">沉淀可复用的节点流程，让产品精修稳定复现。</p>
+                </div>
+              </div>
+            </a>
+          </li>
+
+          <li class="archive-item" data-index="2">
+            <a class="archive-link" href="/prompts/">
+              <div><h2 class="archive-item-title blur-text" data-blur-text="PROMPTS" data-blur-by="words">PROMPTS</h2></div>
+              <div class="archive-item-meta">
+                <div class="archive-item-meta-inner meta-left">
+                  <p class="blur-text" data-blur-text="整理高命中提示词模板，减少从零试错的时间。" data-blur-by="words">整理高命中提示词模板，减少从零试错的时间。</p>
+                </div>
+              </div>
+            </a>
+          </li>
+
+          <li class="archive-item" data-index="3">
+            <a class="archive-link" href="/research/">
+              <div><h2 class="archive-item-title blur-text" data-blur-text="RESEARCH" data-blur-by="words">RESEARCH</h2></div>
+              <div class="archive-item-meta">
+                <div class="archive-item-meta-inner meta-right">
+                  <p class="blur-text" data-blur-text="梳理调研路径与判断依据，把趋势线索转成设计输入。" data-blur-by="words">梳理调研路径与判断依据，把趋势线索转成设计输入。</p>
+                </div>
+              </div>
+            </a>
+          </li>
+
+          <li class="archive-item" data-index="4">
+            <a class="archive-link" href="/marketing/">
+              <div><h2 class="archive-item-title blur-text" data-blur-text="MARKETING" data-blur-by="words">MARKETING</h2></div>
+              <div class="archive-item-meta">
+                <div class="archive-item-meta-inner meta-left">
+                  <p class="blur-text" data-blur-text="把产品卖点转成画面故事、脚本结构和投放素材。" data-blur-by="words">把产品卖点转成画面故事、脚本结构和投放素材。</p>
+                </div>
+              </div>
+            </a>
+          </li>
+
+          <li class="archive-item" data-index="5">
+            <a class="archive-link" href="/resources/">
+              <div><h2 class="archive-item-title blur-text" data-blur-text="RESOURCES" data-blur-by="words">RESOURCES</h2></div>
+              <div class="archive-item-meta">
+                <div class="archive-item-meta-inner meta-right">
+                  <p class="blur-text" data-blur-text="汇总工具、案例和关键词库，作为竞组共享索引。" data-blur-by="words">汇总工具、案例和关键词库，作为竞组共享索引。</p>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ABOUT (in front of chair) -->
+    <section class="Section About" id="contact" style="position:relative;z-index:20;">
+      <div class="c" data-layer="top">
+        <div class="about-text" id="about-text">
+          <span class="about-line">A shared AI knowledge base</span>
+          <span class="about-line">for the design department,</span>
+          <span class="about-line about-line-cn">把工作流、提示词、调研判断与营销素材整理成可搜索、可复用、可交付的团队索引。</span>
+          <span class="about-line">connecting marketing assets</span>
+          <span class="about-line">and cross-team resource indexes.</span>
+        </div>
+        <ul class="about-contacts">
+          <li>
+            <p class="label">KNOWLEDGE / 知识</p>
+            <p>WORKFLOWS <span class="font-gs">(+)</span> PROMPTS <span class="font-gs">(+)</span> RESEARCH</p>
+          </li>
+          <li>
+            <p class="label">OUTPUT / 输出</p>
+            <p>营销素材 <span class="font-gs">(VIA)</span> 跨组资源索引</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- UNICORN STUDIO EMBED (behind chair) -->
+    <section class="Section" id="unicorn-section" style="position:relative;z-index:5;pointer-events:auto;transform:translateY(-25vh);">
+      <div class="c" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="us-reveal" id="us-reveal">
+          <div class="us-embed-frame">
+            <div id="us-embed-wrap"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHIVE CTA SLOT (replaced by the domain navigation block) -->
+    <section class="Section" id="archive-front" style="position:relative;z-index:20;">
+    </section>
+
+    <!-- FOOTER -->
+    <section class="Section Footer" style="position:relative;z-index:20;">
+      <div class="c">
+        <p class="footer-text blur-text-manual">
+          <span class="blur-segment" style="--blur-delay:0ms;">这个知识库面向整个</span>
+          <span class="blur-segment" style="--blur-delay:140ms;"><span class="brand-yahee">YAHEE</span><span class="brand-tech">TECH</span></span>
+          <span class="blur-segment" style="--blur-delay:280ms;">设计部门，沉淀可复用的 AI 工作方法：</span>
+          <span class="blur-segment" style="--blur-delay:420ms;">workflows, prompt templates, research logic, marketing assets, scripts and cross-team references.</span>
+          <span class="blur-segment" style="--blur-delay:560ms;">它把实验过程、判断依据和交付素材整理成一个可检索、可复现、可持续扩展的 shared knowledge base。</span>
+        </p>
+        <p class="footer-right blur-text-manual is-visible" id="footer-credit">
+          <span class="blur-segment" style="--blur-delay:0ms;"><b>DESIGN BY CORVIN CHIANG</b></span>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const isMobile = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
+
+    // ============================================================
+    // PERLIN NOISE GLSL
+    // ============================================================
+    const NOISE_GLSL = /* glsl */`
+      vec4 permute(vec4 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
+      vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+      vec3 fade(vec3 t) { return t * t * t * (t * (t * 6.0 - 15.0) + 10.0); }
+
+      float cnoise(vec3 P) {
+        vec3 Pi0 = floor(P); vec3 Pi1 = Pi0 + vec3(1.0);
+        Pi0 = mod(Pi0, 289.0); Pi1 = mod(Pi1, 289.0);
+        vec3 Pf0 = fract(P); vec3 Pf1 = Pf0 - vec3(1.0);
+        vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+        vec4 iy = vec4(Pi0.yy, Pi1.yy);
+        vec4 iz0 = Pi0.zzzz; vec4 iz1 = Pi1.zzzz;
+        vec4 ixy = permute(permute(ix) + iy);
+        vec4 ixy0 = permute(ixy + iz0);
+        vec4 ixy1 = permute(ixy + iz1);
+        vec4 gx0 = ixy0 / 7.0;
+        vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;
+        gx0 = fract(gx0);
+        vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+        vec4 sz0 = step(gz0, vec4(0.0));
+        gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+        gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+        vec4 gx1 = ixy1 / 7.0;
+        vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;
+        gx1 = fract(gx1);
+        vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+        vec4 sz1 = step(gz1, vec4(0.0));
+        gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+        gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+        vec3 g000 = vec3(gx0.x,gy0.x,gz0.x); vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+        vec3 g010 = vec3(gx0.z,gy0.z,gz0.z); vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+        vec3 g001 = vec3(gx1.x,gy1.x,gz1.x); vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+        vec3 g011 = vec3(gx1.z,gy1.z,gz1.z); vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+        vec4 norm0 = taylorInvSqrt(vec4(dot(g000,g000),dot(g010,g010),dot(g100,g100),dot(g110,g110)));
+        g000 *= norm0.x; g010 *= norm0.y; g100 *= norm0.z; g110 *= norm0.w;
+        vec4 norm1 = taylorInvSqrt(vec4(dot(g001,g001),dot(g011,g011),dot(g101,g101),dot(g111,g111)));
+        g001 *= norm1.x; g011 *= norm1.y; g101 *= norm1.z; g111 *= norm1.w;
+        float n000 = dot(g000, Pf0);
+        float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+        float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+        float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+        float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+        float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+        float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+        float n111 = dot(g111, Pf1);
+        vec3 fade_xyz = fade(Pf0);
+        vec4 n_z = mix(vec4(n000,n100,n010,n110), vec4(n001,n101,n011,n111), fade_xyz.z);
+        vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+        float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
+        return 2.2 * n_xyz;
+      }
+    `;
+
+    // ============================================================
+    // POST-PROCESSING SHADERS
+    // ============================================================
+    const postVertexShader = /* glsl */`
+      varying vec2 v_uv;
+      void main() { v_uv = uv; gl_Position = vec4(position, 1.0); }
+    `;
+
+    const postFragmentShader = /* glsl */`
+      precision highp float;
+      uniform float u_time;
+      uniform float u_a_vel;
+      uniform float u_a_distort;
+      uniform sampler2D u_scene;
+      uniform vec2 u_resolution;
+      uniform float u_chairOverlap;
+      uniform vec2 u_mouseScreen;
+      varying vec2 v_uv;
+      const vec4 DARK = vec4(0.05, 0.05, 0.05, 1.0);
+      ${NOISE_GLSL}
+
+      // 8-direction edge detection on alpha channel
+      float detectEdge(sampler2D tex, vec2 uv, vec2 px) {
+        float a   = texture2D(tex, uv).a;
+        float aU  = texture2D(tex, uv + vec2( 0.0,  px.y)).a;
+        float aD  = texture2D(tex, uv + vec2( 0.0, -px.y)).a;
+        float aL  = texture2D(tex, uv + vec2(-px.x,  0.0)).a;
+        float aR  = texture2D(tex, uv + vec2( px.x,  0.0)).a;
+        float aUL = texture2D(tex, uv + vec2(-px.x,  px.y)).a;
+        float aUR = texture2D(tex, uv + vec2( px.x,  px.y)).a;
+        float aDL = texture2D(tex, uv + vec2(-px.x, -px.y)).a;
+        float aDR = texture2D(tex, uv + vec2( px.x, -px.y)).a;
+        float eH = max(abs(a - aL), abs(a - aR));
+        float eV = max(abs(a - aU), abs(a - aD));
+        float eD = max(max(abs(a-aUL),abs(a-aUR)), max(abs(a-aDL),abs(a-aDR))) * 0.7;
+        return max(max(eH, eV), eD);
+      }
+
+      void main() {
+        float g_cent = smoothstep(0.5, 0.0, distance(vec2(0.5), v_uv));
+        float ns = cnoise(vec3(v_uv * 10.0, u_time * 0.001));
+        float DIST = u_a_distort * 0.5;
+        float INF  = u_a_vel + DIST;
+        vec2 n_uv = v_uv + ns * g_cent;
+        vec2 uv1  = mix(v_uv, n_uv, INF);
+        vec4 color = texture2D(u_scene, uv1);
+        color.rgb  = mix(color.rgb, DARK.rgb, u_a_distort * 0.8);
+
+        if (u_chairOverlap > 0.01) {
+          // ── GlassSurface SVG displacement port ──
+          // Generate displacement from position (like SVG linearGradient red/blue)
+          float a = texture2D(u_scene, uv1).a;
+          float isChair = step(0.5, a);
+
+          // Displacement map: horizontal = red gradient, vertical = blue gradient
+          // Mimics the SVG linearGradient displacement of GlassSurface
+          vec2 chairCenter = vec2(0.5, 0.5);
+          vec2 fromCenter = uv1 - chairCenter;
+          float dispStrength = 0.04 * u_chairOverlap;
+
+          // Per-channel displacement (chromatic aberration like GlassSurface)
+          // Red channel: no offset (distortionScale = -180)
+          // Green channel: offset by 10 (distortionScale + greenOffset)
+          // Blue channel: offset by 20 (distortionScale + blueOffset)
+          vec2 dispR = fromCenter * dispStrength * 0.0;
+          vec2 dispG = fromCenter * dispStrength * 0.6;
+          vec2 dispB = fromCenter * dispStrength * 1.2;
+
+          float rCh = texture2D(u_scene, uv1 + dispR).r;
+          float gCh = texture2D(u_scene, uv1 + dispG).g;
+          float bCh = texture2D(u_scene, uv1 + dispB).b;
+          vec3 glassColor = vec3(rCh, gCh, bCh);
+
+          // Glass blur: sample multiple offsets and average (GlassSurface displace=0.7)
+          float blurSize = 3.0 / u_resolution.x * u_chairOverlap;
+          vec3 blur = vec3(0.0);
+          blur += texture2D(u_scene, uv1 + vec2(blurSize, 0.0)).rgb;
+          blur += texture2D(u_scene, uv1 - vec2(blurSize, 0.0)).rgb;
+          blur += texture2D(u_scene, uv1 + vec2(0.0, blurSize)).rgb;
+          blur += texture2D(u_scene, uv1 - vec2(0.0, blurSize)).rgb;
+          blur += texture2D(u_scene, uv1 + vec2(blurSize, blurSize) * 0.7).rgb;
+          blur += texture2D(u_scene, uv1 - vec2(blurSize, blurSize) * 0.7).rgb;
+          blur += texture2D(u_scene, uv1 + vec2(blurSize, -blurSize) * 0.7).rgb;
+          blur += texture2D(u_scene, uv1 - vec2(blurSize, -blurSize) * 0.7).rgb;
+          blur *= 0.125;
+
+          // Mix displaced color with blur
+          glassColor = mix(glassColor, blur, 0.5 * u_chairOverlap);
+
+          // Brightness boost (GlassSurface brightness=80, opacity=0.75)
+          glassColor = mix(glassColor, glassColor * 1.3 + vec3(0.05), u_chairOverlap * 0.3);
+
+          // Glass body: becomes increasingly transparent
+          float glassOpacity = isChair * mix(1.0, 0.12, u_chairOverlap);
+          vec4 glassBody = vec4(glassColor, glassOpacity);
+
+          // Inner glow: subtle white highlight on glass interior edges
+          vec2 px = 1.0 / u_resolution;
+          float aU = texture2D(u_scene, uv1 + vec2(0.0, px.y)).a;
+          float aD = texture2D(u_scene, uv1 - vec2(0.0, px.y)).a;
+          float aL = texture2D(u_scene, uv1 - vec2(px.x, 0.0)).a;
+          float aR = texture2D(u_scene, uv1 + vec2(px.x, 0.0)).a;
+          float minN = min(min(aU, aD), min(aL, aR));
+          float isEdge = isChair * (1.0 - step(0.5, minN));
+
+          // Edge stroke: thin white line
+          float mouseAspect = u_resolution.x / u_resolution.y;
+          vec2 toMouse = (uv1 - u_mouseScreen) * vec2(mouseAspect, 1.0);
+          float mouseGlow = 1.0 - smoothstep(0.1, 0.3, length(toMouse));
+          float edgeAlpha = isEdge * (0.4 + mouseGlow * 0.5) * u_chairOverlap;
+
+          // Composite: glass body + edge stroke
+          vec3 finalRgb = mix(glassBody.rgb, vec3(1.0), edgeAlpha);
+          float finalA = max(glassBody.a, edgeAlpha);
+
+          // Smooth blend from normal chair to glass chair
+          gl_FragColor = mix(color, vec4(finalRgb, finalA), u_chairOverlap);
+        } else {
+          gl_FragColor = color;
+        }
+      }
+    `;
+
+    // ============================================================
+    // MATCAP SHADERS
+    // ============================================================
+    const matcapVertexShader = /* glsl */`
+      varying vec3 v_normal; varying vec3 v_view; varying vec2 v_uv;
+      void main() {
+        vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+        v_normal = normalize(normalMatrix * normal);
+        v_view = normalize(-mvPos.xyz);
+        v_uv = uv;
+        gl_Position = projectionMatrix * mvPos;
+      }
+    `;
+
+    const matcapFragmentShader = /* glsl */`
+      precision highp float;
+      uniform sampler2D u_mtc;
+      varying vec3 v_normal; varying vec3 v_view; varying vec2 v_uv;
+      void main() {
+        vec3 h_sky = vec3(1.0); vec3 h_ground = vec3(0.1);
+        vec3 h_dir = normalize(vec3(1.0, -1.0, 1.0));
+        vec3 hlight = mix(h_ground, h_sky, 1.0 - dot(h_dir, v_normal));
+        vec3 x = normalize(vec3(v_view.z, 0.0, -v_view.x));
+        vec3 y = cross(v_view, x);
+        vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * 0.495 + 0.5;
+        vec4 mtc = texture2D(u_mtc, fakeUv);
+        mtc.rgb += hlight * 0.15;
+        gl_FragColor = vec4(mtc.rgb, 1.0);
+      }
+    `;
+
+    // ============================================================
+    // SPINNER — drag + inertia + scroll
+    // ============================================================
+    function _lerp(a, b, t) { return a * (1 - t) + b * t; }
+    const TAU = Math.PI * 2;
+    function normalizeAngle(angle) {
+      return ((angle + Math.PI) % TAU + TAU) % TAU - Math.PI;
+    }
+    function nearestAngleToTarget(angle, target) {
+      return target + normalizeAngle(angle - target);
+    }
+    function smoothClamp(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+    function easeOutCubic(x) { x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3); }
+    function easeInOutCubic(x) {
+      x = Math.max(0, Math.min(1, x));
+      return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    }
+    function getRenderDpr() {
+      const nativeDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cssPixels = Math.max(1, window.innerWidth * window.innerHeight);
+      const pixelBudget = isMobile ? 1800000 : 3000000;
+      return Math.max(1, Math.min(nativeDpr, Math.sqrt(pixelBudget / cssPixels)));
+    }
+
+    class Spinner {
+      constructor() {
+        this.spin = { x: 0, y: 0 };
+        this.velocity = { x: 0.005, y: 0.005 };
+        this.pointerDown = false;
+        this.pointer = { x: 0, y: 0 };
+        this.mouse = { x: 0, y: 0, mx: 0, my: 0, ww: window.innerWidth, wh: window.innerHeight };
+        this.coeff = isMobile ? 0.0015 : 0.0005;
+
+        // Emulate Lenis smooth scroll to get smoothed velocity
+        // Lenis(duration:1.8, smoothWheel:true, easing: 1-pow(2,-10*t))
+        // maintains an internal smoothScroll that lerps toward actual scroll.
+        // velocity = per-frame delta of that smooth position.
+        // lerp factor ~0.07 at 60fps approximates Lenis duration:1.8 + expo easing.
+        this.smoothScroll = window.scrollY;
+        this.scrollSpeed = 0;
+
+        this.addEvents();
+      }
+
+      addEvents() {
+        if ('ontouchmove' in window) {
+          window.addEventListener('touchstart', this.onDown.bind(this), { passive: true });
+          window.addEventListener('touchmove', this.onMove.bind(this), { passive: true });
+          window.addEventListener('touchend', this.onUp.bind(this));
+        } else {
+          window.addEventListener('mousedown', this.onDown.bind(this));
+          window.addEventListener('mousemove', this.onMove.bind(this));
+          window.addEventListener('mouseup', this.onUp.bind(this));
+        }
+        // Lenis-style smooth scroll: intercept wheel, smooth-scroll content, track smooth velocity
+        this.scrollTarget = window.scrollY;
+        this.scrollPos = window.scrollY;
+        this.scrollVel = 0;
+        this._wheelActive = false;
+        let _wheelTimer;
+        window.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          // Mark wheel active so scroll event knows it's from wheel, not scrollbar
+          this._wheelActive = true;
+          clearTimeout(_wheelTimer);
+          _wheelTimer = setTimeout(() => { this._wheelActive = false; }, 200);
+          // Normalize delta like Lenis: clamp to [-100, 100], apply multiplier
+          let delta = e.deltaY;
+          if (delta > 80) delta = 80;
+          if (delta < -80) delta = -80;
+          this.scrollTarget += delta * 0.8;
+          // Clamp to actual scrollable range
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          this.scrollTarget = Math.max(0, Math.min(this.scrollTarget, maxScroll));
+        }, { passive: false });
+        // Scrollbar drag: sync target to native position without adding rotation
+        window.addEventListener('scroll', () => {
+          if (!this._wheelActive) {
+            this.scrollTarget = window.scrollY;
+            this.scrollPos = window.scrollY;
+            this._rawScrollVel = 0;
+            this.scrollVel = 0;
+          }
+        });
+        // Animate scroll position toward target (Lenis emulate)
+        this._rawScrollVel = 0;
+        const scrollAnim = () => {
+          if (this._wheelActive) {
+            const prev = this.scrollPos;
+            this.scrollPos = _lerp(this.scrollPos, this.scrollTarget, 0.05);
+            this._rawScrollVel = this.scrollPos - prev;
+            // Double-smooth the velocity for ultra-smooth chair spin
+            this.scrollVel = _lerp(this.scrollVel, this._rawScrollVel, 0.1);
+            window.scrollTo(0, this.scrollPos);
+          } else {
+            // Scrollbar drag: just lerp velocity to zero (no chair spin)
+            this._rawScrollVel = 0;
+            this.scrollVel = _lerp(this.scrollVel, 0, 0.1);
+            this.scrollPos = window.scrollY;
+            this.scrollTarget = window.scrollY;
+          }
+          requestAnimationFrame(scrollAnim);
+        };
+        requestAnimationFrame(scrollAnim);
+      }
+
+      onDown(e) {
+        this.pointerDown = true;
+        const t = e.touches ? e.touches[0] : e;
+        this.pointer.x = t.clientX;
+        this.pointer.y = t.clientY;
+      }
+
+      onMove(e) {
+        const t = e.touches ? e.touches[0] : e;
+        this.mouse.x = t.clientX / this.mouse.ww * 2 - 1;
+        this.mouse.y = -(t.clientY / this.mouse.wh) * 2 + 1;
+        if (!this.pointerDown) return;
+        const cx = t.clientX, cy = t.clientY;
+        this.velocity.x += (cx - this.pointer.x) * this.coeff;
+        this.velocity.y += (cy - this.pointer.y) * this.coeff;
+        this.pointer.x = cx;
+        this.pointer.y = cy;
+      }
+
+      onUp() { this.pointerDown = false; }
+
+      resize() {
+        this.mouse.ww = window.innerWidth;
+        this.mouse.wh = window.innerHeight;
+      }
+
+      update() {
+        // Emulate Lenis velocity: lerp a virtual smooth scroll toward real scrollY,
+        // then take the per-frame delta as velocity — identical to how Lenis works.
+        // Lenis(duration:1.8, easing:1-pow(2,-10*t)): lerp ~0.07/frame at 60fps.
+        const targetScroll = window.scrollY;
+        const prevSmooth = this.smoothScroll;
+        this.smoothScroll = _lerp(this.smoothScroll, targetScroll, 0.06);
+        this.scrollSpeed = this.smoothScroll - prevSmooth;
+
+        // Damping
+        this.velocity.x *= 0.95;
+        this.velocity.y *= 0.95;
+
+        // Smooth mouse velocity (outer container wobble)
+        this.mouse.mx = _lerp(this.mouse.mx, this.velocity.x, 0.1);
+        this.mouse.my = _lerp(this.mouse.my, this.velocity.y, 0.1);
+
+        // Accumulate spin using the original inertia model.
+        this.spin.x += this.velocity.x + Math.sign(this.velocity.x) * this.coeff * (1 - Number(this.pointerDown));
+        this.spin.y += this.velocity.y + Math.sign(this.velocity.y) * this.coeff * (1 - Number(this.pointerDown));
+
+        // Scroll drives rotation
+        this.spin.y += this.scrollSpeed * 0.002;
+        this.spin.x += this.scrollSpeed * 0.002;
+      }
+    }
+
+    // ============================================================
+    // APP
+    // ============================================================
+    class App {
+      constructor() {
+        this.canvas = document.getElementById('gl-canvas');
+        this.wrapper = document.querySelector('[data-gl]');
+        this.time = 0;
+        this.intro = {
+          active: true,
+          entering: false,
+          entered: false,
+          flightStart: 0,
+          enterStart: 0,
+          flightDuration: 3300,
+          enterDuration: 2400,
+          ready: false,
+          enterFrom: null,
+          introSpin: 0,
+          introSpinLastFrame: 0
+        };
+        this.initRenderer();
+        this.initCamera();
+        this.initScene();
+        this.initPostProcessing();
+        this.spinner = new Spinner();
+        this.loadModel();
+        this.addEvents();
+      }
+
+      initRenderer() {
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
+        this.renderer.setPixelRatio(getRenderDpr());
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setClearColor(0x000000, 0);
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+      }
+
+      initCamera() {
+        this.camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 100);
+        this.camera.position.set(0, 0, 5);
+      }
+
+      initScene() { this.scene = new THREE.Scene(); }
+
+      initPostProcessing() {
+        const dpr = getRenderDpr();
+        this.renderTarget = new THREE.WebGLRenderTarget(
+          window.innerWidth * dpr, window.innerHeight * dpr
+        );
+        this.postScene = new THREE.Scene();
+        this.postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        this.postMaterial = new THREE.ShaderMaterial({
+          vertexShader: postVertexShader,
+          fragmentShader: postFragmentShader,
+          uniforms: {
+            u_time:         { value: 0 },
+            u_a_vel:        { value: 0 },
+            u_a_distort:    { value: 0 },
+            u_scene:        { value: this.renderTarget.texture },
+            u_resolution:   { value: new THREE.Vector2(window.innerWidth * dpr, window.innerHeight * dpr) },
+            u_chairOverlap: { value: 0 },
+            u_mouseScreen:  { value: new THREE.Vector2(0.5, 0.5) },
+          },
+          transparent: true,
+          depthTest: false,
+          depthWrite: false,
+        });
+        this._chairOverlap = 0;
+        this._archiveFly = 0;
+        this.postQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.postMaterial);
+        this.postScene.add(this.postQuad);
+      }
+
+      advanceIntroSpin(now) {
+        if (!this.intro.introSpinLastFrame) {
+          this.intro.introSpinLastFrame = now;
+          return this.intro.introSpin;
+        }
+        const spinVelocity = isMobile ? 0.0015 : 0.0025;
+        const frameScale = Math.max(0, Math.min(3, (now - this.intro.introSpinLastFrame) / 16.667));
+        this.intro.introSpinLastFrame = now;
+        this.intro.introSpin = normalizeAngle(this.intro.introSpin + spinVelocity * frameScale);
+        return this.intro.introSpin;
+      }
+
+      async loadModel() {
+        const loader = new GLTFLoader();
+        const textureLoader = new THREE.TextureLoader();
+        const progressBar = document.getElementById('progress-bar');
+        const preloader = document.getElementById('preloader');
+
+        const matcapTexture = await textureLoader.loadAsync('./mtc_dark.webp');
+        matcapTexture.flipY = false;
+
+        this.matcapMaterial = new THREE.ShaderMaterial({
+          vertexShader: matcapVertexShader,
+          fragmentShader: matcapFragmentShader,
+          uniforms: { u_mtc: { value: matcapTexture } },
+        });
+
+        try {
+          const gltf = await new Promise((resolve, reject) => {
+            loader.load('./double-chair.glb', resolve,
+              (xhr) => { if (xhr.lengthComputable) progressBar.style.width = (xhr.loaded / xhr.total * 100) + '%'; },
+              reject
+            );
+          });
+
+          progressBar.style.width = '100%';
+          const model = gltf.scene;
+          model.traverse((child) => { if (child.isMesh) child.material = this.matcapMaterial; });
+
+          const s = isMobile ? 0.3 : 0.5;
+          model.scale.set(s, s, s);
+
+          const box = new THREE.Box3().setFromObject(model);
+          const center = box.getCenter(new THREE.Vector3());
+          model.position.sub(center);
+
+          // Two-layer rotation hierarchy
+          this.outerContainer = new THREE.Group();
+          this.innerMesh = new THREE.Group();
+          this.innerMesh.add(model);
+          this.outerContainer.add(this.innerMesh);
+          this.scene.add(this.outerContainer);
+          this.setIntroPose(0);
+          requestAnimationFrame(() => {
+            document.body.classList.add('boot-ready');
+            setTimeout(() => {
+              const bootMask = document.getElementById('boot-mask');
+              if (bootMask) bootMask.remove();
+            }, 450);
+          });
+
+          setTimeout(() => {
+            preloader.classList.add('hidden');
+            setTimeout(() => preloader.remove(), 600);
+            this.intro.flightStart = performance.now();
+          }, 300);
+
+          this.render();
+        } catch (err) {
+          console.error('Failed to load model:', err);
+          document.body.classList.add('boot-ready');
+        }
+      }
+
+      addEvents() {
+        window.addEventListener('resize', this.onResize.bind(this));
+        const enterButton = document.getElementById('intro-enter');
+        if (enterButton) {
+          enterButton.addEventListener('click', () => this.enterSite());
+        }
+        window.addEventListener('click', () => {
+          if (this.intro && this.intro.ready && !this.intro.entering && !this.intro.entered) {
+            this.enterSite();
+          }
+        });
+        // Cursor: pointer over chair area, default elsewhere
+        let lastMouseX = 0, lastMouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+          lastMouseX = e.clientX;
+          lastMouseY = e.clientY;
+          if (this.intro && !this.intro.entered) {
+            const margin = 58;
+            const x = Math.max(margin, Math.min(window.innerWidth - margin, e.clientX));
+            const y = Math.max(margin, Math.min(window.innerHeight - margin, e.clientY));
+            document.body.style.setProperty('--intro-enter-x', x + 'px');
+            document.body.style.setProperty('--intro-enter-y', y + 'px');
+            document.body.classList.remove('cursor-chair', 'cursor-grab');
+            return;
+          }
+          // Chair occupies center of viewport - tight ellipse around chair
+          const cx = window.innerWidth / 2;
+          const cy = window.innerHeight / 2;
+          const rx = window.innerWidth * 0.18;
+          const ry = window.innerHeight * 0.22;
+          const dx = (e.clientX - cx) / rx;
+          const dy = (e.clientY - cy) / ry;
+          const inChair = (dx * dx + dy * dy) <= 1;
+          document.body.classList.toggle('cursor-chair', inChair);
+        });
+        window.addEventListener('mousedown', () => {
+          if (this.intro && !this.intro.entered) {
+            document.body.classList.remove('cursor-chair', 'cursor-grab');
+            return;
+          }
+          document.body.classList.remove('cursor-chair');
+          document.body.classList.add('cursor-grab');
+        });
+        window.addEventListener('mouseup', () => {
+          document.body.classList.remove('cursor-grab');
+          if (this.intro && !this.intro.entered) {
+            document.body.classList.remove('cursor-chair');
+            return;
+          }
+          // Re-check position for correct cursor after release
+          const cx = window.innerWidth / 2;
+          const cy = window.innerHeight / 2;
+          const rx = window.innerWidth * 0.18;
+          const ry = window.innerHeight * 0.22;
+          const dx = (lastMouseX - cx) / rx;
+          const dy = (lastMouseY - cy) / ry;
+          const inChair = (dx * dx + dy * dy) <= 1;
+          document.body.classList.toggle('cursor-chair', inChair);
+        });
+        window.addEventListener('mouseleave', () => {
+          document.body.classList.remove('cursor-chair');
+          document.body.classList.remove('cursor-grab');
+        });
+      }
+
+      onResize() {
+        const w = window.innerWidth, h = window.innerHeight;
+        const dpr = getRenderDpr();
+        this.camera.aspect = w / h;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setPixelRatio(dpr);
+        this.renderer.setSize(w, h);
+        this.renderTarget.setSize(w * dpr, h * dpr);
+        this.postMaterial.uniforms.u_resolution.value.set(w * dpr, h * dpr);
+        this.spinner.resize();
+      }
+
+      getIntroLayout() {
+        const finalCameraZ = 5.55;
+        const viewH = 2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) * 0.5) * finalCameraZ;
+        const viewW = viewH * this.camera.aspect;
+        const wide = Math.max(0, Math.min(1, (this.camera.aspect - 1.45) / 0.55));
+        const endScale = isMobile ? 0.72 : _lerp(0.8, 0.86, wide);
+        return {
+          start: {
+            x: -viewW * 1.12,
+            y: viewH * 0.72,
+            z: -0.9,
+            scale: endScale * 0.55,
+            rx: -0.9,
+            ry: -1.9,
+            rz: 0.55
+          },
+          end: {
+            x: 0,
+            y: 0.03,
+            z: 0,
+            scale: endScale,
+            rx: -0.08,
+            ry: -0.5,
+            rz: 0.08
+          },
+          cameraStart: {
+            x: -viewW * 0.04,
+            y: viewH * 0.06,
+            z: 5.9
+          },
+          cameraEnd: {
+            x: 0,
+            y: 0.04,
+            z: finalCameraZ
+          }
+        };
+      }
+
+      getViewportWorldSize(z = 0) {
+        const distance = Math.abs(this.camera.position.z - z);
+        const height = 2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) * 0.5) * distance;
+        return {
+          width: height * this.camera.aspect,
+          height
+        };
+      }
+
+      getArchiveFlyProgress() {
+        const archive = document.getElementById('archive-front');
+        if (!archive || !document.body.classList.contains('site-entered')) return 0;
+        const rect = archive.getBoundingClientRect();
+        const viewH = window.innerHeight;
+        const start = viewH * 0.48;
+        const end = -viewH * 0.18;
+        return smoothClamp((start - rect.top) / (start - end));
+      }
+
+      getArchiveFlyTargetX() {
+        const size = this.getViewportWorldSize(this.outerContainer ? this.outerContainer.position.z : 0);
+        return size.width * 0.5 + 2.35;
+      }
+
+      enterSite() {
+        if (!this.outerContainer || this.intro.entered || this.intro.entering) return;
+        this.intro.entering = true;
+        this.intro.enterStart = performance.now();
+        this.intro.introSpinLastFrame = this.intro.enterStart;
+        this.intro.enterFrom = {
+          position: this.outerContainer.position.clone(),
+          scale: this.outerContainer.scale.x,
+          rotation: new THREE.Euler(
+            nearestAngleToTarget(this.outerContainer.rotation.x, 0),
+            nearestAngleToTarget(this.outerContainer.rotation.y, 0),
+            nearestAngleToTarget(this.outerContainer.rotation.z, 0)
+          ),
+          innerRotation: new THREE.Euler(
+            nearestAngleToTarget(this.innerMesh.rotation.x, 0.18),
+            nearestAngleToTarget(this.innerMesh.rotation.y, 0.28),
+            nearestAngleToTarget(this.innerMesh.rotation.z || 0, 0)
+          ),
+          cameraPosition: this.camera.position.clone()
+        };
+        this.spinner.pointerDown = false;
+        this.spinner.velocity.x = 0;
+        this.spinner.velocity.y = 0;
+        this.spinner.mouse.mx = 0;
+        this.spinner.mouse.my = 0;
+        this.spinner.spin.x = this.innerMesh.rotation.y;
+        this.spinner.spin.y = this.innerMesh.rotation.x;
+        this.spinner.scrollSpeed = 0;
+        document.body.classList.remove('cursor-chair', 'cursor-grab');
+        document.body.classList.add('intro-entering');
+        document.body.classList.remove('intro-ready');
+        requestAnimationFrame(() => {
+          document.body.classList.remove('intro-pending');
+        });
+      }
+
+      setIntroPose(progress) {
+        if (!this.outerContainer || !this.innerMesh) return;
+        const p = easeOutCubic(progress);
+        const layout = this.getIntroLayout();
+        const start = layout.start;
+        const end = layout.end;
+        this.outerContainer.position.set(
+          _lerp(start.x, end.x, p),
+          _lerp(start.y, end.y, p),
+          _lerp(start.z, end.z, p)
+        );
+        this.outerContainer.scale.setScalar(_lerp(start.scale, end.scale, p));
+        this.outerContainer.rotation.set(
+          _lerp(start.rx, end.rx, p),
+          _lerp(start.ry, end.ry, p),
+          _lerp(start.rz, end.rz, p)
+        );
+        this.innerMesh.rotation.x = _lerp(-0.7, 0.2, p) + Math.sin(this.time * 0.01) * 0.035;
+        this.innerMesh.rotation.y = _lerp(-1.3, 0.28, p) + this.intro.introSpin;
+        this.camera.position.set(
+          _lerp(layout.cameraStart.x, layout.cameraEnd.x, p),
+          _lerp(layout.cameraStart.y, layout.cameraEnd.y, p),
+          _lerp(layout.cameraStart.z, layout.cameraEnd.z, p)
+        );
+        this.camera.lookAt(0, 0, 0);
+      }
+
+      setEnterPose(progress, now) {
+        if (!this.outerContainer || !this.innerMesh) return;
+        const p = easeInOutCubic(progress);
+        const from = this.intro.enterFrom || {
+          position: new THREE.Vector3(0, 0.03, 0),
+          scale: 0.82,
+          rotation: new THREE.Euler(-0.08, -0.5, 0.08),
+          innerRotation: new THREE.Euler(0.2, 0.2, 0),
+          cameraPosition: new THREE.Vector3(0, 0.04, 5.55)
+        };
+        const targetInnerX = 0.18;
+        const targetInnerZ = 0;
+        const fromInnerY = nearestAngleToTarget(from.innerRotation.y, this.spinner.spin.x);
+        const fromInnerX = nearestAngleToTarget(from.innerRotation.x, targetInnerX);
+        const fromInnerZ = nearestAngleToTarget(from.innerRotation.z || 0, targetInnerZ);
+        this.outerContainer.position.set(
+          _lerp(from.position.x, 0, p),
+          _lerp(from.position.y, 0, p),
+          _lerp(from.position.z, 0, p)
+        );
+        this.outerContainer.scale.setScalar(_lerp(from.scale, 1, p));
+        this.outerContainer.rotation.set(
+          _lerp(from.rotation.x, 0, p),
+          _lerp(from.rotation.y, 0, p),
+          _lerp(from.rotation.z, 0, p)
+        );
+        this.innerMesh.rotation.x = _lerp(fromInnerX, targetInnerX, p);
+        this.innerMesh.rotation.y = _lerp(fromInnerY, this.spinner.spin.x, p);
+        this.innerMesh.rotation.z = _lerp(fromInnerZ, targetInnerZ, p);
+        this.camera.position.set(
+          _lerp(from.cameraPosition.x, 0, p),
+          _lerp(from.cameraPosition.y, 0, p),
+          _lerp(from.cameraPosition.z, 5, p)
+        );
+        this.camera.lookAt(0, 0, 0);
+      }
+
+      render() {
+        requestAnimationFrame(this.render.bind(this));
+        this.time += 0.5;
+        if (!this.outerContainer) return;
+
+        this.spinner.update();
+        const now = performance.now();
+        if (this.intro.active && !this.intro.entered) {
+          this.advanceIntroSpin(now);
+        }
+
+        if (this.intro.active && !this.intro.entered) {
+          if (this.intro.entering) {
+            const p = (now - this.intro.enterStart) / this.intro.enterDuration;
+            this.setEnterPose(p, now);
+            if (p >= 1) {
+              this.intro.active = false;
+              this.intro.entered = true;
+              this.intro.entering = false;
+              this.spinner.spin.x = this.innerMesh.rotation.y;
+              this.spinner.spin.y = this.innerMesh.rotation.x;
+              this.spinner.velocity.x = isMobile ? 0.0015 : 0.0025;
+              this.spinner.velocity.y = isMobile ? 0.0012 : 0.002;
+              this.spinner.mouse.mx = 0;
+              this.spinner.mouse.my = 0;
+              this.spinner.scrollSpeed = 0;
+              document.body.classList.remove('intro-pending', 'intro-entering', 'intro-ready');
+              document.body.classList.add('site-entered');
+              setTimeout(() => window.dispatchEvent(new CustomEvent('site:entered')), 650);
+            }
+          } else {
+            const p = this.intro.flightStart ? (now - this.intro.flightStart) / this.intro.flightDuration : 0;
+            this.setIntroPose(p);
+            if (p >= 1 && !this.intro.ready) {
+              this.intro.ready = true;
+              document.body.classList.add('intro-ready');
+            }
+          }
+
+          this.postMaterial.uniforms.u_time.value = this.time;
+          this.postMaterial.uniforms.u_a_vel.value = 0;
+          this.postMaterial.uniforms.u_a_distort.value = 0;
+          this.postMaterial.uniforms.u_chairOverlap.value = 0;
+          this.renderFrame();
+          return;
+        }
+
+        // Outer container: subtle wobble
+        const archiveFlyTarget = this.getArchiveFlyProgress();
+        const flyEase = Math.max(0.014, Math.min(0.034, 0.034 * (1440 / window.innerWidth)));
+        this._archiveFly = _lerp(this._archiveFly, archiveFlyTarget, flyEase);
+        if (this._archiveFly < 0.002) this._archiveFly = 0;
+        if (this._archiveFly > 0.998) this._archiveFly = 1;
+        this.outerContainer.position.x = _lerp(0, this.getArchiveFlyTargetX(), this._archiveFly);
+        this.outerContainer.position.y = _lerp(0, 0.12, this._archiveFly);
+        this.outerContainer.position.z = 0;
+        this.outerContainer.rotation.z = this.spinner.mouse.mx;
+        this.outerContainer.rotation.x = this.spinner.mouse.mx;
+        this.outerContainer.rotation.y = this.spinner.mouse.my;
+
+        // Inner mesh: accumulated spin
+        this.innerMesh.rotation.x = this.spinner.spin.y;
+        this.innerMesh.rotation.y = this.spinner.spin.x;
+        if (this._archiveFly > 0.002) {
+          const flySpin = Math.abs(this.spinner.scrollSpeed) * 0.026 * this._archiveFly;
+          this.innerMesh.rotation.x += flySpin;
+          this.innerMesh.rotation.y += flySpin;
+        }
+
+        // Chair overlap: glass effect between About contacts and Unicorn Studio bottom
+        // Fade IN (become glass): when About contacts bottom leaves viewport center going up
+        // Fade OUT (become solid): when Unicorn section bottom leaves viewport bottom going up
+        const aboutSection = document.getElementById('contact');
+        const usSection = document.getElementById('unicorn-section');
+        const usFrame = document.querySelector('.us-embed-frame');
+        if (aboutSection && usSection) {
+          const viewH = window.innerHeight;
+          const aboutBottom = aboutSection.getBoundingClientRect().bottom;
+          let usBottom = usSection.getBoundingClientRect().bottom;
+          if (usFrame) {
+            const frameRect = usFrame.getBoundingClientRect();
+            const defaultFrameHeight = 800;
+            usBottom -= Math.max(0, frameRect.height - defaultFrameHeight);
+          }
+
+          // Glass zone: between About bottom leaving viewport and Unicorn bottom leaving viewport
+          // fadeIn:  0→1 as About bottom goes from 60%→20% of viewport
+          // fadeOut: 1→0 as Unicorn bottom goes from 80%→40% of viewport (recover to solid)
+          const fadeIn  = smoothClamp((viewH * 0.6 - aboutBottom) / (viewH * 0.4));
+          const fadeOut = smoothClamp((usBottom - viewH * 0.4) / (viewH * 0.4));
+          const overlapTarget = fadeIn * fadeOut;
+
+          this._chairOverlap = _lerp(this._chairOverlap, overlapTarget, 0.04);
+          if (this._chairOverlap < 0.005) this._chairOverlap = 0;
+          this.postMaterial.uniforms.u_chairOverlap.value = this._chairOverlap;
+        }
+
+        // Pass mouse position to post shader (UV coords: 0-1, Y=0 at bottom for GL textures)
+        const mx = (this.spinner.mouse.x + 1) * 0.5;
+        const my = (this.spinner.mouse.y + 1) * 0.5;
+        this.postMaterial.uniforms.u_mouseScreen.value.set(mx, my);
+
+        // Post-processing: only scroll velocity drives liquid
+        this.postMaterial.uniforms.u_time.value = this.time;
+        this.postMaterial.uniforms.u_a_vel.value = Math.abs(this.spinner.scrollSpeed) * 0.005;
+        this.postMaterial.uniforms.u_a_distort.value = 0;
+
+        this.renderFrame();
+      }
+
+      renderFrame() {
+        this.renderer.setRenderTarget(this.renderTarget);
+        this.renderer.setClearColor(0x000000, 0);
+        this.renderer.clear();
+        this.renderer.render(this.scene, this.camera);
+        this.renderer.setRenderTarget(null);
+        this.renderer.render(this.postScene, this.postCamera);
+      }
+    }
+
+    // ============================================================
+    // About text line-by-line reveal on scroll
+    // ============================================================
+    const aboutEl = document.getElementById('about-text');
+    if (aboutEl) {
+      let animTimers = [];
+      let aboutRevealed = false;
+      const lines = aboutEl.querySelectorAll('.about-line');
+      const contactLines = document.querySelectorAll('.about-contacts li');
+      const clearAboutTimers = () => {
+        animTimers.forEach(t => clearTimeout(t));
+        animTimers = [];
+      };
+      const resetAboutReveal = () => {
+        clearAboutTimers();
+        aboutRevealed = false;
+        lines.forEach(line => line.classList.remove('visible'));
+        contactLines.forEach(line => line.classList.remove('visible'));
+      };
+      const revealAbout = () => {
+        if (aboutRevealed) return;
+        if (!document.body.classList.contains('site-entered') || document.body.classList.contains('intro-entering')) return;
+        aboutRevealed = true;
+        clearAboutTimers();
+        lines.forEach((line, i) => {
+          animTimers.push(setTimeout(() => line.classList.add('visible'), i * 260));
+        });
+        contactLines.forEach((line, i) => {
+          animTimers.push(setTimeout(() => line.classList.add('visible'), (lines.length + i) * 260));
+        });
+      };
+      const revealIfInView = () => {
+        const rect = aboutEl.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.96 && rect.bottom > window.innerHeight * 0.05) revealAbout();
+      };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            revealAbout();
+          } else {
+            resetAboutReveal();
+          }
+        });
+      }, { threshold: 0.01, rootMargin: '0px 0px -4% 0px' });
+      observer.observe(aboutEl);
+      window.addEventListener('site:entered', () => setTimeout(revealIfInView, 220));
+      window.addEventListener('resize', revealIfInView);
+      window.addEventListener('scroll', revealIfInView, { passive: true });
+    }
+
+    // Footer credit animation (same logic)
+    const footerCredit = document.getElementById('footer-credit');
+    if (footerCredit) {
+      const footerObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const lines = entry.target.querySelectorAll('.about-line');
+          if (entry.isIntersecting) {
+            lines.forEach((line, i) => {
+              setTimeout(() => line.classList.add('visible'), i * 150);
+            });
+          } else {
+            lines.forEach(line => line.classList.remove('visible'));
+          }
+        });
+      }, { threshold: 0.2 });
+      footerObs.observe(footerCredit);
+    }
+
+    // Unicorn embed reveal: single block upward reveal, outside the iframe/runtime.
+    const usReveal = document.getElementById('us-reveal');
+    if (usReveal) {
+      const revealUnicorn = () => {
+        if (!document.body.classList.contains('site-entered')) return;
+        usReveal.classList.add('is-visible');
+      };
+      const hideUnicorn = () => {
+        usReveal.classList.remove('is-visible');
+      };
+      const usObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            revealUnicorn();
+          } else {
+            hideUnicorn();
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+      usObserver.observe(usReveal);
+      window.addEventListener('site:entered', () => {
+        const rect = usReveal.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > window.innerHeight * 0.08) {
+          setTimeout(revealUnicorn, 300);
+        }
+      });
+    }
+
+    // ============================================================
+    // TextPressure — vanilla JS port (inside liquid-glass button)
+    // ============================================================
+    (function initTextPressure() {
+      const containers = document.querySelectorAll('[data-text-pressure]');
+      if (!containers.length) return;
+
+      const instances = [];
+      containers.forEach(container => {
+        const text = container.dataset.textPressure || 'DOMAIN NAVIGATION';
+        const chars = text.split('');
+        const title = document.createElement('div');
+        title.className = 'text-pressure-title';
+
+        const spans = [];
+        chars.forEach(ch => {
+          const span = document.createElement('span');
+          span.innerHTML = ch === ' ' ? '&nbsp;' : ch;
+          span.dataset.char = ch;
+          title.appendChild(span);
+          spans.push(span);
+        });
+
+        container.textContent = '';
+        container.appendChild(title);
+        instances.push({ container, title, spans, chars });
+      });
+
+      function setSize(instance) {
+        const cw = instance.container.offsetWidth;
+        let fs = cw / (instance.chars.length / 2);
+        fs = Math.max(fs, 36);
+        instance.title.style.fontSize = fs + 'px';
+      }
+      instances.forEach(setSize);
+      window.addEventListener('resize', () => instances.forEach(setSize));
+
+      const mouse = { x: 0, y: 0 };
+      const cursor = { x: innerWidth / 2, y: innerHeight / 2 };
+      mouse.x = cursor.x;
+      mouse.y = cursor.y;
+
+      window.addEventListener('mousemove', e => { cursor.x = e.clientX; cursor.y = e.clientY; });
+      window.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        cursor.x = t.clientX; cursor.y = t.clientY;
+      }, { passive: true });
+
+      function getAttr(distance, maxDist, minVal, maxVal) {
+        const val = maxVal - Math.abs((maxVal * distance) / maxDist);
+        return Math.max(minVal, val + minVal);
+      }
+
+      function animate() {
+        mouse.x += (cursor.x - mouse.x) / 15;
+        mouse.y += (cursor.y - mouse.y) / 15;
+
+        instances.forEach(instance => {
+          const titleRect = instance.title.getBoundingClientRect();
+          const maxDist = titleRect.width / 2;
+          instance.spans.forEach(span => {
+            const rect = span.getBoundingClientRect();
+            const cx = rect.x + rect.width / 2;
+            const cy = rect.y + rect.height / 2;
+            const dx = mouse.x - cx;
+            const dy = mouse.y - cy;
+            const d = Math.sqrt(dx * dx + dy * dy);
+
+            const wdth = Math.floor(getAttr(d, maxDist, 5, 200));
+            const wght = Math.floor(getAttr(d, maxDist, 800, 900));
+            const ital = getAttr(d, maxDist, 0, 1).toFixed(2);
+            span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${ital}`;
+          });
+        });
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    // ============================================================
+    // BlurText — vanilla JS/CSS equivalent for static pages
+    // ============================================================
+    (function initBlurText() {
+      const nodes = document.querySelectorAll('[data-blur-text], .blur-text-manual');
+      if (!nodes.length) return;
+
+      nodes.forEach(node => {
+        if (!node.hasAttribute('data-blur-text')) return;
+        const text = node.dataset.blurText || node.textContent.trim();
+        const by = node.dataset.blurBy || 'words';
+        const segments = by === 'chars' ? text.split('') : text.split(' ');
+        node.textContent = '';
+        node.classList.add('blur-text');
+
+        segments.forEach((segment, index) => {
+          const span = document.createElement('span');
+          span.className = 'blur-segment';
+          span.style.setProperty('--blur-delay', `${index * 200}ms`);
+          span.textContent = segment;
+          node.appendChild(span);
+          if (by === 'words' && index < segments.length - 1) {
+            node.appendChild(document.createTextNode('\u00A0'));
+          }
+        });
+      });
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+
+      nodes.forEach(node => observer.observe(node));
+    })();
+
+    // ============================================================
+    // VariableProximity — vanilla JS port (About section)
+    // ============================================================
+    (function initVariableProximity() {
+      const container = document.getElementById('about-text');
+      if (!container) return;
+
+      const RADIUS = 150;
+      const FROM = { wght: 400, opsz: 9 };
+      const TO   = { wght: 1000, opsz: 40 };
+
+      const mouse = { x: -9999, y: -9999 };
+      const lines = container.querySelectorAll('.about-line:not(.about-line-cn)');
+      const allCharSpans = [];
+
+      lines.forEach(line => {
+        const text = line.textContent;
+        line.textContent = '';
+
+        const words = text.split(' ');
+        words.forEach((word, wi) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'vp-word';
+
+          word.split('').forEach(ch => {
+            const charSpan = document.createElement('span');
+            charSpan.className = 'vp-char';
+            charSpan.textContent = ch;
+            charSpan.setAttribute('aria-hidden', 'true');
+            wordSpan.appendChild(charSpan);
+            allCharSpans.push(charSpan);
+          });
+
+          line.appendChild(wordSpan);
+
+          if (wi < words.length - 1) {
+            const space = document.createElement('span');
+            space.className = 'vp-space';
+            space.innerHTML = '&nbsp;';
+            line.appendChild(space);
+          }
+        });
+      });
+
+      const updateMouse = (x, y) => {
+        const rect = container.getBoundingClientRect();
+        mouse.x = x - rect.left;
+        mouse.y = y - rect.top;
+      };
+
+      window.addEventListener('mousemove', e => updateMouse(e.clientX, e.clientY));
+      window.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        updateMouse(t.clientX, t.clientY);
+      }, { passive: true });
+
+      let lastX = null, lastY = null;
+
+      function animate() {
+        if (lastX !== mouse.x || lastY !== mouse.y) {
+          lastX = mouse.x;
+          lastY = mouse.y;
+          const cRect = container.getBoundingClientRect();
+
+          allCharSpans.forEach(span => {
+            const rect = span.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2 - cRect.left;
+            const cy = rect.top + rect.height / 2 - cRect.top;
+            const dx = mouse.x - cx;
+            const dy = mouse.y - cy;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance >= RADIUS) {
+              span.style.fontVariationSettings = `'wght' ${FROM.wght}, 'opsz' ${FROM.opsz}`;
+            } else {
+              const norm = 1 - distance / RADIUS;
+              const wght = Math.round(FROM.wght + (TO.wght - FROM.wght) * norm);
+              const opsz = (FROM.opsz + (TO.opsz - FROM.opsz) * norm).toFixed(1);
+              span.style.fontVariationSettings = `'wght' ${wght}, 'opsz' ${opsz}`;
+            }
+          });
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    // ============================================================
+    // Liquid Glass displacement map generation (SDF-based)
+    // ============================================================
+    (function initLiquidGlass() {
+      const W = 200, H = 100;
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.createImageData(W, H);
+      const d = imgData.data;
+      const radius = 0.35;
+
+      function smoothStep(edge0, edge1, x) {
+        const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+        return t * t * (3 - 2 * t);
+      }
+      function roundedRectSDF(px, py, hw, hh, r) {
+        const qx = Math.abs(px) - hw + r;
+        const qy = Math.abs(py) - hh + r;
+        return Math.min(Math.max(qx, qy), 0) +
+          Math.sqrt(Math.max(qx, 0) ** 2 + Math.max(qy, 0) ** 2) - r;
+      }
+
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const u = x / W;
+          const v = y / H;
+          const px = u - 0.5;
+          const py = v - 0.5;
+          const dist = roundedRectSDF(px, py, 0.42, 0.35, radius);
+
+          // Edge refraction: stronger displacement near edges
+          const edgeMask = smoothStep(0.08, -0.02, dist);
+          // Gradient toward center creates lens-like refraction
+          const nx = px * edgeMask * 2.0;
+          const ny = py * edgeMask * 2.0;
+          // Encode displacement: 128 = neutral, R = X offset, G = Y offset
+          const i = (y * W + x) * 4;
+          d[i]     = Math.round(128 + nx * 80);  // R
+          d[i + 1] = Math.round(128 + ny * 80);  // G
+          d[i + 2] = 128;                         // B (unused)
+          d[i + 3] = 255;                         // A
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+      const dataUrl = canvas.toDataURL();
+      document.getElementById('lg-disp-image').setAttribute('href', dataUrl);
+    })();
+
+    // Boot
+    new App();
+
+    // Move the domain navigation block to the CTA slot.
+    (function relocateArchiveNav() {
+      var archive = document.getElementById('archive-behind');
+      var slot = document.getElementById('archive-front');
+      if (!archive || !slot) return;
+      var copy = {
+        1: '流程可复用的节点流程，让产品精修稳定复现。',
+        2: '整理高命中提示词模板，减少从零试错的时间。',
+        3: '梳理调研路径与判断依据，把趋势线索转成设计输入。',
+        4: '把产品卖点转成画面故事、脚本结构和投放素材。',
+        5: '汇总工具、案例和关键词库，作为竞组共享索引。'
+      };
+      Object.keys(copy).forEach(function (index) {
+        var text = copy[index];
+        var node = archive.querySelector('.archive-item[data-index="' + index + '"] .archive-item-meta p');
+        if (!node) return;
+        node.textContent = text;
+        node.dataset.blurText = text;
+      });
+      archive.classList.add('archive-at-cta');
+      archive.id = 'archive-front';
+      slot.replaceWith(archive);
+    })();
+
+    // ShapeBlur removed.
+
+    // ============================================================
+    // Page exit transition for legacy tutorial links
+    // ============================================================
+    document.querySelectorAll('a.start-tutorial').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        var href = link.getAttribute('href');
+        var overlay = document.getElementById('page-exit');
+        var bar = document.getElementById('exit-progress-bar');
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+        // Animate progress bar
+        var progress = 0;
+        var iv = setInterval(function () {
+          progress += Math.random() * 25 + 10;
+          if (progress > 90) progress = 90;
+          bar.style.width = progress + '%';
+        }, 150);
+        // Navigate after short delay
+        setTimeout(function () {
+          clearInterval(iv);
+          bar.style.width = '100%';
+          setTimeout(function () { window.location.href = href; }, 200);
+        }, 600);
+      });
+    });
+  </script>
+
+  <!-- Unicorn Studio: fixed viewport plus visual scale for responsive -->
+  <script>
+  (function () {
+    var scene = null;
+    var embedWrap = null;
+
+    function cropUnicornRuntime() {
+      embedWrap = embedWrap || document.getElementById('us-embed-wrap');
+      if (!embedWrap) return;
+      var designWidth = 1280;
+      var designHeight = 800;
+      var frame = embedWrap.parentElement && embedWrap.parentElement.classList.contains('us-embed-frame')
+        ? embedWrap.parentElement
+        : embedWrap;
+      var scale = Math.max(frame.clientWidth / designWidth, frame.clientHeight / designHeight);
+      embedWrap.style.setProperty('--us-runtime-scale', scale.toFixed(4));
+
+      // The wrapper stays at 1280x800 for Unicorn; the outer frame scales it visually.
+      Array.prototype.forEach.call(embedWrap.children, function (child) {
+        child.style.setProperty('position', 'absolute', 'important');
+        child.style.setProperty('inset', '0', 'important');
+        child.style.setProperty('width', '100%', 'important');
+        child.style.setProperty('height', '100%', 'important');
+        child.style.setProperty('min-width', '100%', 'important');
+        child.style.setProperty('min-height', '100%', 'important');
+        child.style.setProperty('max-width', '100%', 'important');
+        child.style.setProperty('max-height', '100%', 'important');
+        child.style.setProperty('border', '0', 'important');
+        child.style.setProperty('outline', '0', 'important');
+        child.style.setProperty('background', 'transparent', 'important');
+        child.style.setProperty('transform-origin', 'center center', 'important');
+        child.style.setProperty('transform', 'translateZ(0)', 'important');
+        child.style.setProperty('will-change', 'transform', 'important');
+      });
+
+      Array.prototype.forEach.call(embedWrap.querySelectorAll('canvas, iframe'), function (node) {
+        if (node.parentElement === embedWrap) return;
+        node.style.setProperty('position', 'absolute', 'important');
+        node.style.setProperty('inset', '0', 'important');
+        node.style.setProperty('display', 'block', 'important');
+        node.style.setProperty('width', '100%', 'important');
+        node.style.setProperty('height', '100%', 'important');
+        node.style.setProperty('min-width', '100%', 'important');
+        node.style.setProperty('min-height', '100%', 'important');
+        node.style.setProperty('max-width', '100%', 'important');
+        node.style.setProperty('max-height', '100%', 'important');
+        node.style.setProperty('transform', 'none', 'important');
+      });
+    }
+
+    function initScene() {
+      if (!window.UnicornStudio || !UnicornStudio.addScene) return;
+      UnicornStudio.addScene({
+        elementId: 'us-embed-wrap',
+        projectId: 'hqFQZKeSh5u05BllaraV',
+        scale: 1,
+        dpi: 1.5,
+        fps: 60,
+        interactivity: {
+          mouse: { disableMobile: false, disabled: false }
+        }
+      }).then(function (s) {
+        scene = s;
+        cropUnicornRuntime();
+      }).catch(function (err) {
+        console.error('UnicornStudio addScene error:', err);
+      });
+    }
+
+    // The Unicorn runtime stays at 1280x800; resize only updates the visual scale.
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        cropUnicornRuntime();
+      }, 200);
+    });
+
+    // Load SDK v2.1.8 then init
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.8/dist/unicornStudio.umd.js';
+    s.onload = initScene;
+    (document.head || document.body).appendChild(s);
+  })();
+  </script>
+
+  <!-- LightRays WebGL Effect -->
+  <script>
+  (function initLightRays() {
+    // Fixed fullscreen canvas behind everything
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:6;pointer-events:none;overflow:hidden;';
+    document.body.appendChild(wrap);
+
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'width:100%;height:100%;display:block;';
+    wrap.appendChild(canvas);
+
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return;
+
+    var vert = [
+      'attribute vec2 a_pos;',
+      'void main(){gl_Position=vec4(a_pos,0.,1.);}',
+    ].join('\n');
+
+    var frag = [
+      'precision highp float;',
+      'uniform float iTime;',
+      'uniform vec2 iRes;',
+      'uniform vec2 rayPos;',
+      'uniform vec2 rayDir;',
+      'uniform vec2 mousePos;',
+      'uniform float mouseInfluence;',
+      'uniform float lightSpread;',
+      'uniform float rayLength;',
+      'uniform float fadeDistance;',
+      'uniform float raysSpeed;',
+
+      'float rayStrength(vec2 src,vec2 refDir,vec2 coord,float sA,float sB,float spd){',
+      '  vec2 d=coord-src;',
+      '  float cosA=dot(normalize(d),refDir);',
+      '  float spread=pow(max(cosA,0.),1./max(lightSpread,0.001));',
+      '  float dist=length(d);',
+      '  float maxD=iRes.x*rayLength;',
+      '  float lenFall=clamp((maxD-dist)/maxD,0.,1.);',
+      '  float fadeFall=clamp((iRes.x*fadeDistance-dist)/(iRes.x*fadeDistance),0.5,1.);',
+      '  float base=clamp(',
+      '    (0.45+0.15*sin(cosA*sA+iTime*spd))+(0.3+0.2*cos(-cosA*sB+iTime*spd)),',
+      '    0.,1.);',
+      '  return base*lenFall*fadeFall*spread;',
+      '}',
+
+      'void main(){',
+      '  vec2 coord=vec2(gl_FragCoord.x,iRes.y-gl_FragCoord.y);',
+      '  vec2 dir=rayDir;',
+      '  if(mouseInfluence>0.){',
+      '    vec2 mp=mousePos*iRes;',
+      '    dir=normalize(mix(rayDir,normalize(mp-rayPos),mouseInfluence));',
+      '  }',
+      '  float r1=rayStrength(rayPos,dir,coord,36.2214,21.1135,1.5*raysSpeed);',
+      '  float r2=rayStrength(rayPos,dir,coord,22.3991,18.0234,1.1*raysSpeed);',
+      '  float v=r1*0.5+r2*0.4;',
+      '  float bright=1.-(coord.y/iRes.y);',
+      '  float r=v*(0.1+bright*0.8);',
+      '  float g=v*(0.3+bright*0.6);',
+      '  float b=v*(0.5+bright*0.5);',
+      '  gl_FragColor=vec4(r,g,b,v*0.7);',
+      '}',
+    ].join('\n');
+
+    function compile(type, src) {
+      var s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    }
+    var prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vert));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, frag));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    // Full-screen triangle
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    var aPos = gl.getAttribLocation(prog, 'a_pos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    var uTime     = gl.getUniformLocation(prog, 'iTime');
+    var uRes      = gl.getUniformLocation(prog, 'iRes');
+    var uRayPos   = gl.getUniformLocation(prog, 'rayPos');
+    var uRayDir   = gl.getUniformLocation(prog, 'rayDir');
+    var uMouse    = gl.getUniformLocation(prog, 'mousePos');
+    var uMouseInf = gl.getUniformLocation(prog, 'mouseInfluence');
+    var uSpread   = gl.getUniformLocation(prog, 'lightSpread');
+    var uLength   = gl.getUniformLocation(prog, 'rayLength');
+    var uFade     = gl.getUniformLocation(prog, 'fadeDistance');
+    var uSpeed    = gl.getUniformLocation(prog, 'raysSpeed');
+
+    gl.uniform1f(uMouseInf, 0.1);
+    gl.uniform1f(uSpread,   0.5);
+    gl.uniform1f(uLength,   3.0);
+    gl.uniform1f(uFade,     1.0);
+    gl.uniform1f(uSpeed,    1.0);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+
+    var mouse = { x: 0.5, y: 0.5 };
+    var smoothMouse = { x: 0.5, y: 0.5 };
+    window.addEventListener('mousemove', function(e) {
+      mouse.x = e.clientX / window.innerWidth;
+      mouse.y = e.clientY / window.innerHeight;
+    });
+
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio, 2);
+      canvas.width  = window.innerWidth  * dpr;
+      canvas.height = window.innerHeight * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      // Ray origin: top-center, slightly above viewport
+      gl.uniform2f(uRayPos, canvas.width * 0.5, -canvas.height * 0.2);
+      gl.uniform2f(uRayDir, 0.0, 1.0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    var start = performance.now();
+    (function loop() {
+      var t = (performance.now() - start) * 0.001;
+      smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+      smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+      gl.uniform1f(uTime, t);
+      gl.uniform2f(uMouse, smoothMouse.x, 1.0 - smoothMouse.y);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      requestAnimationFrame(loop);
+    })();
+  })();
+  </script>
+  <script>
+    (function initCircularSearch() {
+      var svg = document.querySelector('.circular-search-svg');
+      if (!svg) return;
+      var angle = 0;
+      var speed = 1;
+      var targetSpeed = 1;
+      var lastTime = null;
+      var DECEL = 0.92;
+      var ACCEL = 0.85;
+
+      function tick(time) {
+        if (lastTime !== null) {
+          var delta = (time - lastTime) / 1000;
+          if (speed < targetSpeed) {
+            speed = speed + (targetSpeed - speed) * (1 - ACCEL);
+          } else if (speed > targetSpeed) {
+            speed = speed * DECEL;
+            if (speed < 0.05) speed = 0;
+          }
+          angle = (angle + delta * speed * 18) % 360;
+          svg.style.transform = 'rotate(' + angle + 'deg)';
+        }
+        lastTime = time;
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+
+      var trigger = document.querySelector('.hero-search-trigger');
+      if (trigger) {
+        trigger.addEventListener('mouseenter', function() {
+          targetSpeed = 4;
+          svg.style.color = '#fff';
+          svg.style.filter = 'drop-shadow(0 0 10px rgba(255,255,255,0.25))';
+        });
+        trigger.addEventListener('mouseleave', function() {
+          targetSpeed = 1;
+          svg.style.color = 'rgba(255,255,255,0.78)';
+          svg.style.filter = '';
+        });
+      }
+    })();
+  </script>
+  <script>
+    document.querySelector('.hero-search-trigger')?.addEventListener('click', function () {
+      window.dispatchEvent(new CustomEvent('cmdk:open', { detail: { trigger: this } }));
+    });
+  </script>
+  <script src="/assets/js/cmdk.js" defer></script>
+</body>
+</html>
