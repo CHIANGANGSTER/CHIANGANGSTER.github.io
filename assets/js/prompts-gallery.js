@@ -418,8 +418,8 @@
 
     const payload = {
       title: entry.title,
-      type: entry.type || '室内场景',
-      industry: entry.industry || '家居',
+      type: entry.type || 'interior',
+      industry: entry.industry || 'home',
       style_id: entry.styleId || '',
       style_name: entry.styleName || '',
       image_prompt: entry.imagePrompt || entry.prompt,
