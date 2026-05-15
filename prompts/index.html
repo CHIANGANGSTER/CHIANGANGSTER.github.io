@@ -3,25 +3,98 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prompt 库 — CHIANGANGSTER</title>
+  <title>YAHEETECH Stylized Prompts - CHIANGANGSTER</title>
   <link rel="stylesheet" href="/assets/css/tokens.css">
-  <link rel="stylesheet" href="/assets/css/base.css">
-  <link rel="stylesheet" href="/assets/css/nav.css">
-  <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link rel="stylesheet" href="/assets/css/prompts.css?v=20260515-blurtext-sequence">
 </head>
 <body>
-  <a class="skip-link" href="#main">跳到正文</a>
-  <nav class="glass-page-nav" aria-label="Page">
-    <a href="/">← HOME</a>
-    <span>Prompt 库 PROMPTS</span>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feColorMatrix in="blurred" type="saturate" values="1.15" />
+      </filter>
+    </defs>
+  </svg>
+
+  <nav class="prompt-nav" aria-label="Page">
+    <a href="/?home=archive">← HOME</a>
+    <span>STYLE REFERENCE PROMPTS</span>
   </nav>
-  <main id="main" class="editorial-stub">
-    <h1>PROMPTS</h1>
-    <p>Prompt 模板域将在后续 spec 中落地。当前页面用于锁定信息架构、共享导航与全站搜索入口。</p>
+
+  <main id="main" class="prompt-shell">
+    <header class="prompt-hero">
+      <p class="prompt-kicker">PROMPT TEMPLATE / 风格化参考</p>
+      <h1 aria-label="YAHEETECH STYLIZED PROMPTS">
+        <span class="prompt-title-line prompt-title-brand blur-text-manual">
+          <span class="blur-segment" style="--blur-delay: 0ms;"><span class="brand-yahee">YAHEE</span><span class="brand-tech">TECH</span></span>
+        </span>
+        <span class="prompt-title-line blur-text-manual">
+          <span class="blur-segment" style="--blur-delay: 200ms;">STYLIZED</span>
+        </span>
+        <span class="prompt-title-line blur-text-manual">
+          <span class="blur-segment" style="--blur-delay: 400ms;">PROMPTS</span>
+        </span>
+      </h1>
+      <div class="prompt-lede">
+        <p class="prompt-lede-group blur-text-manual">
+          <span class="blur-segment" style="--blur-delay: 600ms;">这些图片只用于展示提示词可能生成的大概效果，具体提示词内容仍需要根据产品、</span>
+          <span class="blur-segment" style="--blur-delay: 800ms;">空间、渠道和模型特性自行修改；它们是参考模板，不是最终交付文本。适用于主流图像生成模型。</span>
+        </p>
+        <p class="prompt-lede-group blur-text-manual">
+          <span class="blur-segment" style="--blur-delay: 1000ms;"><strong>JSON PROMPT</strong> 会把普通提示词拆成画面主体、空间风格、材质光线、构图要求和</span>
+          <span class="blur-segment" style="--blur-delay: 1200ms;">负面提示词等结构化参数。相比一整段自然语言，它更容易被复用、改写和批量生成，</span>
+          <span class="blur-segment" style="--blur-delay: 1400ms;">也方便不同模型按同一套标准控制画面一致性。</span>
+        </p>
+      </div>
+    </header>
+
+    <section class="prompt-toolbar" aria-label="Prompt filters">
+      <div class="prompt-toolbar-left">
+        <label class="prompt-search">
+          <span>SEARCH</span>
+          <input id="prompt-search" type="search" placeholder="搜索标题、空间、风格、提示词..." autocomplete="off">
+        </label>
+        <span class="prompt-count"><strong id="prompt-count">0</strong> entries</span>
+      </div>
+      <div class="prompt-filter-group" id="prompt-filters" aria-label="Tags"></div>
+    </section>
+
+    <section class="prompt-grid" id="prompt-grid" aria-label="Prompt cards"></section>
   </main>
-  <div data-include="footer"></div>
-  <script src="/assets/js/footer.js" defer></script>
+
+  <dialog class="prompt-dialog" id="prompt-dialog" aria-labelledby="prompt-dialog-title">
+    <button class="prompt-dialog-close" type="button" data-close-dialog aria-label="关闭">×</button>
+    <div class="prompt-dialog-media" id="prompt-dialog-media"></div>
+    <div class="prompt-dialog-body">
+      <p class="prompt-kicker">PROMPT DETAIL</p>
+      <h2 id="prompt-dialog-title"></h2>
+      <div class="prompt-dialog-tags" id="prompt-dialog-tags"></div>
+      <section class="prompt-original-section">
+        <div class="prompt-section-header">
+          <h3>PROMPT</h3>
+          <button class="prompt-copy-section" type="button" data-copy="prompt" title="复制原始提示词">COPY</button>
+        </div>
+        <pre id="prompt-dialog-prompt"></pre>
+      </section>
+      <section class="prompt-image-prompt-section">
+        <div class="prompt-section-header">
+          <h3>JSON PROMPT</h3>
+          <button class="prompt-copy-section" type="button" data-copy="json" title="复制 JSON PROMPT">COPY</button>
+        </div>
+        <pre id="prompt-dialog-image-prompt"></pre>
+      </section>
+    </div>
+  </dialog>
+
+  <div id="promptImageModal" class="prompt-image-modal" aria-hidden="true">
+    <img class="prompt-image-modal-content" id="promptImageFull" alt="">
+  </div>
+
   <script src="/assets/js/cmdk.js" defer></script>
+  <script src="/assets/js/prompts-gallery.js?v=20260515-cmf-hex" defer></script>
 </body>
 </html>
