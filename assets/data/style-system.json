@@ -1,0 +1,168 @@
+{
+  "version": "3-compact-cmf",
+  "generatedAt": "2026-05-15",
+  "source": {
+    "title": "设计部产品风格化（设计、视觉）1.0版本终稿",
+    "pdf": "_imports/product-style-guide.pdf",
+    "textExtract": "_imports/product-style-guide-extracted.txt"
+  },
+  "brand": {
+    "name": "YAHEETECH",
+    "colors": {
+      "yaheeBlue": "#046CCC",
+      "techRed": "#CC0504"
+    },
+    "note": "YAHEETECH 字标继续使用蓝红识别色；以下 CMF 是产品/空间风格色板，不等同于品牌主色。"
+  },
+  "rules": {
+    "logic": "产品决定风格基调，软装完成风格叙事。产品=空间骨架（形态/材质/比例），软装=风格血肉（色彩/纹理/情绪）。",
+    "ratio": "主风格≥60%，过渡材质≥20%，调色单品≤3。",
+    "universalNegative": "avoid visual clutter, over-decoration, mismatched styles, distorted furniture proportions, unreadable text, watermark, people unless requested"
+  },
+  "styles": [
+    {
+      "id": "modern-minimal",
+      "cn": "现代简约风格",
+      "en": "Modern Minimalist Style",
+      "family": "现代风格",
+      "pages": "16-37",
+      "positioning": "功能至上，视觉留白，少即是多。",
+      "dna": "形式追随功能 / 工业美学 / 几何块面 / 理性都市 / 少装饰",
+      "keywords": ["clean lines", "geometric volume", "metal legs", "negative space", "neutral palette"],
+      "cmf": {
+        "baseColors": ["白色 White 11-4001 TPG #F7F5EF", "黑色 Black 19-4305 TPG #1A1A1A", "灰色 Gray 17-3914 TPG #7B7B7B", "深灰色 Dark Gray 18-5203 TPG #4A4A48", "象牙色 Ivory 11-0105 TPG #F1EFE3", "驼色 Camel 15-1215 TPG #B08A62", "暖褐色 Taupe 16-1407 TPG #8A7E76"],
+        "accentColors": ["海军蓝 Navy Blue 19-4030 TPG #26365E", "勃艮第红 Burgundy 19-1338 TPG #7B1E25", "黄色 Yellow 14-0837 TPG #D3BD90", "绿色 Green 18-5338 TPG #2D5561", "砖红色 Brick Red 17-1446 TPG #942E20"],
+        "wood": ["胡桃色", "白色木饰面", "山纹黑", "深咖啡木饰面"],
+        "fabric": ["麻面白", "麻面黑", "灰色布面", "绒布", "人造皮革", "棉麻", "雪尼尔", "灯芯绒"],
+        "surface": ["金属腿", "玻璃", "亚克力", "不锈钢", "铝板", "抛光漆面"],
+        "promptUse": "中性色大面积铺底，小面积亮色点缀；强调干净、直线、几何、材质对比。"
+      }
+    },
+    {
+      "id": "scandinavian",
+      "cn": "现代北欧风格",
+      "en": "Modern Nordic Style",
+      "family": "现代风格",
+      "pages": "38-65",
+      "positioning": "自然舒适、功能优先，温暖极简。",
+      "dna": "自然肌理 / 有机形态 / 柔和体态 / 轻盈支撑 / 暖感生活",
+      "keywords": ["hygge", "light wood", "natural light", "rounded corners", "low saturation"],
+      "cmf": {
+        "baseColors": ["白色 White 11-4001 TPG #F7F5EF", "浅灰色 Light Gray 15-4101 TPG #C4C9CF", "米咖色 Beige 12-0605 TPG #E6DFD7", "象牙色 Ivory 11-0105 TPG #F1EFE3", "驼色 Camel 15-1215 TPG #B08A62", "浅棕色 Tan/Light Brown 14-1038 TPG #CEAD77", "卡其色 Khaki 14-1112 TPG #CEC7B3"],
+        "accentColors": ["灰蓝色 Cloudy Blue 16-4120 TPG #8E9CA5", "粉色 Pink 16-1434 TPG #D5AC99", "湖蓝色 Blue Lake 15-5209 TPG #9BA9AA", "薄荷绿 Mint Green 13-5907 TPG #DDE6DF", "鼠尾草绿 Sage Green 17-0210 TPG #AAA794", "勃艮第红 Burgundy 19-1338 TPG #7B1E25"],
+        "wood": ["浅原木", "浅色木纹", "橡胶木", "浅灰色木饰面", "山纹黑"],
+        "fabric": ["麻面白", "灰色布面", "泰迪绒", "绒布", "人造皮革", "羊毛", "棉麻"],
+        "surface": ["陶瓷", "玻璃", "毛毡", "亚克力", "浅色金属"],
+        "promptUse": "白色+浅木色作为主基底，灰蓝、脏粉、薄荷绿、鼠尾草绿做低饱和点缀。"
+      }
+    },
+    {
+      "id": "mid-century-modern",
+      "cn": "现代中古风格",
+      "en": "Mid-Century Modern Style",
+      "family": "现代风格",
+      "pages": "66-89",
+      "positioning": "复古与未来的对话，有温度的现代感。",
+      "dna": "复古与实用的平衡 / 经典几何 / 材料混搭 / 暖色木质 / timeless elegance",
+      "keywords": ["walnut", "teak", "brass", "retro future", "tapered legs"],
+      "cmf": {
+        "baseColors": ["深灰色 Dark Gray 18-5203 TPG #4A4A48", "黑色 Black 19-4305 TPG #1A1A1A", "深棕色 Dark Brown 19-1217 TPG #3A261E", "深咖啡色 Espresso 19-1111 TPG #2B211D", "驼色 Camel 15-1215 TPG #B08A62", "灰褐色 Taupe 18-1110 TPG #8A7668", "卡其色 Khaki 14-1112 TPG #CEC7B3"],
+        "accentColors": ["海军蓝 Navy Blue 19-4030 TPG #26365E", "勃艮第红 Burgundy 19-1338 TPG #7B1E25", "芥末黄 Mustard Yellow 16-0947 TPG #B4963C", "复古棕色 Retro Brown 17-1330 TPG #96441F", "橄榄绿色 Olive Green 18-0435 TPG #635E3B", "水蓝色 Aqua Blue 18-4630 TPG #455763"],
+        "wood": ["胡桃色", "柚木", "玫瑰木", "山纹黑", "深咖啡木饰面"],
+        "fabric": ["麻面黑", "绒布", "人造皮革", "棉麻", "雪尼尔", "灯芯绒"],
+        "surface": ["黄铜", "哑光钢", "玻璃", "亚克力", "抛光混凝土", "藤编"],
+        "promptUse": "胡桃木/柚木/深咖啡作主体，芥末黄、橄榄绿、勃艮第红、水蓝作为小面积复古点缀。"
+      }
+    },
+    {
+      "id": "modern-cream",
+      "cn": "现代奶油风格",
+      "en": "Modern Cream Style",
+      "family": "现代风格",
+      "pages": "90-106",
+      "positioning": "温柔的极简，圆润、柔雾、治愈。",
+      "dna": "无棱角的流动感 / 柔和 / 温暖 / 治愈 / 云朵般体量",
+      "keywords": ["cream palette", "rounded furniture", "misty light", "soft matte", "healing atmosphere"],
+      "cmf": {
+        "baseColors": ["奶油色 Cream 11-0701 TPG #F6F6EE", "象牙色 Ivory 11-0105 TPG #F1EFE3", "米咖色 Beige 12-0605 TPG #E6DFD7", "米灰色 Greige 13-4403 TPG #DAD7CE", "浅灰色 Light Gray 15-4101 TPG #C4C9CF", "浅棕色 Tan/Light Brown 14-1038 TPG #CEAD77", "卡其色 Khaki 14-1112 TPG #CEC7B3", "驼色 Camel 15-1215 TPG #B08A62"],
+        "accentColors": ["灰蓝色 Cloudy Blue 16-4120 TPG #8E9CA5", "浅蓝色 Light Blue 15-4005 TPG #BCC8D1", "粉色 Pink 16-1434 TPG #D5AC99", "淡粉色 Simple Pink 13-1409 TPG #E0C5B2", "薄荷绿 Mint Green 13-5907 TPG #DDE6DF", "深灰色 Dark Gray 18-5203 TPG #4A4A48"],
+        "wood": ["浅原木", "奶茶色橡木", "浅灰色木饰面", "山纹黑"],
+        "fabric": ["麻面白", "泰迪绒", "绒布", "人造皮革", "羊羔绒", "棉麻", "雪尼尔"],
+        "surface": ["哑光石材", "陶瓷", "柔光表面", "磨砂玻璃", "浅色烤漆"],
+        "promptUse": "奶油、象牙、米咖、米灰作主色；只用浅粉、薄荷绿、灰蓝等极低饱和点缀，避免冷硬高对比。"
+      }
+    },
+    {
+      "id": "light-luxury",
+      "cn": "现代轻奢风格",
+      "en": "Modern Light Luxury Style",
+      "family": "现代风格",
+      "pages": "107-128",
+      "positioning": "现代底子、轻奢材质、中性底色、金属点睛。",
+      "dna": "低调奢华 / 都市精致 / 干练柔和 / 视觉层次 / 艺术性",
+      "keywords": ["marble", "brass", "metal trim", "premium textile", "layered lighting"],
+      "cmf": {
+        "baseColors": ["象牙色 Ivory 11-0105 TPG #F1EFE3", "米咖色 Beige 12-0605 TPG #E6DFD7", "深灰色 Dark Gray 18-5203 TPG #4A4A48", "黑色 Black 19-4305 TPG #1A1A1A", "复古棕色 Retro Brown 17-1330 TPG #96441F", "棕色 Brown 18-1030 TPG #8A5A3B", "大理石白 Marble White #F1F1EF"],
+        "accentColors": ["金属色 Metallic Gold/Brass #B09868", "绿色 Green 18-5338 TPG #2D5561", "深绿色 Dark Green 19-6050 TPG #183B2B", "草绿色 Greenish-gray 16-0233 TPG #AAA794", "勃艮第红 Burgundy 19-1338 TPG #7B1E25", "砖红色 Brick Red 17-1446 TPG #942E20", "紫色 Purple 18-3628 TPG #593084", "深粉色 Deep Pink 16-1620 TPG #D0947A", "宝蓝色 Pagoda Blue 18-4434 TPG #26365E", "黄色 Yellow 14-0837 TPG #D3BD90"],
+        "wood": ["胡桃色", "山纹黑", "轻纹理木饰面", "肤感 PET 饰面板"],
+        "fabric": ["绒布", "人造皮革", "品质棉麻", "真丝", "羊绒", "雪尼尔"],
+        "surface": ["大理石", "岩板", "黄铜", "玫瑰金", "金属收边", "水晶", "艺术玻璃", "长虹玻璃", "水波纹玻璃"],
+        "promptUse": "中性底色加金属/大理石材质点睛；宝石色只做低面积强调，避免宫廷化和过度闪亮。"
+      }
+    },
+    {
+      "id": "farmhouse",
+      "cn": "田园农舍风格",
+      "en": "Pastoral Farmhouse Style",
+      "family": "田园农舍风格",
+      "pages": "132-149",
+      "positioning": "自然怀旧、实用温馨、质朴生活气息。",
+      "dna": "质朴 / 古典 / 实用 / 粗犷自然 / 历史感与故事性",
+      "keywords": ["distressed wood", "barn door", "black iron", "plaid textile", "rustic ceramic"],
+      "cmf": {
+        "baseColors": ["白色 White 11-4001 TPG #F7F5EF", "米咖色 Beige 12-0605 TPG #E6DFD7", "灰色 Gray 17-3914 TPG #7B7B7B", "深灰色 Dark Gray 18-5203 TPG #4A4A48", "黑色 Black 19-4305 TPG #1A1A1A", "驼色 Camel 15-1215 TPG #B08A62", "暖褐色 Taupe 16-1407 TPG #8A7E76"],
+        "accentColors": ["深棕色 Dark Brown 19-1217 TPG #3A261E", "复古棕色 Retro Brown 17-1330 TPG #96441F", "栗子棕 Chestnut Brown 19-1420 TPG #5A3028", "棕色 Brown 18-1030 TPG #8A5A3B", "海军蓝 Navy Blue 19-4030 TPG #26365E", "鼠尾草绿 Sage Green 17-0210 TPG #AAA794", "水蓝色 Aqua Blue 18-4630 TPG #455763"],
+        "wood": ["虫蛀橡木板", "做旧宽板木地板", "复古棕色木饰面", "水洗灰木饰面", "暖棕色木饰面", "深棕色木饰面"],
+        "fabric": ["麻面黑", "人造皮革", "仿橡麻", "毛毡布", "麻面白", "棉麻", "格纹布艺", "花卉图案布艺"],
+        "surface": ["黑铁", "古铜色五金", "镀锌五金", "陶瓷", "仿古砖", "裸露砖墙", "谷仓门"],
+        "promptUse": "暖白/米色墙面配深木、黑铁和做旧材质；鼠尾草绿、水蓝、复古棕做自然怀旧点缀。"
+      }
+    },
+    {
+      "id": "boho",
+      "cn": "波西米亚风格",
+      "en": "Boho Style",
+      "family": "波西米亚风格",
+      "pages": "150-170",
+      "positioning": "自由随性、自然粗犷、民族艺术感、不刻意的混搭美学。",
+      "dna": "天然材质 / 手工感 / 自由随性 / 层叠美学 / 植物生机",
+      "keywords": ["rattan", "woven textile", "ethnic pattern", "fringe", "plant-rich interior"],
+      "cmf": {
+        "baseColors": ["象牙色 Ivory 11-0105 TPG #F1EFE3", "米咖色 Beige 12-0605 TPG #E6DFD7", "奶油色 Cream 11-0701 TPG #F6F6EE", "驼色 Camel 15-1215 TPG #B08A62", "浅棕色 Tan/Light Brown 14-1038 TPG #CEAD77", "卡其色 Khaki 14-1112 TPG #CEC7B3", "浅灰色 Light Gray 15-4101 TPG #C4C9CF"],
+        "accentColors": ["黑色 Black 19-4305 TPG #1A1A1A", "灰蓝色 Cloudy Blue 16-4120 TPG #8E9CA5", "粉色 Pink 16-1434 TPG #D5AC99", "湖蓝色 Blue Lake 15-5209 TPG #9BA9AA", "鼠尾草绿 Sage Green 17-0210 TPG #AAA794", "黄色 Yellow 14-0837 TPG #D3BD90", "复古棕色 Retro Brown 17-1330 TPG #96441F", "棕色 Brown 18-1030 TPG #8A5A3B"],
+        "wood": ["山纹黑", "胡桃色", "浅原木", "橡胶木", "自然木色"],
+        "fabric": ["泰迪绒", "人造皮革", "仿橡麻", "编织布艺", "流苏织物", "花卉图案", "民族图案"],
+        "surface": ["藤编", "编藤", "粗陶", "黄铜", "锤纹铜", "氧化银器", "竹编筐", "椰壳灯"],
+        "promptUse": "米色/象牙/奶油/自然木为底，叠加藤编、编织、粗陶、植物；亮色要温暖但避免荧光。"
+      }
+    },
+    {
+      "id": "light-industrial",
+      "cn": "轻工业风格",
+      "en": "Light Industrial Style",
+      "family": "轻工业风格",
+      "pages": "171-190",
+      "positioning": "粗犷与精致并存，突出结构美学和未完成质感。",
+      "dna": "简而有质 / 机械感 / 实用至上 / 结构美学 / 理性克制",
+      "keywords": ["black iron", "exposed connector", "worn leather", "concrete wall", "Edison bulb"],
+      "cmf": {
+        "baseColors": ["深灰色 Dark Gray 18-5203 TPG #4A4A48", "黑色 Black 19-4305 TPG #1A1A1A", "深棕色 Dark Brown 19-1217 TPG #3A261E", "深咖啡色 Espresso 19-1111 TPG #2B211D", "灰褐色 Taupe 18-1110 TPG #8A7668", "暖褐色 Taupe 16-1407 TPG #8A7E76"],
+        "accentColors": ["海军蓝 Navy Blue 19-4030 TPG #26365E", "勃艮第红 Burgundy 19-1338 TPG #7B1E25", "深绿色 Dark Green 19-6050 TPG #183B2B", "复古棕色 Retro Brown 17-1330 TPG #96441F", "砖红色 Brick Red 17-1446 TPG #942E20"],
+        "wood": ["山纹黑", "深棕色木饰面", "复古棕色木饰面", "水洗灰木饰面", "暖棕色木饰面", "深咖啡木饰面"],
+        "fabric": ["麻面黑", "人造皮革", "做旧复古皮革", "羊毛", "粗亚麻", "仿橡麻"],
+        "surface": ["黑铁", "不锈钢", "铝", "镀锌管", "微水泥", "裸露混凝土", "红砖", "拉丝铜古铜"],
+        "promptUse": "灰黑棕白为工业底色，黑铁、做旧皮革、水泥、红砖和外露连接件构成主要画面语言。"
+      }
+    }
+  ]
+}
