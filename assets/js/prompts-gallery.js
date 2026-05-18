@@ -436,8 +436,55 @@
       '波西米亚风格': 'boho'
     };
 
+    function translateTitle(title) {
+      const wordMap = {
+        '客厅': 'living room',
+        '卧室': 'bedroom',
+        '餐厅': 'dining room',
+        '书房': 'study',
+        '厨房': 'kitchen',
+        '玄关': 'entryway',
+        '开放': 'open',
+        '弧形': 'curved',
+        '奶油': 'cream',
+        '柔雾': 'soft mist',
+        '奶茶': 'milk tea',
+        '柔光': 'soft light',
+        '做旧': 'vintage',
+        '皮革': 'leather',
+        '大理石': 'marble',
+        '轻奢': 'light luxury',
+        '水泥': 'cement',
+        '水蓝': 'water blue',
+        '浅木': 'light wood',
+        '深绿': 'dark green',
+        '温暖': 'warm',
+        '民族': 'ethnic',
+        '橄榄绿': 'olive green',
+        '植物感': 'botanical',
+        '模块化': 'modular',
+        '收纳': 'storage',
+        '藤编': 'rattan',
+        '拱门': 'arch',
+        '陶艺': 'ceramic',
+        '手工': 'handmade',
+        '云朵': 'cloud',
+        '阅读角': 'reading corner',
+        '休闲角': 'lounge corner',
+        '自然光': 'natural light',
+        '中古': 'mid-century'
+      };
+      let result = title;
+      Object.keys(wordMap).forEach(key => {
+        if (result.includes(key)) {
+          result = result.replace(key, wordMap[key]);
+        }
+      });
+      return result;
+    }
+
     const payload = {
-      title: entry.title,
+      title: translateTitle(entry.title),
       type: typeMap[entry.type] || entry.type?.toLowerCase() || 'interior',
       industry: industryMap[entry.industry] || entry.industry?.toLowerCase() || 'home',
       style_id: entry.styleId || '',
