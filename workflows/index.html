@@ -10,12 +10,13 @@
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/hub.css">
   <link rel="stylesheet" href="/assets/css/card.css">
+  <link rel="stylesheet" href="/assets/css/workflows-index.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
 </head>
 <body class="hub-page">
   <a class="skip-link" href="#main">跳到正文</a>
   <nav class="glass-page-nav" aria-label="Page">
-    <a href="/">← HOME</a>
+    <a href="/?home=archive">← HOME</a>
     <span>工作流 WORKFLOWS</span>
   </nav>
   <main id="main" class="hub-shell" data-hub-domain="workflows">
@@ -30,6 +31,86 @@
       <div class="hub-filter-row" data-tag-filters></div>
     </section>
     <section class="kb-grid" data-hub-grid aria-live="polite"></section>
+    <section class="workflow-resource-section" aria-labelledby="workflow-resource-title">
+      <header class="workflow-resource-header">
+        <p class="workflow-resource-kicker">Workflow Reference</p>
+        <h2 class="workflow-resource-title" id="workflow-resource-title">COMFYUI WORKFLOW NOTES</h2>
+        <p class="workflow-resource-description">Quick reference modules moved from the Flux.2 workflow detail page: production path, ComfyUI shortcuts, and visual troubleshooting.</p>
+      </header>
+<section class="chapter">
+      <div class="chapter-header"><h2 class="chapter-title">实战路径：从白模到商业成品</h2>
+        <p class="section-subtitle">Practical Action Path</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        只需四个步骤，即可完成从原始素材到商业大图的蜕变：
+      </p>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 1: 载入定架 (Base Input)</span>
+        <p class="step-desc">在 Load Image 节点载入家具白模或实拍原图。这是生成的<span style="color: var(--accent);">「地基」</span>，决定了物体的基本轮廓与空间占比。</p>
+      </div>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 2: 语义注入 (Logic & Soul)</span>
+        <p class="step-desc">在节点 <strong>#93</strong> 输入空间逻辑，在节点 <strong>#77</strong> 输入美学风格。让 AI 的<span style="color: var(--accent);">「双脑」</span>开始协同工作。</p>
+      </div>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 3: 材质微调 (Material Dial)</span>
+        <p class="step-desc">通过节点 <strong>#208</strong> Fast Groups Bypasser 控制 <strong>#133</strong> 增强模块和 <strong>SeedVR2</strong> 放大模块的开关。如需加压开启增强和放大，只需在 <strong>#208</strong> 中勾选对应模块即可。</p>
+      </div>
+
+      <div class="step-card path-step">
+        <span class="step-tag">// STEP 4: 一键出图 (Master Output)</span>
+        <p class="step-desc">执行提示词 <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span>。工作流将自动完成三段式渲染：从构图草案到高清提纯，最终产出商业级 PNG 资产。</p>
+      </div>
+
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header"><h2 class="chapter-title">常见瑕疵自查手册</h2>
+        <p class="section-subtitle">Visual Troubleshooting Guide</p>
+      </div>
+      <p class="step-desc" style="margin-bottom: 1.5rem;">
+        在 Flux.2 的高精度生成中，细微的参数偏差可能导致物理逻辑崩溃。以下是商业生产中最常遇到的三类瑕疵及其修正方案：
+      </p>
+
+      <div class="qa-card">
+        <p class="qa-q">Q: 家具结构解构（如：椅腿融合、扶手断裂）？ / Structural Collapse</p>
+        <div class="qa-a">
+          <strong>原因分析：</strong> 提示词中对产品结构的描述不够明确，导致 AI 对几何拓扑产生歧义。<br>
+          <strong>解决方案：</strong>
+          1. 检查 <strong>T5XXL</strong> 节点，确保加入了明确的结构描述词（如：four separate metal legs, independent armrests）。<br>
+          2. 在 <strong>CLIP_L</strong> 节点中加入材质边界词。<br>
+          3. 适当降低 <strong>FluxGuidance</strong> 值至 2.8-3.0，减少对比度过高导致的结构粘连。
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <p class="qa-q">Q: 皮革/织物纹理过度平滑，缺乏商业质感？ / Over-smoothed Textures</p>
+        <div class="qa-a">
+          <strong>原因分析：</strong> UnifiedReward 权重过低或 Guidance 压缩了动态范围。<br>
+          <strong>解决方案：</strong>
+          1. 检查节点 <strong>#133</strong>，将 <strong>UnifiedReward Weight</strong> 步进式调高（建议 1.0 - 1.2）。<br>
+          2. 尝试切换采样器为 <strong>Euler A</strong> 以获取更丰富的细节颗粒度。<br>
+          3. 在 <strong>CLIP_L</strong> 提示词中加入强力材质词：macro photography, pore details, visible fiber grain。
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <p class="qa-q">Q: 边缘重影或背景颜色溢出？ / Ghosting & Color Bleeding</p>
+        <div class="qa-a">
+          <strong>原因分析：</strong> FluxGuidance 过高导致对比度过载。<br>
+          <strong>解决方案：</strong>
+          1. 将 <strong>FluxGuidance</strong> 的值从 3.5 降至 2.8 - 3.0。<br>
+          2. 在提示词中强调：isolated on pure white background, no shadows, no ghosting。<br>
+          3. 若开启了 Upscale，请确保 <strong>Denoise</strong> 幅度不要超过 0.35。
+        </div>
+      </div>
+    </section>
+
+    
+    </section>
     <p class="hub-empty" data-hub-empty>没有匹配的条目。</p>
   </main>
   <div data-include="footer"></div>
