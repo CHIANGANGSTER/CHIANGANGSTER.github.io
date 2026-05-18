@@ -416,12 +416,32 @@
       ? entry.negativePrompt.split(',').map(item => item.trim()).filter(Boolean)
       : fallbackNegativePrompt;
 
+    const typeMap = {
+      '室内场景': 'interior',
+      '产品场景': 'product'
+    };
+    const industryMap = {
+      '家居': 'home',
+      '商业': 'commercial',
+      '办公': 'office'
+    };
+    const styleNameMap = {
+      '现代简约风格': 'modern minimalist',
+      '现代北欧风格': 'modern scandinavian',
+      '现代奶油风格': 'modern cream',
+      '现代中古风格': 'mid-century modern',
+      '现代轻奢风格': 'light luxury',
+      '轻工业风格': 'light industrial',
+      '田园农舍风格': 'farmhouse',
+      '波西米亚风格': 'boho'
+    };
+
     const payload = {
       title: entry.title,
-      type: entry.type || 'interior',
-      industry: entry.industry || 'home',
+      type: typeMap[entry.type] || entry.type?.toLowerCase() || 'interior',
+      industry: industryMap[entry.industry] || entry.industry?.toLowerCase() || 'home',
       style_id: entry.styleId || '',
-      style_name: entry.styleName || '',
+      style_name: styleNameMap[entry.styleName] || entry.styleName || '',
       image_prompt: entry.imagePrompt || entry.prompt,
       cmf: getCmfPalette(entry),
       style_controls: [
