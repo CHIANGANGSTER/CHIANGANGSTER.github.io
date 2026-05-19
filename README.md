@@ -39,16 +39,17 @@
 
 ## 本地预览
 
+本项目是无构建工具的静态站点，但页面使用了 `/assets/...` 绝对路径和 `fetch()` 加载 JSON 数据。请通过本地 HTTP server 访问，不建议直接双击或用 `file://` 打开 `index.html`，否则资源路径、搜索弹窗或数据加载可能失败。
+
 ```bash
-# 方法1：直接用浏览器打开
-open index.html
+# 方法1：使用 Python 本地服务器
+python -m http.server 8080
+# 然后访问 http://localhost:8080
 
-# 方法2：使用 Python 本地服务器
-python -m http.server 8000
-# 然后访问 http://localhost:8000
-
-# 方法3：使用 Node.js 服务器
+# 方法2：使用 Node.js 静态服务器
 npx serve .
+
+# 方法3：使用 VS Code Live Server
 ```
 
 ## 关于

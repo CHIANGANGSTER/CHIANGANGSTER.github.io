@@ -33,8 +33,14 @@
         if (!tagIds.has(tag)) warn(id, `tag "${tag}" not in tags.json`);
       });
       if (entry.url && entry.url !== '#' && entry.external !== true) {
-        const expected = `/${entry.domain}/${entry.id}.html`;
-        if (entry.url !== expected) warn(id, `url "${entry.url}" does not match "${expected}"`);
+        const expectedUrls = [
+          `/${entry.domain}/${entry.id}/`,
+          `/${entry.domain}/${entry.id}/index.html`,
+          `/${entry.domain}/${entry.id}.html`
+        ];
+        if (!expectedUrls.includes(entry.url)) {
+          warn(id, `url "${entry.url}" does not match ${expectedUrls.join(' or ')}`);
+        }
       }
     });
 

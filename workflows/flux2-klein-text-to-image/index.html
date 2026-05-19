@@ -11,9 +11,10 @@
   <style>
     @font-face {
       font-family: 'AaFengKuangYuanShiRen';
-      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.ttf') format('truetype');
+      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.subset.woff2') format('woff2');
       font-weight: normal;
       font-style: normal;
+      font-display: swap;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -418,7 +419,10 @@
     </header>
 
     <section class="workflow-demo-wrap" aria-label="Flux.2 Klein workflow demo">
-      <img class="workflow-demo-gif" src="/assets/images/workflows/flux2-klein-text-to-image.gif" alt="Flux.2 Klein 文生图 ComfyUI 工作流演示">
+      <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="Flux.2 Klein 文生图 ComfyUI 工作流演示">
+        <source src="/assets/images/workflows/flux2-klein-text-to-image.mp4" type="video/mp4">
+        <img class="workflow-demo-gif" src="/assets/images/workflows/flux2-klein-text-to-image-fallback.jpg" alt="Flux.2 Klein 文生图 ComfyUI 工作流演示">
+      </video>
     </section>
 
     <section class="chapter">

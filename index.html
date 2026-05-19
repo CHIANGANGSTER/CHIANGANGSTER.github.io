@@ -1112,6 +1112,33 @@
     } else {
       window.scrollTo(0, 0);
     }
+    window.__HOME_BOOT_READY = function (reason, options) {
+      var revealContent = options && options.revealContent;
+      if (reason) console.warn('[home] boot fallback:', reason);
+      document.body.classList.add('boot-ready');
+      var bootMask = document.getElementById('boot-mask');
+      if (bootMask) {
+        setTimeout(function () {
+          bootMask.remove();
+        }, 450);
+      }
+      if (revealContent && !document.body.classList.contains('site-entered')) {
+        document.body.classList.remove('intro-pending', 'intro-ready', 'intro-entering', 'cursor-chair', 'cursor-grab');
+        document.body.classList.add('site-entered');
+        window.dispatchEvent(new CustomEvent('site:entered'));
+        if (window.__HOME_RETURN_ARCHIVE) {
+          window.dispatchEvent(new CustomEvent('home:return-archive'));
+        }
+      }
+    };
+    window.__HOME_BOOT_TIMEOUT = window.setTimeout(function () {
+      if (!document.body.classList.contains('boot-ready')) {
+        window.__HOME_BOOT_READY('boot timeout after 7s', { revealContent: true });
+      }
+    }, 7000);
+    window.addEventListener('site:entered', function () {
+      window.clearTimeout(window.__HOME_BOOT_TIMEOUT);
+    }, { once: true });
     window.addEventListener('pageshow', function (event) {
       if (event.persisted) window.location.reload();
     });
@@ -1851,7 +1878,7 @@
           this.render();
         } catch (err) {
           console.error('Failed to load model:', err);
-          document.body.classList.add('boot-ready');
+          window.__HOME_BOOT_READY?.('model load failed', { revealContent: true });
         }
       }
 

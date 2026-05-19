@@ -2,11 +2,15 @@
 _backups/
 *.backup-*
 *.backup-*
+*.backup-*.html
+index.html.backup-*.html
 _imports/
 
 # Logs
+*.log
 server.err.log
 server.out.log
+_server-*.log
 
 # Claude config
 .claude/
@@ -16,11 +20,22 @@ server.out.log
 chrome-headless-profile/
 edge-profile-codex/
 edge-profile-codex-2/
+_tmp_framia_inspect/
 
 # Screenshots (not needed for site)
 screenshots/
+screenshot_*.png
 screenshot_2026-04-27_16-44-30.png
 F45A6783.png
+Cap *.gif
+/Cap*.mp4
+/Cap-*.mp4
+
+# OS / runtime caches
+.DS_Store
+Thumbs.db
+__pycache__/
+scripts/__pycache__/
 
 # Generated prompt source images are only for local regeneration.
 # The site uses assets/images/prompts/*.webp.

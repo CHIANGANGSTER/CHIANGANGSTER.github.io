@@ -91,6 +91,7 @@
   let isOpen = false;
   let entries = [];
   let tagsById = {};
+  let indexLoadError = null;
 
   function ensureModal() {
     if (modal) return;
@@ -123,26 +124,46 @@
     if (window.__kbIndex) {
       entries = window.__kbIndex.entries;
       tagsById = window.__kbIndex.tagsById;
+      indexLoadError = null;
       return;
     }
     const [kb, tags] = await Promise.all([
-      fetch('/assets/data/kb.json').then(r => r.json()),
-      fetch('/assets/data/tags.json').then(r => r.json())
+      loadJson('/assets/data/kb.json'),
+      loadJson('/assets/data/tags.json')
     ]);
     entries = kb.entries || [];
     tagsById = Object.fromEntries((tags.tags || []).map(tag => [tag.id, tag]));
     window.__kbIndex = { entries, tagsById };
+    indexLoadError = null;
   }
 
   async function open(trigger) {
     ensureModal();
     lastFocus = trigger || document.activeElement;
-    await loadIndex();
     input.value = '';
-    render('');
+    try {
+      await loadIndex();
+      render('');
+    } catch (error) {
+      console.error('[cmdk] failed to load search data:', error);
+      entries = [];
+      tagsById = {};
+      indexLoadError = error;
+      renderLoadError();
+    }
     modal.hidden = false;
     isOpen = true;
     input.focus();
+  }
+
+  async function loadJson(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`${url} returned ${response.status}`);
+    return response.json();
+  }
+
+  function renderLoadError() {
+    list.innerHTML = '<li class="cmdk-empty">搜索数据加载失败，请刷新页面或检查本地服务器。</li>';
   }
 
   function close() {
@@ -176,6 +197,10 @@
   }
 
   function render(query) {
+    if (indexLoadError) {
+      renderLoadError();
+      return;
+    }
     const rows = results(query);
     list.innerHTML = '';
     if (rows.length === 0) {

@@ -12,9 +12,10 @@
   <style>
     @font-face {
       font-family: 'AaFengKuangYuanShiRen';
-      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.ttf') format('truetype');
+      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.subset.woff2') format('woff2');
       font-weight: normal;
       font-style: normal;
+      font-display: swap;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -628,12 +629,12 @@
       <div class="tech-grid">
         <div class="tech-card">
           <h3>4B 型号 (基础商用)</h3>
-          <p><strong>协议：</strong><a href="https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md" target="_blank" style="color: var(--accent);">Apache 2.0</a></p>
+          <p><strong>协议：</strong><a href="https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">Apache 2.0</a></p>
           <p>开源协议保障，支持全渠道商业化分发，适用于对生成速度有较高要求的生产场景。</p>
         </div>
         <div class="tech-card accent-green">
           <h3>9B 型号 (核心高精生产)</h3>
-          <p><strong>协议：</strong><a href="https://github.com/black-forest-labs/flux2/blob/main/model_licenses/LICENSE-FLUX-DEV" target="_blank" style="color: var(--accent-green);">FLUX.2-dev 验证版</a></p>
+          <p><strong>协议：</strong><a href="https://github.com/black-forest-labs/flux2/blob/main/model_licenses/LICENSE-FLUX-DEV" target="_blank" rel="noopener noreferrer" style="color: var(--accent-green);">FLUX.2-dev 验证版</a></p>
           <p>经过内部全链路验证，9B 模型生成的图像资产已达到商业交付级精度。支持在当前企业工作流框架下进行大规模数字资产产出。</p>
         </div>
       </div>
@@ -652,7 +653,7 @@
         这是 Flux.2 模型的介绍。
       </p>
       <p class="step-desc" style="margin-bottom: 1.5rem;">
-        模型地址：<a href="https://github.com/black-forest-labs/flux2" target="_blank" style="color: var(--accent);">https://github.com/black-forest-labs/flux2</a>
+        模型地址：<a href="https://github.com/black-forest-labs/flux2" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">https://github.com/black-forest-labs/flux2</a>
       </p>
       <div class="tech-grid">
         <div class="tech-card">
@@ -680,7 +681,10 @@
         <strong>使用步骤：</strong>上传图片，修改提示词，按需要调整一致性、质感数值和开关，运行后保存结果；如果需要更高清的交付图，再开启放大模块。
       </p>
       <div class="rounded-img">
-        <img loading="lazy" src="/assets/images/workflows/flux2-workflow-steps.gif" alt="FLUX.2 工作流步骤演示" class="img-fluid" style="width: 100% !important;">
+        <video autoplay loop muted playsinline preload="none" class="img-fluid" style="width: 100% !important;" aria-label="FLUX.2 工作流步骤演示">
+          <source src="/assets/images/workflows/flux2-workflow-steps.mp4" type="video/mp4">
+          <img loading="lazy" src="/assets/images/workflows/flux2-workflow-steps-fallback.jpg" alt="FLUX.2 工作流步骤演示" class="img-fluid" style="width: 100% !important;">
+        </video>
       </div>
       <p class="img-caption">Complete Node Pipeline / 完整节点拓扑与数据流向</p>
     </section>
