@@ -2,6 +2,7 @@
 _backups/
 *.backup-*
 *.backup-*
+_imports/
 
 # Logs
 server.err.log
@@ -20,6 +21,14 @@ edge-profile-codex-2/
 screenshots/
 screenshot_2026-04-27_16-44-30.png
 F45A6783.png
+
+# Generated prompt source images are only for local regeneration.
+# The site uses assets/images/prompts/*.webp.
+assets/images/prompts/source/xlsx-interior-*.png
+assets/images/prompts/xlsx-interior-011.webp
+assets/images/prompts/xlsx-interior-015.webp
+assets/images/prompts/xlsx-interior-027.webp
+assets/images/prompts/xlsx-interior-028.webp
 
 # Workflow configs (internal use only)
 flux2-product-retouch-v1.0.json

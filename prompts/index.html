@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/prompts.css?v=20260515-blurtext-sequence">
+  <link rel="stylesheet" href="/assets/css/reveal-motion.css">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -27,34 +28,52 @@
 
   <main id="main" class="prompt-shell">
     <header class="prompt-hero">
-      <p class="prompt-kicker">PROMPT TEMPLATE / 风格化参考</p>
-      <h1 aria-label="YAHEETECH STYLIZED PROMPTS">
-        <span class="prompt-title-line prompt-title-brand blur-text-manual">
-          <span class="blur-segment" style="--blur-delay: 0ms;"><span class="brand-yahee">YAHEE</span><span class="brand-tech">TECH</span></span>
-        </span>
-        <span class="prompt-title-line blur-text-manual">
-          <span class="blur-segment" style="--blur-delay: 200ms;">STYLIZED</span>
-        </span>
-        <span class="prompt-title-line blur-text-manual">
-          <span class="blur-segment" style="--blur-delay: 400ms;">PROMPTS</span>
-        </span>
-      </h1>
-      <div class="prompt-lede">
-        <p class="prompt-lede-group blur-text-manual">
-          <span class="blur-segment" style="--blur-delay: 600ms;">展示图片以 Flux2 Klean 9B 生成为基准，仅作为模型能力与方向的效果参考，</span>
-          <span class="blur-segment" style="--blur-delay: 800ms;">实际应用时，提示词内容仍需根据具体产品、空间场景及模型特性自行修改。</span>
-          <span class="blur-segment" style="--blur-delay: 1000ms;">本套资料定位为"参考模板"，适用于市面各类主流图像生成模型。</span>
-        </p>
-        <p class="prompt-lede-group blur-text-manual">
-          <span class="blur-segment" style="--blur-delay: 1200ms;">本模板采用 <strong>JSON PROMPT</strong> 结构化表达，将提示词拆解为主体、空间、材质光影与构图等维度。</span>
-          <span class="blur-segment" style="--blur-delay: 1400ms;">相比整段自然语言，它不仅更易于复用、批量生成并跨模型保持画面一致性，</span>
-          <span class="blur-segment" style="--blur-delay: 1600ms;">也可满足设计部产品风格化不同需求进行调整。</span>
-        </p>
-        <p class="prompt-lede-group blur-text-manual prompt-lede-hint">
-          <span class="blur-segment" style="--blur-delay: 1800ms;">点击图片放大预览，点击卡片展开 Prompt 详情。</span>
-        </p>
+      <div class="prompt-hero-copy">
+        <p class="prompt-kicker">PROMPT TEMPLATE / 风格化参考</p>
+        <h1 aria-label="YAHEETECH STYLIZED PROMPTS">
+          <span class="prompt-title-line prompt-title-brand blur-text-manual">
+            <span class="blur-segment" style="--blur-delay: 0ms;"><span class="brand-yahee">YAHEE</span><span class="brand-tech">TECH</span></span>
+          </span>
+          <span class="prompt-title-line blur-text-manual">
+            <span class="blur-segment" style="--blur-delay: 200ms;">STYLIZED</span>
+          </span>
+          <span class="prompt-title-line blur-text-manual">
+            <span class="blur-segment" style="--blur-delay: 400ms;">PROMPTS</span>
+          </span>
+        </h1>
+        <div class="prompt-lede">
+          <p class="prompt-lede-group blur-text-manual">
+            <span class="blur-segment" style="--blur-delay: 600ms;">展示图片以 Flux2 Klean 9B 生成为基准，仅作为模型能力与方向的效果参考，</span>
+            <span class="blur-segment" style="--blur-delay: 800ms;">实际应用时，提示词内容仍需根据具体产品、空间场景及模型特性自行修改。</span>
+            <span class="blur-segment" style="--blur-delay: 1000ms;">本套资料定位为"参考模板"，适用于市面各类主流图像生成模型。</span>
+          </p>
+          <p class="prompt-lede-group blur-text-manual">
+            <span class="blur-segment" style="--blur-delay: 1200ms;">本模板采用 <strong>JSON PROMPT</strong> 结构化表达，将提示词拆解为主体、空间、材质光影与构图等维度。</span>
+            <span class="blur-segment" style="--blur-delay: 1400ms;">相比整段自然语言，它不仅更易于复用、批量生成并跨模型保持画面一致性，</span>
+            <span class="blur-segment" style="--blur-delay: 1600ms;">也可满足设计部产品风格化不同需求进行调整。</span>
+          </p>
+          <p class="prompt-lede-group blur-text-manual prompt-lede-hint">
+            <span class="blur-segment" style="--blur-delay: 1800ms;">点击图片放大预览，点击卡片展开 Prompt 详情。</span>
+          </p>
+        </div>
       </div>
+      <aside class="prompt-plugin-panel blur-text-manual" aria-label="Framia Clipper download">
+        <a class="prompt-plugin-icon-link" href="/assets/downloads/framiaClipperExtension.zip" download aria-label="下载 Framia Clipper 插件" data-decay-card data-width="220" data-height="220" data-base-frequency="0.005" data-num-octaves="5" data-seed="4" data-max-displacement="150" data-movement-bound="26">
+          <svg viewBox="0 0 256 256" preserveAspectRatio="xMidYMid meet" class="prompt-decay-svg" aria-hidden="true" focusable="false">
+            <filter id="promptDecayFilter">
+              <feTurbulence type="turbulence" baseFrequency="0.005" numOctaves="5" seed="4" stitchTiles="stitch" result="turbulence1" />
+              <feDisplacementMap class="prompt-decay-map" in="SourceGraphic" in2="turbulence1" scale="0" xChannelSelector="R" yChannelSelector="B" result="displacementMap3" />
+            </filter>
+            <image href="/assets/images/prompts/framiaclipper-folder-share.png" x="0" y="0" width="256" height="256" filter="url(#promptDecayFilter)" preserveAspectRatio="xMidYMid meet" />
+          </svg>
+        </a>
+        <p class="prompt-plugin-note">点击文件夹安装插件，可在浏览器中反推任意图片的提示词结构。</p>
+      </aside>
     </header>
+
+    <section class="prompt-plugin-demo-wrap" aria-label="Framia Clipper demo">
+      <img class="prompt-plugin-demo-gif" src="/assets/images/prompts/framiaclipper-demo.gif" alt="">
+    </section>
 
     <section class="prompt-toolbar" aria-label="Prompt filters">
       <div class="prompt-toolbar-left">
@@ -99,6 +118,7 @@
   </div>
 
   <script src="/assets/js/cmdk.js" defer></script>
-  <script src="/assets/js/prompts-gallery.js?v=20260515-cmf-hex" defer></script>
+  <script src="/assets/js/reveal-motion.js" defer></script>
+  <script src="/assets/js/prompts-gallery.js?v=20260518-title-scroll-reset" defer></script>
 </body>
 </html>

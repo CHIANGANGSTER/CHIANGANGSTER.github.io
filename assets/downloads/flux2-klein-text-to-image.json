@@ -1,0 +1,1194 @@
+{
+  "id": "f085f011-3655-4ceb-97ab-4fe9e412c73e",
+  "revision": 0,
+  "last_node_id": 95,
+  "last_link_id": 127,
+  "nodes": [
+    {
+      "id": 83,
+      "type": "CLIPLoader",
+      "pos": [
+        -1164.7286668678435,
+        -1854.5512401342462
+      ],
+      "size": [
+        346.226318359375,
+        111.20387268066406
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "label": "type",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "label": "device",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            120,
+            121
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "CLIPLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "clip_name": true,
+          "type": true,
+          "device": true
+        },
+        "rejects_ue_links": true
+      },
+      "widgets_values": [
+        "qwen_3_8b_fp8mixed.safetensors",
+        "flux2",
+        "default"
+      ]
+    },
+    {
+      "id": 84,
+      "type": "VAELoader",
+      "pos": [
+        -1161.1971120440926,
+        -1802.4033456036057
+      ],
+      "size": [
+        342.5146484375,
+        418.3780212402344
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "slot_index": 0,
+          "links": [
+            115
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "VAELoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "vae_name": true
+        }
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ]
+    },
+    {
+      "id": 81,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -1158.200301032166,
+        -1747.0392761590158
+      ],
+      "size": [
+        393.9082946777344,
+        544.045166015625
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 120
+        },
+        {
+          "label": "text",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "CONDITIONING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            118
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "CLIPTextEncode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "text": true
+        }
+      },
+      "widgets_values": [
+        "people, human body, face, hands, text, logo, watermark, brand logo, poster text, distorted furniture, broken chair legs, warped perspective, fisheye, overexposed window, underexposed room, low resolution, blurry, noisy, plastic texture, oversaturated colors, messy clutter, mixed interior styles, unrealistic scale, duplicate furniture, floating objects, bad composition\n"
+      ]
+    },
+    {
+      "id": 82,
+      "type": "UNETLoader",
+      "pos": [
+        -1150.7612599600047,
+        -1698.6145726570885
+      ],
+      "size": [
+        347.66351318359375,
+        94.76904296875
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "label": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": [
+            123
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "UNETLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "weight_dtype": true,
+          "unet_name": true
+        }
+      },
+      "widgets_values": [
+        "FLUX.2-klein-9b-fp8-v2_flux2 Klein b9.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 78,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        -1072.271076367233,
+        -1890.0606497545505
+      ],
+      "size": [
+        394.07025146484375,
+        106
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 111
+        },
+        {
+          "label": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 112
+        },
+        {
+          "label": "batch_size",
+          "name": "batch_size",
+          "type": "INT",
+          "widget": {
+            "name": "batch_size"
+          },
+          "link": 113
+        }
+      ],
+      "outputs": [
+        {
+          "label": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            119
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "EmptyFlux2LatentImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "batch_size": true,
+          "width": true,
+          "height": true
+        }
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        1
+      ]
+    },
+    {
+      "id": 79,
+      "type": "VAEDecode",
+      "pos": [
+        -1013.8828322626933,
+        -1832.4450119158655
+      ],
+      "size": [
+        422.06353759765625,
+        118.38111877441406
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 114
+        },
+        {
+          "label": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 115
+        }
+      ],
+      "outputs": [
+        {
+          "label": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            122
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "VAEDecode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 88,
+      "type": "SaveImage",
+      "pos": [
+        -860,
+        -1930
+      ],
+      "size": [
+        1120,
+        720
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 122
+        },
+        {
+          "label": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.71",
+        "Node name for S&R": "SaveImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 92,
+      "type": "Note",
+      "pos": [
+        -1880,
+        -1720
+      ],
+      "size": [
+        220,
+        90
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "出图数量"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 95,
+      "type": "Note",
+      "pos": [
+        -1280,
+        -2060
+      ],
+      "size": [
+        410,
+        90
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "K采样器数值\nsteps：4-6                      出图效率\ncfg：1-2                        提示词强度\nsampler：euler                  生成方式\nscheduler：simple               降噪节奏\ndenoise：1                      重绘程度"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 91,
+      "type": "Note",
+      "pos": [
+        -1880,
+        -1930
+      ],
+      "size": [
+        220,
+        170
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "总像素不超过4000   以下最佳\n1:1\t1536×1536\t\n4:5\t1536×1920\t\n3:4\t1536×2048\t\n2:3\t1365×2048\t\n16:9\t1792×1024\t\n21:9\t2048×896\t\n9:16\t1024×1792\t\n4:3\t1824×1368\t\n3:2\t1920×1280\t\n5:4\t1792×1434\t\n2:1\t2048×1024\t\n1.91:1\t1792×938"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 85,
+      "type": "ImpactInt",
+      "pos": [
+        -1650,
+        -1930
+      ],
+      "size": [
+        350,
+        70
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "value",
+          "name": "value",
+          "type": "INT",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "INT",
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            111
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-impact-pack",
+        "ver": "8.28.3",
+        "Node name for S&R": "ImpactInt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        1536
+      ]
+    },
+    {
+      "id": 86,
+      "type": "ImpactInt",
+      "pos": [
+        -1650,
+        -1820
+      ],
+      "size": [
+        350,
+        60
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "value",
+          "name": "value",
+          "type": "INT",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "INT",
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            112
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-impact-pack",
+        "ver": "8.28.3",
+        "Node name for S&R": "ImpactInt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        1536
+      ]
+    },
+    {
+      "id": 77,
+      "type": "ImpactInt",
+      "pos": [
+        -1650,
+        -1720
+      ],
+      "size": [
+        350,
+        60
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "value",
+          "name": "value",
+          "type": "INT",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "INT",
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            113
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-impact-pack",
+        "ver": "8.28.3",
+        "Node name for S&R": "ImpactInt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        2
+      ]
+    },
+    {
+      "id": 89,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        -1644.819981637516,
+        -1563.412429295129
+      ],
+      "size": [
+        340,
+        90
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 123
+        },
+        {
+          "label": "lora_name",
+          "name": "lora_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "lora_name"
+          },
+          "link": null
+        },
+        {
+          "label": "strength_model",
+          "name": "strength_model",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength_model"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            127
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.16.4",
+        "Node name for S&R": "LoraLoaderModelOnly",
+        "ue_properties": {
+          "version": "7.8",
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "UnifiedReward-Flex\\pytorch_lora_weights.safetensors",
+        1.5
+      ],
+      "color": "#ff7fff",
+      "bgcolor": "#ed6bef"
+    },
+    {
+      "id": 94,
+      "type": "Fast Groups Bypasser (rgthree)",
+      "pos": [
+        -1650,
+        -1400
+      ],
+      "size": [
+        350,
+        190
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "OPT_CONNECTION",
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "matchColors": "",
+        "matchTitle": "",
+        "showNav": false,
+        "showAllGraphs": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "default",
+        "ue_properties": {
+          "version": "7.8",
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        }
+      }
+    },
+    {
+      "id": 87,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -1280,
+        -1610
+      ],
+      "size": [
+        411.2231818089683,
+        399.28000744324686
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 121
+        },
+        {
+          "label": "text",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "CONDITIONING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            117
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "CLIPTextEncode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "text": true
+        }
+      },
+      "widgets_values": [
+        "Please recreate this image with high fidelity. Pay close attention to:\n- Overall composition, layout, and framing\n- Subject positioning, scale, and spatial relationships\n- Color palette, lighting, and atmosphere\n- Textures, materials, and surface details\n- Any text, logos, or graphic elements\n- Style, mood, and artistic treatment\nPreserve all visual characteristics as accurately as possible.\n---\n\n```json\n{\n  \"global_overview\": {\n    \"subject_matter\": \"Interior scene with a focus on a window, seating area, and shelving unit.\",\n    \"scene_type\": \"Residential interior, living room or lounge area.\",\n    \"medium_texture\": \"Photorealistic, high-resolution digital photograph.\",\n    \"commercial_attributes\": \"Likely for interior design portfolio, real estate listing, or lifestyle magazine.\",\n    \"style_genre\": \"Modern, minimalist, Scandinavian-inspired, with elements of Japandi.\",\n    \"emotional_atmosphere\": \"Calm, serene, inviting, tranquil, sophisticated, airy.\",\n    \"period_feel\": \"Contemporary, 2020s.\",\n    \"narrative_sense\": \"Implies a comfortable and stylish living space, suggesting relaxation and contemplation.\"\n  },\n  \"composition_and_camera\": {\n    \"aspect_ratio\": \"16:9 (approximate, based on typical digital photography formats).\",\n    \"framing_scope\": \"Medium shot, capturing a significant portion of the room's features.\",\n    \"shot_type\": \"Medium shot.\",\n    \"camera_height\": \"Eye-level to slightly low angle.\",\n    \"camera_tilt\": \"Slightly upward tilt.\",\n    \"perspective_relationship\": \"Slightly wide-angle perspective, creating a sense of depth and spaciousness.\",\n    \"focal_length_impression\": \"Appears to be a moderate wide-angle lens (e.g., 24-35mm equivalent) to capture the breadth of the scene without excessive distortion.\",\n    \"subject_proportion\": \"The window and shelving unit dominate the frame, with the seating in the foreground occupying a substantial but not overwhelming portion.\",\n    \"cropping_method\": \"The image is cropped to focus on the interior elements, with the exterior view serving as a backdrop. The top of the frame shows a concrete beam, and the bottom shows the edge of a sofa.\",\n    \"visual_center\": \"The visual center is dynamic, shifting between the window with the natural light, the shelving unit, and the open book on the sofa.\",\n    \"reading_path\": \"The eye is drawn from the foreground sofa and book, up to the shelving unit and the light from the window, then to the exterior greenery.\",\n    \"negative_space\": \"Significant negative space is present in the ceiling area and the lighter floor, contributing to the airy feel. The empty shelves also contribute to negative space.\"\n  },\n  \"spatial_layout\": {\n    \"top_to_bottom\": [\n      {\n        \"element\": \"Concrete beam\",\n        \"position\": \"Top edge of the frame.\",\n        \"size\": \"Significant width, moderate height.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Foreground/Midground.\",\n        \"distance\": \"Close to the camera.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Centered horizontally.\",\n        \"contact\": \"Appears to be a structural element of the room.\"\n      },\n      {\n        \"element\": \"Ceiling\",\n        \"position\": \"Below the concrete beam.\",\n        \"size\": \"Large area.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Background.\",\n        \"distance\": \"Distant.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Meets the walls.\"\n      },\n      {\n        \"element\": \"Ventilation grille\",\n        \"position\": \"Upper left quadrant, recessed within a wooden structure.\",\n        \"size\": \"Rectangular.\",\n        \"orientation\": \"Horizontal slats.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"Partially obscured by shadow.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Integrated into the wooden structure.\"\n      },\n      {\n        \"element\": \"Wooden shelf structure\",\n        \"position\": \"Upper left, above the window seat.\",\n        \"size\": \"Rectangular, extending horizontally.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Integrated with the wall.\"\n      },\n      {\n        \"element\": \"Window blinds (left)\",\n        \"position\": \"Upper left quadrant, covering a window.\",\n        \"size\": \"Tall, rectangular.\",\n        \"orientation\": \"Vertical slats.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"Partially obscured by light and shadow.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Within a window frame.\"\n      },\n      {\n        \"element\": \"Wall paneling (left)\",\n        \"position\": \"Left side of the frame, behind the window seat.\",\n        \"size\": \"Large, textured panels.\",\n        \"orientation\": \"Vertical and horizontal lines.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical and horizontal.\",\n        \"contact\": \"Forms the wall structure.\"\n      },\n      {\n        \"element\": \"Window blinds (right)\",\n        \"position\": \"Upper right quadrant, covering a large window.\",\n        \"size\": \"Tall, rectangular.\",\n        \"orientation\": \"Vertical slats.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"Partially obscured by light and shadow.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Within a window frame.\"\n      },\n      {\n        \"element\": \"Wooden shelving unit\",\n        \"position\": \"Mid-right to right side of the frame, below the large window.\",\n        \"size\": \"Long, horizontal unit with multiple cubbies.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Against the wall.\"\n      },\n      {\n        \"element\": \"Window seat cushion (left)\",\n        \"position\": \"Lower left quadrant, recessed.\",\n        \"size\": \"Rectangular, substantial.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"On a wooden base.\"\n      },\n      {\n        \"element\": \"Pillow (left)\",\n        \"position\": \"On the window seat cushion.\",\n        \"size\": \"Square.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Resting on the cushion.\"\n      },\n      {\n        \"element\": \"Table lamp\",\n        \"position\": \"On the shelving unit, right of center.\",\n        \"size\": \"Small to medium.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Sitting on the shelf.\"\n      },\n      {\n        \"element\": \"Books on shelves\",\n        \"position\": \"Various cubbies of the shelving unit.\",\n        \"size\": \"Varying.\",\n        \"orientation\": \"Vertical and horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Arranged within cubbies.\",\n        \"contact\": \"Resting on shelves.\"\n      },\n      {\n        \"element\": \"Vase/Pot (on shelf)\",\n        \"position\": \"Lower right cubby of the shelving unit.\",\n        \"size\": \"Medium.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Sitting on the shelf.\"\n      },\n      {\n        \"element\": \"Sofa (foreground)\",\n        \"position\": \"Bottom half of the frame, extending from left to right.\",\n        \"size\": \"Large, modular.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Foreground.\",\n        \"distance\": \"Close to the camera.\",\n        \"occlusion\": \"Partially cropped at the bottom and right edges.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"On the floor.\"\n      },\n      {\n        \"element\": \"Open book (on sofa)\",\n        \"position\": \"Center of the foreground sofa.\",\n        \"size\": \"Medium.\",\n        \"orientation\": \"Open, horizontal.\",\n        \"layer\": \"Foreground.\",\n        \"distance\": \"Close to the camera.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Resting on the sofa cushions.\"\n      },\n      {\n        \"element\": \"Floor\",\n        \"position\": \"Bottom of the frame, extending upwards.\",\n        \"size\": \"Large area.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Foreground/Midground.\",\n        \"distance\": \"Varies.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Meets the walls and furniture.\"\n      },\n      {\n        \"element\": \"Exterior greenery\",\n        \"position\": \"Through the large window.\",\n        \"size\": \"Extensive.\",\n        \"orientation\": \"Natural, organic.\",\n        \"layer\": \"Background.\",\n        \"distance\": \"Distant.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Natural.\",\n        \"contact\": \"Outside the building.\"\n      }\n    ],\n    \"left_to_right\": [\n      {\n        \"element\": \"Wall paneling (left)\",\n        \"position\": \"Far left.\",\n        \"size\": \"Vertical.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Forms the wall.\"\n      },\n      {\n        \"element\": \"Window seat\",\n        \"position\": \"Left to center.\",\n        \"size\": \"Recessed, horizontal.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Integrated into the wall structure.\"\n      },\n      {\n        \"element\": \"Window (left)\",\n        \"position\": \"Left to center, behind the window seat.\",\n        \"size\": \"Vertical.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Within the wall.\"\n      },\n      {\n        \"element\": \"Wall paneling (center)\",\n        \"position\": \"Center.\",\n        \"size\": \"Vertical.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Forms the wall.\"\n      },\n      {\n        \"element\": \"Window (right)\",\n        \"position\": \"Center to right.\",\n        \"size\": \"Large, horizontal.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Within the wall.\"\n      },\n      {\n        \"element\": \"Shelving unit\",\n        \"position\": \"Right side.\",\n        \"size\": \"Horizontal.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Against the wall.\"\n      },\n      {\n        \"element\": \"Sofa (foreground)\",\n        \"position\": \"Bottom, spanning across.\",\n        \"size\": \"Large.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Foreground.\",\n        \"distance\": \"Close.\",\n        \"occlusion\": \"Cropped.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"On the floor.\"\n      }\n    ],\n    \"foreground_to_background\": [\n      {\n        \"element\": \"Sofa (foreground)\",\n        \"position\": \"Closest to the viewer.\",\n        \"size\": \"Large.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Foreground.\",\n        \"distance\": \"Close.\",\n        \"occlusion\": \"Cropped.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"On the floor.\"\n      },\n      {\n        \"element\": \"Open book\",\n        \"position\": \"On the foreground sofa.\",\n        \"size\": \"Medium.\",\n        \"orientation\": \"Open, horizontal.\",\n        \"layer\": \"Foreground.\",\n        \"distance\": \"Close.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Resting on sofa.\"\n      },\n      {\n        \"element\": \"Floor\",\n        \"position\": \"Extending from foreground to midground.\",\n        \"size\": \"Large.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Foreground/Midground.\",\n        \"distance\": \"Varies.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Meets walls and furniture.\"\n      },\n      {\n        \"element\": \"Window seat\",\n        \"position\": \"Midground, left.\",\n        \"size\": \"Recessed.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Integrated into wall.\"\n      },\n      {\n        \"element\": \"Pillow\",\n        \"position\": \"On window seat.\",\n        \"size\": \"Square.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"On cushion.\"\n      },\n      {\n        \"element\": \"Wall paneling\",\n        \"position\": \"Midground, left and center.\",\n        \"size\": \"Large.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"Forms walls.\"\n      },\n      {\n        \"element\": \"Window blinds\",\n        \"position\": \"Midground, left and right.\",\n        \"size\": \"Tall.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"Partially obscured.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"In window frames.\"\n      },\n      {\n        \"element\": \"Shelving unit\",\n        \"position\": \"Midground, right.\",\n        \"size\": \"Horizontal.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Against wall.\"\n      },\n      {\n        \"element\": \"Table lamp\",\n        \"position\": \"On shelving unit.\",\n        \"size\": \"Medium.\",\n        \"orientation\": \"Vertical.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Vertical.\",\n        \"contact\": \"On shelf.\"\n      },\n      {\n        \"element\": \"Books and vase\",\n        \"position\": \"On shelving unit.\",\n        \"size\": \"Varying.\",\n        \"orientation\": \"Varying.\",\n        \"layer\": \"Midground.\",\n        \"distance\": \"Mid-range.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Arranged.\",\n        \"contact\": \"On shelves.\"\n      },\n      {\n        \"element\": \"Exterior greenery\",\n        \"position\": \"Background, seen through window.\",\n        \"size\": \"Extensive.\",\n        \"orientation\": \"Natural.\",\n        \"layer\": \"Background.\",\n        \"distance\": \"Distant.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Natural.\",\n        \"contact\": \"Outside.\"\n      },\n      {\n        \"element\": \"Ceiling\",\n        \"position\": \"Background, top.\",\n        \"size\": \"Large.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Background.\",\n        \"distance\": \"Distant.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Meets walls.\"\n      },\n      {\n        \"element\": \"Concrete beam\",\n        \"position\": \"Background, top.\",\n        \"size\": \"Significant.\",\n        \"orientation\": \"Horizontal.\",\n        \"layer\": \"Background.\",\n        \"distance\": \"Distant.\",\n        \"occlusion\": \"None.\",\n        \"overlap\": \"None.\",\n        \"alignment\": \"Horizontal.\",\n        \"contact\": \"Structural.\"\n      }\n    ]\n  },\n  \"all_subjects_and_objects\": [\n    {\n      \"category\": \"Architectural element\",\n      \"quantity\": 1,\n      \"shape\": \"Rectangular beam.\",\n      \"structure\": \"Solid, monolithic.\",\n      \"parts\": [],\n      \"color\": \"Dark grey, concrete texture.\",\n      \"material\": \"Concrete.\",\n      \"texture\": \"Rough, slightly porous.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Sharp, defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"Casts a subtle shadow on the ceiling.\",\n      \"support_relationship\": \"Structural support for the ceiling/roof.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Architectural element\",\n      \"quantity\": 1,\n      \"shape\": \"Large, flat surface.\",\n      \"structure\": \"Smooth.\",\n      \"parts\": [],\n      \"color\": \"Off-white, slightly textured.\",\n      \"material\": \"Plaster/Paint.\",\n      \"texture\": \"Subtle, matte.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Sharp, defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"None.\",\n      \"support_relationship\": \"Forms the ceiling.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Ventilation grille\",\n      \"quantity\": 1,\n      \"shape\": \"Rectangular.\",\n      \"structure\": \"Slatted.\",\n      \"parts\": [\"Slats\"],\n      \"color\": \"Black.\",\n      \"material\": \"Metal (likely aluminum or steel).\",\n      \"texture\": \"Smooth.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Defined.\",\n      \"reflection\": \"Minimal.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"Partially in shadow.\",\n      \"support_relationship\": \"Integrated into wooden structure.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Wooden structure\",\n      \"quantity\": 1,\n      \"shape\": \"Rectangular recess.\",\n      \"structure\": \"Box-like.\",\n      \"parts\": [\"Sides\", \"Top\"],\n      \"color\": \"Light wood tone, natural grain.\",\n      \"material\": \"Wood (likely plywood or veneer).\",\n      \"texture\": \"Smooth, visible grain.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Clean, defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"Subtle sheen.\",\n      \"shadow\": \"Shadows within the recess.\",\n      \"support_relationship\": \"Supports the ventilation grille.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Window blinds\",\n      \"quantity\": 2,\n      \"shape\": \"Rectangular, slatted.\",\n      \"structure\": \"Horizontal slats.\",\n      \"parts\": [\"Slats\", \"Control cord (implied)\"],\n      \"color\": \"Dark brown, wood grain.\",\n      \"material\": \"Wood (likely stained).\",\n      \"texture\": \"Wood grain, smooth.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Defined.\",\n      \"reflection\": \"Minimal.\",\n      \"highlight\": \"Subtle sheen on slats.\",\n      \"shadow\": \"Creates striped shadow patterns.\",\n      \"support_relationship\": \"Within window frames.\",\n      \"suspension_relationship\": \"Suspended by cords.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Wall paneling\",\n      \"quantity\": 1,\n      \"shape\": \"Large, rectangular panels.\",\n      \"structure\": \"Textured surface.\",\n      \"parts\": [\"Panels\"],\n      \"color\": \"Beige, light cream.\",\n      \"material\": \"Stone or ceramic tile.\",\n      \"texture\": \"Slightly rough, granular.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Defined grout lines.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"Subtle shadows in grout lines.\",\n      \"support_relationship\": \"Forms the wall.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Window frame\",\n      \"quantity\": 2,\n      \"shape\": \"Rectangular.\",\n      \"structure\": \"Thin profile.\",\n      \"parts\": [\"Frame\"],\n      \"color\": \"Dark brown, matching blinds.\",\n      \"material\": \"Wood or metal.\",\n      \"texture\": \"Smooth.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Sharp.\",\n      \"reflection\": \"Minimal.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"None.\",\n      \"support_relationship\": \"Holds the glass and blinds.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Window glass\",\n      \"quantity\": 2,\n      \"shape\": \"Rectangular.\",\n      \"structure\": \"Flat pane.\",\n      \"parts\": [\"Glass\"],\n      \"color\": \"Clear, reflecting the exterior.\",\n      \"material\": \"Glass.\",\n      \"texture\": \"Smooth.\",\n      \"surface_state\": \"Glossy.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Defined by frame.\",\n      \"reflection\": \"Reflects interior elements and exterior light.\",\n      \"highlight\": \"Highlights from sunlight.\",\n      \"shadow\": \"None.\",\n      \"support_relationship\": \"Within window frame.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Window seat base\",\n      \"quantity\": 1,\n      \"shape\": \"Rectangular platform.\",\n      \"structure\": \"Solid.\",\n      \"parts\": [\"Base\"],\n      \"color\": \"Light wood tone, matching upper structure.\",\n      \"material\": \"Wood (likely plywood or veneer).\",\n      \"texture\": \"Smooth, visible grain.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Clean, defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"Subtle sheen.\",\n      \"shadow\": \"Shadows underneath.\",\n      \"support_relationship\": \"Supports the cushion.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Window seat cushion\",\n      \"quantity\": 1,\n      \"shape\": \"Rectangular cushion.\",\n      \"structure\": \"Soft, padded.\",\n      \"parts\": [\"Cushion\"],\n      \"color\": \"Dark grey, almost black.\",\n      \"material\": \"Fabric (likely linen or cotton blend).\",\n      \"texture\": \"Slightly textured, matte.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"Subtle folds from seating.\",\n      \"edges\": \"Defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"None.\",\n      \"support_relationship\": \"Rests on the window seat base.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Pillow\",\n      \"quantity\": 1,\n      \"shape\": \"Square cushion.\",\n      \"structure\": \"Soft, padded.\",\n      \"parts\": [\"Cushion\"],\n      \"color\": \"Off-white, slightly off-white.\",\n      \"material\": \"Fabric (likely linen or cotton blend).\",\n      \"texture\": \"Slightly textured, matte.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"Subtle folds.\",\n      \"edges\": \"Defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"None.\",\n      \"support_relationship\": \"Rests on the window seat cushion.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Shelving unit\",\n      \"quantity\": 1,\n      \"shape\": \"Long, rectangular unit with multiple cubbies.\",\n      \"structure\": \"Modular, open shelves.\",\n      \"parts\": [\"Shelves\", \"Vertical dividers\", \"Horizontal dividers\"],\n      \"color\": \"Light wood tone, natural grain.\",\n      \"material\": \"Wood (likely plywood or veneer).\",\n      \"texture\": \"Smooth, visible grain.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Clean, defined.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"Subtle sheen.\",\n      \"shadow\": \"Shadows within cubbies.\",\n      \"support_relationship\": \"Against the wall.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Table lamp\",\n      \"quantity\": 1,\n      \"shape\": \"Spherical shade on a conical base.\",\n      \"structure\": \"Modern design.\",\n      \"parts\": [\"Shade\", \"Base\", \"Stem\"],\n      \"color\": \"White shade, silver/chrome base.\",\n      \"material\": \"Glass (shade), Metal (base).\",\n      \"texture\": \"Smooth.\",\n      \"surface_state\": \"Matte shade, reflective base.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Smooth curves.\",\n      \"reflection\": \"Base is reflective.\",\n      \"highlight\": \"On the base and shade.\",\n      \"shadow\": \"Casts a shadow on the shelf.\",\n      \"support_relationship\": \"Sits on the shelving unit.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Book\",\n      \"quantity\": 3,\n      \"shape\": \"Rectangular.\",\n      \"structure\": \"Bound pages.\",\n      \"parts\": [\"Cover\", \"Pages\"],\n      \"color\": \"Varying (one with a white spine and black text, one with a dark cover, one with a light cover).\",\n      \"material\": \"Paper, cardboard.\",\n      \"texture\": \"Paper texture, smooth covers.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Sharp.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"Casts subtle shadows.\",\n      \"support_relationship\": \"Resting on shelves.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Vase/Pot\",\n      \"quantity\": 1,\n      \"shape\": \"Ovoid, with a narrow neck.\",\n      \"structure\": \"Ceramic or stoneware.\",\n      \"parts\": [\"Body\", \"Neck\"],\n      \"color\": \"Dark grey, matte.\",\n      \"material\": \"Ceramic/Stoneware.\",\n      \"texture\": \"Slightly rough, matte.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Smooth curves.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"Casts a shadow on the shelf.\",\n      \"support_relationship\": \"Sits on the shelving unit.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Sofa\",\n      \"quantity\": 1,\n      \"shape\": \"Large, modular, low-profile.\",\n      \"structure\": \"Upholstered, segmented cushions.\",\n      \"parts\": [\"Cushions\", \"Base (implied)\"],\n      \"color\": \"Deep navy blue.\",\n      \"material\": \"Fabric (likely textured, possibly velvet or a heavy weave).\",\n      \"texture\": \"Textured, with visible stitching and tufting.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"Subtle folds and creases from the cushion segments.\",\n      \"edges\": \"Defined by cushion segments.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"None.\",\n      \"shadow\": \"Casts shadows on the floor.\",\n      \"support_relationship\": \"Sits on the floor.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Book\",\n      \"quantity\": 1,\n      \"shape\": \"Open, rectangular.\",\n      \"structure\": \"Bound pages, open.\",\n      \"parts\": [\"Pages\", \"Binding\"],\n      \"color\": \"Cream pages with black and white illustrations/text.\",\n      \"material\": \"Paper.\",\n      \"texture\": \"Paper texture.\",\n      \"surface_state\": \"Matte.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"Pages are slightly curved from being open.\",\n      \"edges\": \"Sharp page edges.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"On the paper surface.\",\n      \"shadow\": \"Casts a shadow on the sofa.\",\n      \"support_relationship\": \"Resting on the sofa cushions.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Floor\",\n      \"quantity\": 1,\n      \"shape\": \"Large, flat surface.\",\n      \"structure\": \"Smooth.\",\n      \"parts\": [\"Surface\"],\n      \"color\": \"Light grey, neutral tone.\",\n      \"material\": \"Polished concrete or large format tiles.\",\n      \"texture\": \"Smooth, subtle variations.\",\n      \"surface_state\": \"Matte to semi-gloss.\",\n      \"wear_and_tear\": \"None visible.\",\n      \"folds\": \"None.\",\n      \"edges\": \"Meets walls and furniture.\",\n      \"reflection\": \"Slight reflection of light.\",\n      \"highlight\": \"Areas of light reflection.\",\n      \"shadow\": \"Shadows cast by furniture.\",\n      \"support_relationship\": \"Forms the base of the room.\",\n      \"suspension_relationship\": \"None.\",\n      \"force_state\": \"Static.\"\n    },\n    {\n      \"category\": \"Trees and foliage\",\n      \"quantity\": \"Numerous\",\n      \"shape\": \"Organic, irregular.\",\n      \"structure\": \"Natural growth.\",\n      \"parts\": [\"Leaves\", \"Branches\", \"Trunks (partially visible)\"],\n      \"color\": \"Various shades of green, yellow-green.\",\n      \"material\": \"Organic matter.\",\n      \"texture\": \"Varied, from smooth leaves to rough bark.\",\n      \"surface_state\": \"Natural.\",\n      \"wear_and_tear\": \"Natural weathering.\",\n      \"folds\": \"Leaf veins.\",\n      \"edges\": \"Irregular, organic.\",\n      \"reflection\": \"None.\",\n      \"highlight\": \"Sunlight catching leaves.\",\n      \"shadow\": \"Creates dappled shadows.\",\n      \"support_relationship\": \"Grown from the ground outside.\",\n      \"suspension_relationship\": \"Branches suspended by growth.\",\n      \"force_state\": \"Dynamic (swaying in wind, implied).\"\n    }\n  ],\n  \"text_and_symbols\": {\n    \"visible_text\": [],\n    \"logos\": [],\n    \"symbols\": [],\n    \"patterns\": [],\n    \"prints\":"
+      ]
+    },
+    {
+      "id": 80,
+      "type": "KSampler",
+      "pos": [
+        -1280,
+        -1930
+      ],
+      "size": [
+        410,
+        270
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 127
+        },
+        {
+          "label": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 117
+        },
+        {
+          "label": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 118
+        },
+        {
+          "label": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 119
+        },
+        {
+          "label": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "label": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "label": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "label": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "label": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "label": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            114
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "KSampler",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        },
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "widget_ue_connectable": {
+          "scheduler": true,
+          "denoise": true,
+          "seed": true,
+          "cfg": true,
+          "sampler_name": true,
+          "steps": true
+        }
+      },
+      "widgets_values": [
+        316229828415870,
+        "increment",
+        4,
+        1.2,
+        "euler",
+        "simple",
+        1
+      ]
+    }
+  ],
+  "links": [
+    [
+      111,
+      85,
+      0,
+      78,
+      0,
+      "INT"
+    ],
+    [
+      112,
+      86,
+      0,
+      78,
+      1,
+      "INT"
+    ],
+    [
+      113,
+      77,
+      0,
+      78,
+      2,
+      "INT"
+    ],
+    [
+      114,
+      80,
+      0,
+      79,
+      0,
+      "LATENT"
+    ],
+    [
+      115,
+      84,
+      0,
+      79,
+      1,
+      "VAE"
+    ],
+    [
+      117,
+      87,
+      0,
+      80,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      118,
+      81,
+      0,
+      80,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      119,
+      78,
+      0,
+      80,
+      3,
+      "LATENT"
+    ],
+    [
+      120,
+      83,
+      0,
+      81,
+      0,
+      "CLIP"
+    ],
+    [
+      121,
+      83,
+      0,
+      87,
+      0,
+      "CLIP"
+    ],
+    [
+      122,
+      79,
+      0,
+      88,
+      0,
+      "IMAGE"
+    ],
+    [
+      123,
+      82,
+      0,
+      89,
+      0,
+      "MODEL"
+    ],
+    [
+      127,
+      89,
+      0,
+      80,
+      0,
+      "MODEL"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "质感",
+      "bounding": [
+        -1650,
+        -1640,
+        350,
+        190
+      ],
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "ds": {
+      "scale": 1.1671841070450009,
+      "offset": [
+        1931.815986377155,
+        2177.829677124337
+      ]
+    },
+    "links_added_by_ue": [],
+    "frontendVersion": "1.42.14"
+  },
+  "version": 0.4
+}

@@ -96,6 +96,9 @@
       return `<span class="kb-chip" data-tag-id="${escapeHtml(id)}" data-hint="${escapeHtml(meta.hint || '')}">${escapeHtml(meta.label || id)}</span>`;
     }).join('');
     const statusText = statusLabel(entry.status);
+    const metaText = domain === 'workflows'
+      ? escapeHtml(entry.updated || '')
+      : `${escapeHtml(entry.owner || '')} · ${escapeHtml(entry.updated || '')}`;
     const inner = `
       <div class="kb-card__eyebrow">
         <span>${escapeHtml(entry.type || 'entry')}</span>
@@ -106,7 +109,7 @@
       <div class="kb-card__tags">${tagHtml}</div>
       <div class="kb-card__meta">
         <span class="kb-status" data-status="${escapeHtml(entry.status)}">${statusText}</span>
-        <span>${escapeHtml(entry.owner || '')} · ${escapeHtml(entry.updated || '')}</span>
+        <span>${metaText}</span>
       </div>
     `;
     if (navigable) {

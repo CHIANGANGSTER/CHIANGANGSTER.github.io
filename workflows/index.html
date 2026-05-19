@@ -3,33 +3,179 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>工作流 Workflows — CHIANGANGSTER</title>
+  <title>工作流 Workflows - CHIANGANGSTER</title>
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/base.css">
   <link rel="stylesheet" href="/assets/css/nav.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/hub.css">
   <link rel="stylesheet" href="/assets/css/card.css">
+  <link rel="stylesheet" href="/assets/css/workflows-index.css">
+  <link rel="stylesheet" href="/assets/css/reveal-motion.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
 </head>
-<body class="hub-page">
+<body class="hub-page workflow-page">
   <a class="skip-link" href="#main">跳到正文</a>
   <nav class="glass-page-nav" aria-label="Page">
-    <a href="/">← HOME</a>
+    <a href="/?home=archive">← HOME</a>
     <span>工作流 WORKFLOWS</span>
   </nav>
   <main id="main" class="hub-shell" data-hub-domain="workflows">
     <header class="hub-hero">
-      <p class="hub-kicker">Domain 01 · AI production workflows</p>
-      <h1 class="hub-title">WORKFLOWS</h1>
-      <p class="hub-description">沉淀可复用的 AI 图像、修图、场景搭建与生产流程。先迁移现有 Flux.2 产品精修教程，后续内容按独立 spec 增量扩展。</p>
+      <p class="hub-kicker">Domain 01 / AI production workflows</p>
+      <h1 class="hub-title line-reveal" aria-label="WORKFLOWS">
+        <span class="line-reveal-item">WORKFLOWS</span>
+      </h1>
+      <p class="hub-description line-reveal">
+        <span class="line-reveal-item">把 ComfyUI 的节点流程、模型调用、画面修复、场景生成和批量交付整理成可复用的方法库。</span>
+        <span class="line-reveal-item">它帮助平面设计师把重复试错变成可复制的流程，</span>
+        <span class="line-reveal-item">把零散经验沉淀为团队可以检索、复现和继续迭代的生产资产。</span>
+      </p>
       <span class="hub-count" data-hub-count>Loading entries</span>
     </header>
-    <section class="hub-filters" aria-label="筛选工作流">
-      <div class="hub-filter-row" data-status-filters></div>
-      <div class="hub-filter-row" data-tag-filters></div>
-    </section>
+
     <section class="kb-grid" data-hub-grid aria-live="polite"></section>
+
+    <section class="workflow-resource-section" aria-labelledby="workflow-resource-title">
+      <div class="workflow-resource-header">
+        <p class="workflow-resource-kicker line-reveal">
+          <span class="line-reveal-item">Workflow Reference</span>
+        </p>
+        <h2 class="workflow-resource-title line-reveal" id="workflow-resource-title" aria-label="COMFYUI PRODUCTION NOTES">
+          <span class="line-reveal-item">COMFYUI</span>
+          <span class="line-reveal-item">PRODUCTION</span>
+          <span class="line-reveal-item">NOTES</span>
+        </h2>
+        <p class="workflow-resource-description line-reveal">
+          <span class="line-reveal-item">这些内容面向整个 ComfyUI 使用场景，不绑定单一工作流。</span>
+          <span class="line-reveal-item">重点放在节点图搭建、提示词协作、模型管理、报错排查与设计交付效率。</span>
+        </p>
+      </div>
+
+      <section class="chapter">
+        <div class="chapter-header">
+          <h2 class="chapter-title">实战路径：从素材到可交付画面</h2>
+          <p class="section-subtitle">General ComfyUI Production Path</p>
+        </div>
+        <p class="step-desc">ComfyUI 的优势不是“点一次生成一张图”，而是把图像生产拆成可检查、可替换、可复用的节点链路。对平面设计来说，它更像一套视觉生产台：输入素材，明确画面目标，控制模型和参数，最后把结果整理成可交付资产。</p>
+
+        <div class="step-card path-step">
+          <span class="step-tag">明确输入 / Input First</span>
+          <p class="step-desc">先判断任务需要什么输入：产品白底图、参考图、深度图、线稿、遮罩、品牌色或场景关键词。输入越清楚，后面的节点越容易稳定复现。</p>
+        </div>
+
+        <div class="step-card path-step">
+          <span class="step-tag">拆分目标 / Split the Job</span>
+          <p class="step-desc">把需求拆成结构、材质、光线、风格和输出尺寸。不要把所有要求塞进一个提示词里，能用节点控制的就交给节点，能用提示词描述的再写进提示词。</p>
+        </div>
+
+        <div class="step-card path-step">
+          <span class="step-tag">小图验证 / Preview Before Pressure</span>
+          <p class="step-desc">先用低成本预览确认构图、透视和风格方向，再开启高清修复、放大、细节增强或批量生成。这样能减少无效等待，也方便快速定位问题来自哪一段节点。</p>
+        </div>
+
+        <div class="step-card path-step">
+          <span class="step-tag">锁定版本 / Save the Workflow</span>
+          <p class="step-desc">交付前保存工作流、关键提示词、模型版本、种子和输出图。ComfyUI 的价值在于“下次还能做出来”，不是只保留最后一张图片。</p>
+        </div>
+      </section>
+
+      <section class="chapter">
+        <div class="chapter-header">
+          <h2 class="chapter-title">ComfyUI 核心快捷键全表</h2>
+          <p class="section-subtitle">ComfyUI Full Keyboard Shortcuts Matrix</p>
+        </div>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-desc">打开工作流</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">O</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">保存工作流</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">S</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">撤销 / 重做</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Z/Y</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">全选节点</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">A</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">中断生成</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Alt</span><span class="kbd">Enter</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">转换为子图</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">E</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">刷新节点定义</span><div class="kbd-group"><span class="kbd">R</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">添加框 Group</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">G</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">折叠 / 展开节点</span><div class="kbd-group"><span class="kbd">Alt</span><span class="kbd">C</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">静音 / 取消静音</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">M</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">忽略 / 取消忽略</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">B</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">删除选中节点</span><div class="kbd-group"><span class="kbd">Delete</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">清空当前图</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Backspace</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">执行提示词</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Enter</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">执行提示词并置前</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">Enter</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">放大视图</span><div class="kbd-group"><span class="kbd">Alt</span><span class="kbd">=</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">缩小视图</span><div class="kbd-group"><span class="kbd">Alt</span><span class="kbd">-</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">按住拖动画布</span><div class="kbd-group"><span class="kbd">Space</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">固定 / 取消固定节点</span><div class="kbd-group"><span class="kbd">P</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">显示 / 隐藏菜单</span><div class="kbd-group"><span class="kbd">F</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">锁定画布</span><div class="kbd-group"><span class="kbd">H</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">系统设置</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">,</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">快捷键面板</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">K</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">资产侧边栏</span><div class="kbd-group"><span class="kbd">A</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">节点库侧边栏</span><div class="kbd-group"><span class="kbd">N</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">模型库侧边栏</span><div class="kbd-group"><span class="kbd">M</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">工作流侧边栏</span><div class="kbd-group"><span class="kbd">W</span></div></div>
+          <div class="shortcut-item"><span class="shortcut-desc">日志底部面板</span><div class="kbd-group"><span class="kbd">Ctrl</span><span class="kbd">`</span></div></div>
+        </div>
+      </section>
+
+      <section class="chapter">
+        <div class="chapter-header">
+          <h2 class="chapter-title">ComfyUI 常见问题自查手册</h2>
+          <p class="section-subtitle">General Troubleshooting Guide</p>
+        </div>
+        <p class="step-desc">排查 ComfyUI 问题时，不要一上来就怀疑模型。先看输入、节点连接、模型路径、显存和参数范围。大多数问题都能通过“从输出往前倒查”的方式快速定位。</p>
+
+        <div class="qa-card">
+          <p class="qa-q">Q: 节点报红、缺节点或工作流打不开？</p>
+          <div class="qa-a"><strong>常见原因：</strong>缺少自定义节点、节点版本不一致，或别人导出的工作流使用了你本机没有安装的扩展。<br><strong>处理方式：</strong>先看报错节点名称，再安装对应 custom node；安装后重启 ComfyUI；如果仍然报错，再检查节点输入口是否被新版节点改名。</div>
+        </div>
+
+        <div class="qa-card">
+          <p class="qa-q">Q: 模型、LoRA、VAE 明明下载了，却在节点里找不到？</p>
+          <div class="qa-a"><strong>常见原因：</strong>文件放错目录、模型命名不规范，或 ComfyUI 没有重新扫描。<br><strong>处理方式：</strong>确认 checkpoint、loras、vae、controlnet 等文件放在对应 models 子目录；文件名尽量保留模型版本信息；刷新或重启后再检查节点下拉列表。</div>
+        </div>
+
+        <div class="qa-card">
+          <p class="qa-q">Q: 生成很慢、卡住，或者显存爆掉？</p>
+          <div class="qa-a"><strong>常见原因：</strong>分辨率过大、批量数过高、同时开启高清修复/放大/ControlNet，或后台占用显存。<br><strong>处理方式：</strong>先降低分辨率和 batch size；预览阶段关闭放大和细节增强；确认效果后再分段加压。复杂工作流建议先跑小图，最后再跑交付尺寸。</div>
+        </div>
+
+        <div class="qa-card">
+          <p class="qa-q">Q: 画面跑偏，产品结构变形，或者风格不稳定？</p>
+          <div class="qa-a"><strong>常见原因：</strong>提示词目标混乱、参考图权重过强或过弱、种子频繁变化，导致模型每次都重新理解任务。<br><strong>处理方式：</strong>固定 seed，先锁定构图和产品结构，再逐步调整风格词；涉及产品图时优先保护轮廓、比例和材质边界，不要同时大幅修改空间、灯光和材质。</div>
+        </div>
+
+        <div class="qa-card">
+          <p class="qa-q">Q: 输出图看起来“AI 味”重，细节脏或边缘发虚？</p>
+          <div class="qa-a"><strong>常见原因：</strong>采样步数、降噪强度、放大链路和提示词细节没有配合好。<br><strong>处理方式：</strong>把修复拆成两步：先解决大结构，再解决材质和边缘；放大时降低 denoise，避免把原有细节重画掉；必要时用遮罩局部修复，不要整图反复重绘。</div>
+        </div>
+      </section>
+
+      <section class="chapter">
+        <div class="chapter-header">
+          <h2 class="chapter-title">ComfyUI 工作流管理建议</h2>
+          <p class="section-subtitle">Workflow Hygiene for Design Teams</p>
+        </div>
+        <div class="workflow-extra-grid">
+          <div class="workflow-note-card">
+            <span class="step-tag">节点命名</span>
+            <p class="step-desc">重要节点用中文或英文短名标注用途，例如“产品输入”“材质增强”“最终输出”。不要只保留默认节点名，否则多人协作时很难维护。</p>
+          </div>
+          <div class="workflow-note-card">
+            <span class="step-tag">分组管理</span>
+            <p class="step-desc">把输入、控制、采样、修复、放大、输出分成不同 Group。复杂工作流先看分组，再看节点，排查效率会高很多。</p>
+          </div>
+          <div class="workflow-note-card">
+            <span class="step-tag">版本记录</span>
+            <p class="step-desc">每次稳定出图后保留工作流 JSON、关键提示词、模型版本和示例输出。ComfyUI 支持工作流随图片保存，适合沉淀团队案例。</p>
+          </div>
+          <div class="workflow-note-card">
+            <span class="step-tag">API 思维</span>
+            <p class="step-desc">当一个流程稳定后，可以把它整理成可调用的生产流程，用统一输入替换手动节点操作，为批量图像生产和内部工具打基础。</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
     <p class="hub-empty" data-hub-empty>没有匹配的条目。</p>
   </main>
   <div data-include="footer"></div>
@@ -37,5 +183,125 @@
   <script src="/assets/js/hub.js" defer></script>
   <script src="/assets/js/cmdk.js" defer></script>
   <script src="/assets/js/validate-kb.js" defer></script>
+  <script src="/assets/js/smooth-scroll.js" defer></script>
+  <script src="/assets/js/reveal-motion.js" defer></script>
+  <script>
+    (function initWorkflowResourceBento() {
+      var root = document.querySelector('.workflow-resource-section');
+      if (!root) return;
+      var glowColor = '255, 255, 255';
+      var radius = 200;
+      var selectors = ['.step-card', '.shortcut-item', '.qa-card', '.workflow-note-card'];
+      var cards = [];
+
+      selectors.forEach(function (selector) {
+        root.querySelectorAll(selector).forEach(function (el) {
+          el.classList.add('mb-card');
+          el.style.setProperty('--glow-color', glowColor);
+          cards.push(el);
+        });
+      });
+
+      if (!cards.length) return;
+
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function updateGlow(card, mx, my, intensity) {
+        var rect = card.getBoundingClientRect();
+        card.style.setProperty('--glow-x', (((mx - rect.left) / rect.width) * 100) + '%');
+        card.style.setProperty('--glow-y', (((my - rect.top) / rect.height) * 100) + '%');
+        card.style.setProperty('--glow-intensity', intensity.toFixed(3));
+        card.style.setProperty('--glow-radius', radius + 'px');
+      }
+
+      document.addEventListener('mousemove', function (event) {
+        cards.forEach(function (card) {
+          var rect = card.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dist = Math.hypot(event.clientX - cx, event.clientY - cy) - Math.max(rect.width, rect.height) / 2;
+          dist = Math.max(0, dist);
+          var intensity = dist <= 100 ? 1 : dist <= 150 ? (150 - dist) / 50 : 0;
+          updateGlow(card, event.clientX, event.clientY, intensity);
+        });
+      });
+
+      document.addEventListener('mouseleave', function () {
+        cards.forEach(function (card) { card.style.setProperty('--glow-intensity', '0'); });
+      });
+
+      cards.forEach(function (card) {
+        var tiltX = 0;
+        var tiltY = 0;
+        var magX = 0;
+        var magY = 0;
+        var animRaf;
+
+        function applyTransform() {
+          card.style.transform = [
+            'perspective(1200px)',
+            'rotateX(' + tiltX.toFixed(2) + 'deg)',
+            'rotateY(' + tiltY.toFixed(2) + 'deg)',
+            'translate(' + magX.toFixed(2) + 'px,' + magY.toFixed(2) + 'px)'
+          ].join(' ');
+        }
+
+        card.addEventListener('mousemove', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var cx = rect.width / 2;
+          var cy = rect.height / 2;
+          tiltX = lerp(tiltX, ((y - cy) / cy) * -6, 0.25);
+          tiltY = lerp(tiltY, ((x - cx) / cx) * 6, 0.25);
+          magX = lerp(magX, (x - cx) * 0.04, 0.15);
+          magY = lerp(magY, (y - cy) * 0.04, 0.15);
+          applyTransform();
+        });
+
+        card.addEventListener('mouseleave', function () {
+          function springBack() {
+            tiltX = lerp(tiltX, 0, 0.15);
+            tiltY = lerp(tiltY, 0, 0.15);
+            magX = lerp(magX, 0, 0.15);
+            magY = lerp(magY, 0, 0.15);
+            applyTransform();
+            if (Math.abs(tiltX) > 0.01 || Math.abs(tiltY) > 0.01 || Math.abs(magX) > 0.01 || Math.abs(magY) > 0.01) {
+              animRaf = requestAnimationFrame(springBack);
+            } else {
+              card.style.transform = '';
+            }
+          }
+          cancelAnimationFrame(animRaf);
+          springBack();
+        });
+
+        card.addEventListener('click', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var maxR = Math.max(
+            Math.hypot(x, y),
+            Math.hypot(x - rect.width, y),
+            Math.hypot(x, y - rect.height),
+            Math.hypot(x - rect.width, y - rect.height)
+          );
+          var ripple = document.createElement('div');
+          ripple.className = 'mb-ripple';
+          ripple.style.cssText = [
+            'width:' + (maxR * 2) + 'px',
+            'height:' + (maxR * 2) + 'px',
+            'left:' + (x - maxR) + 'px',
+            'top:' + (y - maxR) + 'px',
+            'background:radial-gradient(circle,rgba(' + glowColor + ',0.35) 0%,rgba(' + glowColor + ',0.15) 30%,transparent 70%)'
+          ].join(';');
+          card.appendChild(ripple);
+          ripple.animate(
+            [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+            { duration: 750, easing: 'ease-out' }
+          ).onfinish = function () { ripple.remove(); };
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

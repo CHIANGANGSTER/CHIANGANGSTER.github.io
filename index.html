@@ -312,6 +312,7 @@
     body.intro-pending #about-text,
     body.intro-pending .about-contacts,
     body.intro-pending #archive-front,
+    body.returning-home #archive-front,
     body.intro-entering .hero-title,
     body.intro-entering .hero-desc-area,
     body.intro-entering #about-text,
@@ -1099,12 +1100,18 @@
 <body class="intro-pending" style="background:#111;">
   <div id="boot-mask" aria-hidden="true"></div>
   <script>
+    const homeParams = new URLSearchParams(window.location.search);
+    window.__HOME_RETURN_ARCHIVE = homeParams.get('home') === 'archive' || window.location.hash === '#archive-front';
     document.documentElement.style.background = '#111';
     document.documentElement.style.colorScheme = 'dark';
     document.body.classList.remove('site-entered', 'intro-ready', 'intro-entering', 'cursor-chair', 'cursor-grab');
     document.body.classList.add('intro-pending');
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
+    if (window.__HOME_RETURN_ARCHIVE) {
+      document.body.classList.add('returning-home');
+    } else {
+      window.scrollTo(0, 0);
+    }
     window.addEventListener('pageshow', function (event) {
       if (event.persisted) window.location.reload();
     });
@@ -1819,6 +1826,9 @@
           this.outerContainer.add(this.innerMesh);
           this.scene.add(this.outerContainer);
           this.setIntroPose(0);
+          if (window.__HOME_RETURN_ARCHIVE) {
+            this.completeIntroForReturnHome();
+          }
           requestAnimationFrame(() => {
             document.body.classList.add('boot-ready');
             setTimeout(() => {
@@ -1830,7 +1840,12 @@
           setTimeout(() => {
             preloader.classList.add('hidden');
             setTimeout(() => preloader.remove(), 600);
-            this.intro.flightStart = performance.now();
+            if (window.__HOME_RETURN_ARCHIVE) {
+              window.dispatchEvent(new CustomEvent('site:entered'));
+              window.dispatchEvent(new CustomEvent('home:return-archive'));
+            } else {
+              this.intro.flightStart = performance.now();
+            }
           }, 300);
 
           this.render();
@@ -1838,6 +1853,26 @@
           console.error('Failed to load model:', err);
           document.body.classList.add('boot-ready');
         }
+      }
+
+      completeIntroForReturnHome() {
+        if (!this.outerContainer || !this.innerMesh) return;
+        this.intro.active = false;
+        this.intro.entered = true;
+        this.intro.entering = false;
+        this.intro.ready = true;
+        this.outerContainer.position.set(0, 0, 0);
+        this.outerContainer.scale.setScalar(1);
+        this.outerContainer.rotation.set(0, 0, 0);
+        this.innerMesh.rotation.set(0.18, 0.28, 0);
+        this.camera.position.set(0, 0, 5);
+        this.camera.lookAt(0, 0, 0);
+        this.spinner.spin.x = this.innerMesh.rotation.y;
+        this.spinner.spin.y = this.innerMesh.rotation.x;
+        this.spinner.velocity.x = isMobile ? 0.0015 : 0.0025;
+        this.spinner.velocity.y = isMobile ? 0.0012 : 0.002;
+        document.body.classList.remove('intro-pending', 'intro-entering', 'intro-ready', 'cursor-chair', 'cursor-grab');
+        document.body.classList.add('site-entered');
       }
 
       addEvents() {
@@ -2576,6 +2611,21 @@
       archive.classList.add('archive-at-cta');
       archive.id = 'archive-front';
       slot.replaceWith(archive);
+      function scrollToArchiveLinks() {
+        if (!window.__HOME_RETURN_ARCHIVE) return;
+        document.body.classList.remove('returning-home');
+        requestAnimationFrame(function () {
+          var rect = archive.getBoundingClientRect();
+          var target = window.scrollY + rect.top - Math.max(24, (window.innerHeight - rect.height) * 0.5);
+          var max = document.documentElement.scrollHeight - window.innerHeight;
+          window.scrollTo(0, Math.max(0, Math.min(target, max)));
+          history.replaceState(null, '', '/');
+        });
+      }
+      window.addEventListener('home:return-archive', scrollToArchiveLinks);
+      window.addEventListener('load', function () {
+        setTimeout(scrollToArchiveLinks, 120);
+      });
     })();
 
     // ShapeBlur removed.

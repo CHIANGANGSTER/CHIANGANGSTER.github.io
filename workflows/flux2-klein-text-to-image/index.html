@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flux.2 Klein 9B 文生图场景搭建工作流</title>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'AaFengKuangYuanShiRen';
+      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-card: rgba(255,255,255,0.06);
+      --bg-card-hover: rgba(255,255,255,0.1);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.72);
+      --text-muted: rgba(255,255,255,0.42);
+      --accent: #B09868;
+      --accent-soft: #B08A62;
+      --accent-red: #7B1E25;
+      --border-radius: 16px;
+      --border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+      overscroll-behavior: none;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% -10%, rgba(176, 152, 104, 0.18), transparent 34rem),
+        radial-gradient(circle at 86% 20%, rgba(123, 30, 37, 0.16), transparent 28rem),
+        #0a0a0a;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 16px 32px;
+      background: transparent;
+    }
+
+    .nav a,
+    .nav span {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav a:hover { color: rgba(255,255,255,0.72); }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: clamp(112px, 14vh, 150px) 0 12vh;
+    }
+
+    .hero {
+      display: block;
+      margin-bottom: 34px;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-family: 'AaFengKuangYuanShiRen', Inter, sans-serif;
+      margin: 0;
+      color: var(--text-primary);
+      font-size: clamp(2.1rem, 6.1vw, 5.8rem);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero-subtitle {
+      margin: 10px 0 0;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 2vw, 1.28rem);
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .lede {
+      max-width: 720px;
+      margin: 24px 0 0;
+      color: var(--text-secondary);
+      font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+      line-height: 1.85;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border: var(--border);
+      border-radius: 999px;
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.055);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+    }
+
+    .workflow-demo-wrap {
+      position: relative;
+      width: 100%;
+      margin: 0 0 26px;
+      border-radius: var(--border-radius);
+      animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) 0.72s both;
+      transform-style: preserve-3d;
+    }
+
+    .workflow-demo-gif {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: inherit;
+      transition: transform 0.15s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    @keyframes workflow-demo-rise {
+      0% {
+        opacity: 0;
+        filter: blur(16px);
+        transform: translateY(70px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .chapter {
+      margin-bottom: 26px;
+      padding: clamp(20px, 3vw, 34px);
+      border: var(--border);
+      border-radius: 20px;
+      background: var(--bg-card);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+    }
+
+    .chapter-header {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: var(--border);
+    }
+
+    .chapter-title {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: clamp(1.35rem, 2.6vw, 2rem);
+      line-height: 1.25;
+    }
+
+    .section-subtitle {
+      margin-top: 6px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    .step-desc,
+    .qa-a {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .tech-grid,
+    .workflow-extra-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .tech-card,
+    .step-card,
+    .qa-card,
+    .workflow-note-card,
+    .workflow-shot {
+      position: relative;
+      padding: 18px;
+      border: var(--border);
+      border-radius: var(--border-radius);
+      background: rgba(255,255,255,0.045);
+    }
+
+    .tech-card h3,
+    .step-tag,
+    .qa-q {
+      display: block;
+      margin: 0 0 8px;
+      color: var(--text-primary);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tech-card p,
+    .workflow-note-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .accent-card {
+      border-color: rgba(176, 152, 104, 0.32);
+      background: rgba(176, 152, 104, 0.08);
+    }
+
+    .workflow-shot {
+      margin-top: 18px;
+      padding: 0;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    .workflow-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: zoom-in;
+    }
+
+    .img-caption {
+      margin: 0.8rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .mb-card {
+      overflow: hidden;
+      --glow-x: 50%;
+      --glow-y: 50%;
+      --glow-intensity: 0;
+      --glow-radius: 200px;
+      --glow-color: 255, 255, 255;
+      transition: transform 0.15s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+    }
+
+    .mb-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      padding: 4px;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(
+        var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.45)) 30%,
+        transparent 60%
+      );
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+    }
+
+    .mb-ripple {
+      position: absolute;
+      z-index: 10;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: scale(0);
+      opacity: 1;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 4vh 4vw;
+      background: rgba(0,0,0,0.72);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(12px) contrast(1.05) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(12px) contrast(1.05) saturate(1.1);
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      max-width: min(94vw, 1500px);
+      max-height: 90vh;
+      border-radius: 14px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      transform: scale(0.94);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.show .modal-content { transform: scale(1); }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .main-title {
+        font-size: clamp(1.28rem, 8vw, 3.1rem);
+      }
+
+      .nav {
+        padding: 14px 18px;
+      }
+
+      .nav span {
+        text-align: right;
+      }
+    }
+  </style>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feColorMatrix in="blurred" type="saturate" values="1.15" />
+      </filter>
+    </defs>
+  </svg>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/?home=archive">← HOME</a>
+    <span>Flux.2 Klein 场景工作流</span>
+  </nav>
+
+  <main class="container">
+    <header class="hero">
+      <div>
+        <p class="kicker line-reveal">
+          <span class="line-reveal-item">COMFYUI / TEXT TO IMAGE SCENE BUILDING</span>
+        </p>
+        <h1 class="main-title line-reveal" aria-label="Flux.2 Klein 9B">
+          <span class="line-reveal-item">FLUX.2 KLEIN 9B</span>
+        </h1>
+        <p class="hero-subtitle line-reveal">
+          <span class="line-reveal-item">文生图场景搭建工作流</span>
+        </p>
+        <p class="lede line-reveal">
+          <span class="line-reveal-item">这是一个面向产品场景搭建的 ComfyUI 文生图工作流。</span>
+          <span class="line-reveal-item">它可以结合 prompts 页面里的结构化提示词库，或使用浏览器插件反推参考图提示词，快速生成室内、电商、空间氛围和产品展示场景。</span>
+          <span class="line-reveal-item">核心目标不是炫技，而是让设计师用更短链路得到可继续筛选、放大和交付的场景初稿。</span>
+        </p>
+        <div class="hero-actions">
+          <a class="pill-link" href="/assets/downloads/flux2-klein-text-to-image.json" download>下载工作流 JSON</a>
+          <a class="pill-link" href="/prompts/">打开提示词库</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="workflow-demo-wrap" aria-label="Flux.2 Klein workflow demo">
+      <img class="workflow-demo-gif" src="/assets/images/workflows/flux2-klein-text-to-image.gif" alt="Flux.2 Klein 文生图 ComfyUI 工作流演示">
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">工作流定位</h2>
+        <p class="section-subtitle">From prompt structure to scene generation</p>
+      </div>
+      <p class="step-desc">这个流程适合从零生成产品场景：先用提示词库或插件把参考图拆成空间、主体、材质、光影、构图等结构，再把这些信息交给 Flux.2 Klein 9B。它更像一个快速场景草图机，适合做方向探索、客户提案、产品氛围图和批量风格测试。</p>
+      <div class="tech-grid">
+        <div class="tech-card accent-card">
+          <h3>提示词来源</h3>
+          <p>可以直接使用 prompts 页面里的 JSON PROMPT，也可以用 Framia Clipper 在浏览器里反推任意参考图的提示词结构，再改成自己的产品场景。</p>
+        </div>
+        <div class="tech-card">
+          <h3>输出目标</h3>
+          <p>生成有空间感、材质关系和商业摄影质感的场景图，用于筛选构图、测试风格、建立后续精修或放大的基础。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">核心节点与参数</h2>
+        <p class="section-subtitle">Klein 9B quick generation path</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h3>模型</h3>
+          <p>UNET 使用 FLUX.2 Klein 9B FP8 版本，CLIP 使用 qwen_3_8b_fp8mixed，VAE 使用 flux2-vae。整体链路偏轻，适合快速迭代。</p>
+        </div>
+        <div class="tech-card">
+          <h3>采样</h3>
+          <p>KSampler 当前配置为 steps 4、CFG 1.2、Euler、Simple。它强调速度和方向验证，适合先跑多张图挑方向。</p>
+        </div>
+        <div class="tech-card accent-card">
+          <h3>LoRA 质感</h3>
+          <p>工作流包含 UnifiedReward-Flex LoRA，作为质感和可用性增强。它帮助输出更接近商业图，而不是停留在粗糙草图阶段。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">为什么适合场景搭建</h2>
+        <p class="section-subtitle">Fast, open, realistic enough for design iteration</p>
+      </div>
+      <div class="workflow-extra-grid">
+        <div class="workflow-note-card">
+          <span class="step-tag">出图快</span>
+          <p>少步数采样让它更适合前期找方向。先用低成本判断空间、风格和产品气质，再决定是否进入精修链路。</p>
+        </div>
+        <div class="workflow-note-card">
+          <span class="step-tag">开源链路</span>
+          <p>模型、VAE、LoRA 和节点都可以在本地 ComfyUI 管理，团队可以保存版本、复用工作流，并沉淀成内部资产。</p>
+        </div>
+        <div class="workflow-note-card">
+          <span class="step-tag">真实性</span>
+          <p>Flux.2 Klein 对空间结构、光影层次和材质关系有较好的理解，适合做室内、电商、家具和生活方式场景。</p>
+        </div>
+        <div class="workflow-note-card">
+          <span class="step-tag">提示词兼容</span>
+          <p>结构化提示词可以直接沿用 prompts 页的主体、空间、CMF、摄影和构图维度，减少每次从零写提示词的成本。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">推荐使用步骤</h2>
+        <p class="section-subtitle">A practical scene-building loop</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">整理参考</span>
+        <p class="step-desc">从 Pinterest、品牌页面、竞品图或 prompts 页面挑一个方向。先确认场景类型、主体位置、材质和光线，不要一开始就追求完整大段自然语言。</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">生成结构化提示词</span>
+        <p class="step-desc">用插件反推参考图，或复制 prompts 页面里的 JSON PROMPT。保留空间、CMF、摄影、构图、负面词这些关键字段，再替换成自己的产品和场景需求。</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">小批量跑图</span>
+        <p class="step-desc">固定宽高和核心提示词，先改 seed 和局部描述，一次跑多张。重点看构图、真实感和风格方向，而不是第一轮就看细节完美度。</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">进入精修</span>
+        <p class="step-desc">选出方向后，再把结果交给产品精修、局部重绘、放大或后期修图流程。Klein 负责找方向，精修流程负责把图推到交付标准。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">文件与交付</h2>
+        <p class="section-subtitle">Keep the workflow reusable</p>
+      </div>
+      <div class="qa-card">
+        <p class="qa-q">工作流文件</p>
+        <div class="qa-a">页面顶部的下载按钮会保存当前 Flux.2 Klein 文生图 JSON。导入 ComfyUI 后，按本机模型路径调整模型名、LoRA 和 VAE。</div>
+      </div>
+      <div class="qa-card">
+        <p class="qa-q">提示词资产</p>
+        <div class="qa-a">建议把稳定输出的提示词保存回 prompts 页面对应分类，记录场景、CMF、构图和负面词，方便下次直接复用。</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="imageModal" class="modal">
+    <img class="modal-content" id="imgFull" alt="">
+  </div>
+
+  <script src="/assets/js/cmdk.js" defer></script>
+  <script src="/assets/js/smooth-scroll.js" defer></script>
+  <script src="/assets/js/reveal-motion.js" defer></script>
+  <script>
+    (function initLightRays() {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;overflow:hidden;';
+      document.body.appendChild(wrap);
+
+      var canvas = document.createElement('canvas');
+      canvas.style.cssText = 'width:100%;height:100%;display:block;';
+      wrap.appendChild(canvas);
+
+      var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) return;
+
+      var vert = [
+        'attribute vec2 a_pos;',
+        'void main(){gl_Position=vec4(a_pos,0.,1.);}',
+      ].join('\n');
+
+      var frag = [
+        'precision highp float;',
+        'uniform float iTime;',
+        'uniform vec2 iRes;',
+        'uniform vec2 rayPos;',
+        'uniform vec2 rayDir;',
+        'uniform vec2 mousePos;',
+        'uniform float mouseInfluence;',
+        'uniform float lightSpread;',
+        'uniform float rayLength;',
+        'uniform float fadeDistance;',
+        'uniform float raysSpeed;',
+
+        'float rayStrength(vec2 src,vec2 refDir,vec2 coord,float sA,float sB,float spd){',
+        '  vec2 d=coord-src;',
+        '  float cosA=dot(normalize(d),refDir);',
+        '  float spread=pow(max(cosA,0.),1./max(lightSpread,0.001));',
+        '  float dist=length(d);',
+        '  float maxD=iRes.x*rayLength;',
+        '  float lenFall=clamp((maxD-dist)/maxD,0.,1.);',
+        '  float fadeFall=clamp((iRes.x*fadeDistance-dist)/(iRes.x*fadeDistance),0.5,1.);',
+        '  float base=clamp(',
+        '    (0.45+0.15*sin(cosA*sA+iTime*spd))+(0.3+0.2*cos(-cosA*sB+iTime*spd)),',
+        '    0.,1.);',
+        '  return base*lenFall*fadeFall*spread;',
+        '}',
+
+        'void main(){',
+        '  vec2 coord=vec2(gl_FragCoord.x,iRes.y-gl_FragCoord.y);',
+        '  vec2 dir=rayDir;',
+        '  if(mouseInfluence>0.){',
+        '    vec2 mp=mousePos*iRes;',
+        '    dir=normalize(mix(rayDir,normalize(mp-rayPos),mouseInfluence));',
+        '  }',
+        '  float r1=rayStrength(rayPos,dir,coord,36.2214,21.1135,1.5*raysSpeed);',
+        '  float r2=rayStrength(rayPos,dir,coord,22.3991,18.0234,1.1*raysSpeed);',
+        '  float v=r1*0.5+r2*0.4;',
+        '  float bright=1.-(coord.y/iRes.y);',
+        '  float tone=0.55+bright*0.45;',
+        '  float r=v*tone;',
+        '  float g=v*tone;',
+        '  float b=v*tone;',
+        '  gl_FragColor=vec4(r,g,b,v*0.7);',
+        '}',
+      ].join('\n');
+
+      function compile(type, src) {
+        var shader = gl.createShader(type);
+        gl.shaderSource(shader, src);
+        gl.compileShader(shader);
+        return shader;
+      }
+
+      var prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, vert));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, frag));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      var buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      var aPos = gl.getAttribLocation(prog, 'a_pos');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      var uTime = gl.getUniformLocation(prog, 'iTime');
+      var uRes = gl.getUniformLocation(prog, 'iRes');
+      var uRayPos = gl.getUniformLocation(prog, 'rayPos');
+      var uRayDir = gl.getUniformLocation(prog, 'rayDir');
+      var uMouse = gl.getUniformLocation(prog, 'mousePos');
+      var uMouseInf = gl.getUniformLocation(prog, 'mouseInfluence');
+      var uSpread = gl.getUniformLocation(prog, 'lightSpread');
+      var uLength = gl.getUniformLocation(prog, 'rayLength');
+      var uFade = gl.getUniformLocation(prog, 'fadeDistance');
+      var uSpeed = gl.getUniformLocation(prog, 'raysSpeed');
+
+      gl.uniform1f(uMouseInf, 0.1);
+      gl.uniform1f(uSpread, 0.5);
+      gl.uniform1f(uLength, 3.0);
+      gl.uniform1f(uFade, 1.0);
+      gl.uniform1f(uSpeed, 1.0);
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+
+      var mouse = { x: 0.5, y: 0.5 };
+      var smoothMouse = { x: 0.5, y: 0.5 };
+      window.addEventListener('mousemove', function (event) {
+        mouse.x = event.clientX / window.innerWidth;
+        mouse.y = event.clientY / window.innerHeight;
+      });
+
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio, 2);
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform2f(uRayPos, canvas.width * 0.5, -canvas.height * 0.2);
+        gl.uniform2f(uRayDir, 0.0, 1.0);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      var start = performance.now();
+      (function loop() {
+        var t = (performance.now() - start) * 0.001;
+        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+        gl.uniform1f(uTime, t);
+        gl.uniform2f(uMouse, smoothMouse.x, 1.0 - smoothMouse.y);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        requestAnimationFrame(loop);
+      })();
+    })();
+
+    (function initLiquidGlassMap() {
+      var feImage = document.getElementById('lg-disp-image');
+      if (!feImage) return;
+      var canvas = document.createElement('canvas');
+      var size = 128;
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext('2d');
+      var imageData = ctx.createImageData(size, size);
+      var data = imageData.data;
+      for (var y = 0; y < size; y += 1) {
+        for (var x = 0; x < size; x += 1) {
+          var i = (y * size + x) * 4;
+          var wave = Math.sin(x * 0.14) * 18 + Math.cos(y * 0.16) * 18;
+          data[i] = 128 + wave;
+          data[i + 1] = 128 - wave;
+          data[i + 2] = 128;
+          data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      feImage.setAttribute('href', canvas.toDataURL());
+    })();
+
+    (function initImageModal() {
+      var modal = document.getElementById('imageModal');
+      var modalImg = document.getElementById('imgFull');
+      document.querySelectorAll('.workflow-shot img, .workflow-demo-gif').forEach(function (img) {
+        img.addEventListener('click', function () {
+          modalImg.src = img.src;
+          modalImg.alt = img.alt || '';
+          modal.classList.add('show');
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
+        });
+      });
+      modal.addEventListener('click', function () {
+        modal.classList.remove('show');
+        modalImg.src = '';
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      });
+    })();
+
+    (function initDemoMagnetism() {
+      var card = document.querySelector('.workflow-demo-wrap');
+      if (!card) return;
+      var target = card.querySelector('.workflow-demo-gif') || card;
+      var tiltX = 0;
+      var tiltY = 0;
+      var magX = 0;
+      var magY = 0;
+      var animRaf;
+      function lerp(a, b, n) { return (1 - n) * a + n * b; }
+      function applyTransform() {
+        target.style.transform = [
+          'perspective(1200px)',
+          'rotateX(' + tiltX.toFixed(2) + 'deg)',
+          'rotateY(' + tiltY.toFixed(2) + 'deg)',
+          'translate(' + magX.toFixed(2) + 'px,' + magY.toFixed(2) + 'px)'
+        ].join(' ');
+      }
+      function releaseRiseAnimation() { card.style.animation = 'none'; }
+      card.addEventListener('animationend', releaseRiseAnimation, { once: true });
+      window.setTimeout(releaseRiseAnimation, 3600);
+      card.addEventListener('mousemove', function (event) {
+        var rect = card.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        var cx = rect.width / 2;
+        var cy = rect.height / 2;
+        tiltX = ((y - cy) / cy) * -6;
+        tiltY = ((x - cx) / cx) * 6;
+        magX = lerp(magX, (x - cx) * 0.04, 0.15);
+        magY = lerp(magY, (y - cy) * 0.04, 0.15);
+        applyTransform();
+      });
+      card.addEventListener('mouseleave', function () {
+        function springBack() {
+          tiltX = lerp(tiltX, 0, 0.15);
+          tiltY = lerp(tiltY, 0, 0.15);
+          magX = lerp(magX, 0, 0.15);
+          magY = lerp(magY, 0, 0.15);
+          applyTransform();
+          if (Math.abs(tiltX) > 0.01 || Math.abs(tiltY) > 0.01 || Math.abs(magX) > 0.01 || Math.abs(magY) > 0.01) {
+            animRaf = requestAnimationFrame(springBack);
+          } else {
+            tiltX = tiltY = magX = magY = 0;
+            target.style.transform = '';
+          }
+        }
+        cancelAnimationFrame(animRaf);
+        springBack();
+      });
+    })();
+
+    (function initMagicBento() {
+      var glowColor = '255, 255, 255';
+      var radius = 200;
+      var cards = [];
+      document.querySelectorAll('.tech-card, .step-card, .qa-card, .workflow-note-card, .workflow-shot').forEach(function (card) {
+        card.classList.add('mb-card');
+        card.style.setProperty('--glow-color', glowColor);
+        cards.push(card);
+      });
+      if (!cards.length) return;
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function updateGlow(card, mx, my, intensity) {
+        var rect = card.getBoundingClientRect();
+        card.style.setProperty('--glow-x', (((mx - rect.left) / rect.width) * 100) + '%');
+        card.style.setProperty('--glow-y', (((my - rect.top) / rect.height) * 100) + '%');
+        card.style.setProperty('--glow-intensity', intensity.toFixed(3));
+        card.style.setProperty('--glow-radius', radius + 'px');
+      }
+      document.addEventListener('mousemove', function (event) {
+        cards.forEach(function (card) {
+          var rect = card.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dist = Math.hypot(event.clientX - cx, event.clientY - cy) - Math.max(rect.width, rect.height) / 2;
+          dist = Math.max(0, dist);
+          var intensity = dist <= 100 ? 1 : dist <= 150 ? (150 - dist) / 50 : 0;
+          updateGlow(card, event.clientX, event.clientY, intensity);
+        });
+      });
+      document.addEventListener('mouseleave', function () {
+        cards.forEach(function (card) { card.style.setProperty('--glow-intensity', '0'); });
+      });
+      cards.forEach(function (card) {
+        var tiltX = 0;
+        var tiltY = 0;
+        var magX = 0;
+        var magY = 0;
+        var animRaf;
+        function applyTransform() {
+          card.style.transform = [
+            'perspective(1200px)',
+            'rotateX(' + tiltX.toFixed(2) + 'deg)',
+            'rotateY(' + tiltY.toFixed(2) + 'deg)',
+            'translate(' + magX.toFixed(2) + 'px,' + magY.toFixed(2) + 'px)'
+          ].join(' ');
+        }
+        card.addEventListener('mousemove', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var cx = rect.width / 2;
+          var cy = rect.height / 2;
+          tiltX = lerp(tiltX, ((y - cy) / cy) * -6, 0.25);
+          tiltY = lerp(tiltY, ((x - cx) / cx) * 6, 0.25);
+          magX = lerp(magX, (x - cx) * 0.04, 0.15);
+          magY = lerp(magY, (y - cy) * 0.04, 0.15);
+          applyTransform();
+        });
+        card.addEventListener('mouseleave', function () {
+          function springBack() {
+            tiltX = lerp(tiltX, 0, 0.15);
+            tiltY = lerp(tiltY, 0, 0.15);
+            magX = lerp(magX, 0, 0.15);
+            magY = lerp(magY, 0, 0.15);
+            applyTransform();
+            if (Math.abs(tiltX) > 0.01 || Math.abs(tiltY) > 0.01 || Math.abs(magX) > 0.01 || Math.abs(magY) > 0.01) {
+              animRaf = requestAnimationFrame(springBack);
+            } else {
+              card.style.transform = '';
+            }
+          }
+          cancelAnimationFrame(animRaf);
+          springBack();
+        });
+        card.addEventListener('click', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var maxR = Math.max(
+            Math.hypot(x, y),
+            Math.hypot(x - rect.width, y),
+            Math.hypot(x, y - rect.height),
+            Math.hypot(x - rect.width, y - rect.height)
+          );
+          var ripple = document.createElement('div');
+          ripple.className = 'mb-ripple';
+          ripple.style.cssText = [
+            'width:' + (maxR * 2) + 'px',
+            'height:' + (maxR * 2) + 'px',
+            'left:' + (x - maxR) + 'px',
+            'top:' + (y - maxR) + 'px',
+            'background:radial-gradient(circle,rgba(' + glowColor + ',0.35) 0%,rgba(' + glowColor + ',0.15) 30%,transparent 70%)'
+          ].join(';');
+          card.appendChild(ripple);
+          ripple.animate(
+            [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+            { duration: 750, easing: 'ease-out' }
+          ).onfinish = function () { ripple.remove(); };
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

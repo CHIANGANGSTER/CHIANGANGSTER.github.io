@@ -4,7 +4,7 @@
   if (!host) return;
 
   const links = [
-    ['/', 'Home'],
+    ['/?home=archive', 'Home'],
     ['/workflows/', '工作流 WORKFLOWS'],
     ['/prompts/', 'Prompt 库 PROMPTS'],
     ['/research/', '调研 RESEARCH'],
@@ -12,12 +12,15 @@
     ['/resources/', '资源 RESOURCES']
   ];
   const path = location.pathname;
-  const active = href => href === '/' ? path === '/' || path.endsWith('/index.html') : path.startsWith(href);
+  const active = href => {
+    const cleanHref = href.split('?')[0];
+    return cleanHref === '/' ? path === '/' || path.endsWith('/index.html') : path.startsWith(cleanHref);
+  };
 
   host.innerHTML = `
     <nav class="kb-nav" aria-label="Primary">
       <div class="kb-nav__inner">
-        <a class="kb-nav__brand" href="/">CHIANGANGSTER</a>
+        <a class="kb-nav__brand" href="/?home=archive">CHIANGANGSTER</a>
         <div class="kb-nav__links">
           ${links.map(([href, label]) => `<a href="${href}"${active(href) ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
           <button class="kb-nav__search" type="button" aria-label="打开搜索" aria-haspopup="dialog" aria-expanded="false">
@@ -36,4 +39,5 @@
     window.dispatchEvent(new CustomEvent('cmdk:open', { detail: { trigger: button } }));
   });
   window.addEventListener('cmdk:closed', () => button?.setAttribute('aria-expanded', 'false'));
+  window.dispatchEvent(new CustomEvent('kb:navigation-ready'));
 })();

@@ -1,3 +1,87 @@
+/* Static GradualBlur navigation layer based on React Bits. */
+(() => {
+  const CONFIG = {
+    position: 'top',
+    height: '7rem',
+    strength: 1.5,
+    divCount: 5,
+    curve: 'bezier',
+    exponential: true,
+    opacity: 1
+  };
+
+  const CURVE_FUNCTIONS = {
+    linear: p => p,
+    bezier: p => p * p * (3 - 2 * p),
+    'ease-in': p => p * p,
+    'ease-out': p => 1 - Math.pow(1 - p, 2),
+    'ease-in-out': p => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2)
+  };
+
+  const getGradientDirection = position => ({
+    top: 'to top',
+    bottom: 'to bottom',
+    left: 'to left',
+    right: 'to right'
+  })[position] || 'to bottom';
+
+  function createGradualBlur() {
+    const root = document.createElement('div');
+    root.className = 'gradual-blur gradual-blur-parent';
+    root.setAttribute('aria-hidden', 'true');
+    root.style.height = CONFIG.height;
+
+    const inner = document.createElement('div');
+    inner.className = 'gradual-blur-inner';
+    root.appendChild(inner);
+
+    const increment = 100 / CONFIG.divCount;
+    const curveFunc = CURVE_FUNCTIONS[CONFIG.curve] || CURVE_FUNCTIONS.linear;
+    const direction = getGradientDirection(CONFIG.position);
+
+    for (let i = 1; i <= CONFIG.divCount; i += 1) {
+      let progress = curveFunc(i / CONFIG.divCount);
+      const blurValue = CONFIG.exponential
+        ? Math.pow(2, progress * 4) * 0.0625 * CONFIG.strength
+        : 0.0625 * (progress * CONFIG.divCount + 1) * CONFIG.strength;
+
+      const p1 = Math.round((increment * i - increment) * 10) / 10;
+      const p2 = Math.round(increment * i * 10) / 10;
+      const p3 = Math.round((increment * i + increment) * 10) / 10;
+      const p4 = Math.round((increment * i + increment * 2) * 10) / 10;
+
+      let gradient = `transparent ${p1}%, black ${p2}%`;
+      if (p3 <= 100) gradient += `, black ${p3}%`;
+      if (p4 <= 100) gradient += `, transparent ${p4}%`;
+
+      const layer = document.createElement('div');
+      layer.style.maskImage = `linear-gradient(${direction}, ${gradient})`;
+      layer.style.webkitMaskImage = `linear-gradient(${direction}, ${gradient})`;
+      layer.style.backdropFilter = `blur(${blurValue.toFixed(3)}rem)`;
+      layer.style.webkitBackdropFilter = `blur(${blurValue.toFixed(3)}rem)`;
+      layer.style.opacity = CONFIG.opacity;
+      inner.appendChild(layer);
+    }
+
+    return root;
+  }
+
+  function applyGradualBlur() {
+    document.querySelectorAll('.kb-nav, .glass-page-nav, .prompt-nav, .nav').forEach(nav => {
+      if (nav.querySelector(':scope > .gradual-blur')) return;
+      nav.classList.add('gradual-blur-host');
+      nav.prepend(createGradualBlur());
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyGradualBlur, { once: true });
+  } else {
+    applyGradualBlur();
+  }
+  window.addEventListener('kb:navigation-ready', applyGradualBlur);
+})();
+
 /* Cmd/Ctrl+K and slash-triggered KB search modal. */
 (() => {
   let modal;
