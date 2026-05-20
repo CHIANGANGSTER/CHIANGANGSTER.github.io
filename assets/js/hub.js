@@ -1,5 +1,6 @@
 /* Fetches kb.json, filters by domain, and renders hub cards. */
 (() => {
+  const escapeHtml = window.AppUtils.escapeHtml;
   const root = document.querySelector('[data-hub-domain]');
   if (!root) return;
 
@@ -121,7 +122,4 @@
     return ({ published: '已发布', testing: '测试中', planned: '待发布', archived: '已归档' })[status] || status;
   }
 
-  function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
-  }
 })();

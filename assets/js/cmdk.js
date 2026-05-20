@@ -84,6 +84,7 @@
 
 /* Cmd/Ctrl+K and slash-triggered KB search modal. */
 (() => {
+  const escapeHtml = window.AppUtils.escapeHtml;
   let modal;
   let input;
   let list;
@@ -305,8 +306,5 @@
 
   function statusLabel(status) {
     return ({ published: '已发布', testing: '测试中', planned: '计划中', archived: '已归档' })[status] || status;
-  }
-  function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
   }
 })();
