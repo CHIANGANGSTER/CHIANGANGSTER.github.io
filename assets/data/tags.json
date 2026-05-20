@@ -1,6 +1,7 @@
 {
   "tags": [
     { "id": "平面组", "label": "平面组", "group": "team", "hint": "graphic" },
+    { "id": "平面设计", "label": "平面设计", "group": "team", "hint": "graphic-design" },
     { "id": "3D 渲染组", "label": "3D 渲染组", "group": "team", "hint": "render" },
     { "id": "摄制组", "label": "摄制组", "group": "team", "hint": "video" },
     { "id": "产品设计组", "label": "产品设计组", "group": "team", "hint": "product" },
