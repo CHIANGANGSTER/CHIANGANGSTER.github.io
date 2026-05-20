@@ -102,7 +102,6 @@
     const inner = `
       <div class="kb-card__eyebrow">
         <span>${escapeHtml(entry.type || 'entry')}</span>
-        <span>PHASE ${Number(entry.phase || 0)}</span>
       </div>
       <h2>${escapeHtml(entry.title)}</h2>
       <p>${escapeHtml(entry.summary)}</p>
