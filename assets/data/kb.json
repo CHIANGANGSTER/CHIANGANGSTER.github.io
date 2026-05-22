@@ -36,6 +36,24 @@
       "prerequisites": ["ComfyUI", "Flux.2 Klein 9B", "qwen_3_8b_fp8mixed", "flux2-vae"],
       "outputs": ["产品场景图", "空间氛围图", "提示词结构"],
       "external": false
+    },
+    {
+      "id": "flux2-klein-light-fusion",
+      "title": "Flux.2 Klein 光影融合溶图打光工作流",
+      "domain": "workflows",
+      "type": "workflow",
+      "tags": ["平面设计", "ComfyUI", "Flux"],
+      "phase": 1,
+      "status": "published",
+      "difficulty": 3,
+      "timeCost": "15-30min",
+      "owner": "Corvin",
+      "updated": "2026-05-22",
+      "summary": "用 Flux.2 Klein 9B、ReferenceLatent、BiRefNet 遮罩和重打光 LoRA，把产品或参考图自然融入新的光影场景。",
+      "url": "/workflows/flux2-klein-light-fusion/",
+      "prerequisites": ["ComfyUI", "Flux.2 Klein 9B", "qwen_3_8b_fp8mixed", "flux2-vae", "BiRefNet-General"],
+      "outputs": ["光影融合图", "产品溶图", "重打光场景图"],
+      "external": false
     }
   ]
 }
