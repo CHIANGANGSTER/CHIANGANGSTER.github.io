@@ -245,6 +245,37 @@
       margin-top: 18px;
     }
 
+    .credit-note {
+      margin-top: 18px;
+      padding: clamp(18px, 2.4vw, 26px);
+      border: var(--border);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .credit-note h3 {
+      margin: 0 0 10px;
+      color: var(--text-primary);
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      line-height: 1.25;
+    }
+
+    .credit-note p {
+      margin: 0 0 12px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .credit-video {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 16px;
+      border-radius: 16px;
+      background: #000;
+    }
+
     .tech-card,
     .step-card,
     .qa-card,
@@ -425,6 +456,14 @@
           <h3>Flux.2 Pro</h3>
           <p>使用方式相同，适合更完整的商业图像生成链路和高质量输出方向。</p>
         </div>
+      </div>
+      <div class="credit-note">
+        <h3>积分使用说明</h3>
+        <p>这类节点调用的是闭源模型 API，需要消耗 ComfyUI 账户积分。当前换算约为 211 积分 ≈ 1 美元。使用前先估算生成次数，避免在测试阶段浪费积分。</p>
+        <p>建议先用 <a href="/workflows/flux2-klein-text-to-image/">Flux.2 文生图工作流</a> 优化提示词，把画面方向、主体描述和风格定稿。确认提示词后，再回到这四个节点生成正式图片。</p>
+        <video autoplay loop muted playsinline preload="metadata" class="credit-video" aria-label="积分使用说明演示">
+          <source src="/assets/images/workflows/multi-model-image-credits.mp4" type="video/mp4">
+        </video>
       </div>
     </section>
 
