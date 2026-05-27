@@ -1,288 +1,779 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>四模型图像工作流使用指南</title>
-  <meta name="description" content="Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个图像工作流的统一使用方式：单图生成与多图联结。">
+  <meta name="description" content="Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个图像工作流的统一使用方式，包含单图与多图联结两种演示。">
   <link rel="canonical" href="/workflows/multi-model-image-workflows/">
   <link rel="stylesheet" href="/assets/css/tokens.css">
-  <link rel="stylesheet" href="/assets/css/base.css">
-  <link rel="stylesheet" href="/assets/css/card.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     @font-face {
       font-family: 'AaFengKuangYuanShiRen';
       src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.subset.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
       font-display: swap;
     }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      color-scheme: dark;
-      --page-bg: #06090f;
-      --panel: rgba(255, 255, 255, 0.065);
-      --panel-strong: rgba(255, 255, 255, 0.1);
-      --line: rgba(255, 255, 255, 0.14);
-      --text: #f4f7fb;
-      --muted: rgba(244, 247, 251, 0.68);
-      --soft: rgba(244, 247, 251, 0.44);
-      --accent: #98e6ff;
-      --accent-2: #ffd48a;
+      --bg-primary: #0a0a0a;
+      --bg-card: rgba(255,255,255,0.06);
+      --bg-card-hover: rgba(255,255,255,0.1);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.72);
+      --text-muted: rgba(255,255,255,0.42);
+      --accent: #B09868;
+      --accent-soft: #B08A62;
+      --accent-red: #7B1E25;
+      --border-radius: 16px;
+      --border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+      overscroll-behavior: none;
     }
 
     body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
       background:
-        radial-gradient(circle at 18% 8%, rgba(98, 180, 255, 0.2), transparent 34rem),
-        radial-gradient(circle at 88% 18%, rgba(255, 196, 108, 0.18), transparent 30rem),
-        linear-gradient(180deg, #07101b 0%, var(--page-bg) 50%, #05070b 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        radial-gradient(circle at 20% -10%, rgba(176, 152, 104, 0.18), transparent 34rem),
+        radial-gradient(circle at 86% 20%, rgba(123, 30, 37, 0.14), transparent 28rem),
+        #0a0a0a;
     }
 
-    .workflow-page {
-      width: min(1180px, calc(100% - 32px));
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 16px 32px;
+      background: transparent;
+    }
+
+    .nav a,
+    .nav span {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav a:hover { color: rgba(255,255,255,0.72); }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(1120px, calc(100vw - 32px));
       margin: 0 auto;
-      padding: 88px 0 72px;
+      padding: clamp(112px, 14vh, 150px) 0 12vh;
     }
 
     .hero {
-      display: grid;
-      gap: 24px;
-      padding: 28px 0 40px;
+      display: block;
+      margin-bottom: 34px;
     }
 
-    .eyebrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
     .main-title {
-      max-width: 980px;
+      font-family: inherit;
       margin: 0;
-      font-family: 'AaFengKuangYuanShiRen', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: clamp(3.15rem, 8vw, 7.1rem);
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5.5vw, 4.7rem);
+      font-weight: 800;
       line-height: 0.98;
-      font-weight: 900;
       letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .hero-subtitle {
-      max-width: 860px;
-      margin: 0;
-      color: var(--muted);
-      font-size: clamp(1.08rem, 2vw, 1.35rem);
-      line-height: 1.82;
+      margin: 10px 0 0;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 2vw, 1.28rem);
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
     }
 
-    .hero-actions,
-    .download-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .lede {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: var(--text-secondary);
+      font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+      line-height: 1.85;
     }
 
-    .pill-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 0 18px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.08);
-      text-decoration: none;
-      font-weight: 700;
-      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-    }
-
-    .pill-link:hover {
-      transform: translateY(-1px);
-      border-color: rgba(152, 230, 255, 0.65);
-      background: rgba(152, 230, 255, 0.12);
-    }
-
-    .demo-grid {
+    .workflow-demo-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 22px;
-      margin: 26px 0 56px;
+      gap: 18px;
+      margin: 0 0 26px;
     }
 
-    .demo-card,
-    .chapter {
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--panel);
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+    .workflow-demo-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: var(--border-radius);
+      animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) 0.72s both;
+      transform-style: preserve-3d;
       overflow: hidden;
+      border: var(--border);
+      background: var(--bg-card);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
     }
 
-    .demo-card__body {
-      padding: 20px 20px 22px;
-    }
-
-    .demo-card h2,
-    .chapter h2 {
-      margin: 0;
-      font-size: clamp(1.35rem, 2.8vw, 2rem);
-      line-height: 1.18;
-    }
-
-    .demo-card p,
-    .chapter p,
-    .chapter li {
-      color: var(--muted);
-      line-height: 1.78;
-    }
-
-    .workflow-demo-video {
+    .workflow-demo-gif {
       display: block;
       width: 100%;
       aspect-ratio: 16 / 9;
-      background: #000;
       object-fit: cover;
+      background: #000;
+      transition: transform 0.15s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
 
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+    .demo-caption {
+      padding: 16px 18px 18px;
+      border-top: var(--border);
+    }
+
+    .demo-caption h2 {
+      margin: 0 0 8px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .demo-caption p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+
+    @keyframes workflow-demo-rise {
+      0% {
+        opacity: 0;
+        filter: blur(16px);
+        transform: translateY(70px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+      }
     }
 
     .chapter {
-      padding: 24px;
+      margin-bottom: 26px;
+      padding: clamp(20px, 3vw, 34px);
+      border: var(--border);
+      border-radius: 20px;
+      background: var(--bg-card);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
     }
 
-    .chapter ul {
-      margin: 16px 0 0;
-      padding-left: 1.15rem;
+    .chapter-header {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: var(--border);
     }
 
-    .download-section {
+    .chapter-title {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: clamp(1.35rem, 2.6vw, 2rem);
+      line-height: 1.25;
+    }
+
+    .section-subtitle {
+      margin-top: 6px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    .step-desc,
+    .qa-a {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .tech-grid,
+    .workflow-extra-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
       margin-top: 18px;
-      padding: 26px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--panel-strong);
     }
 
-    .download-section h2 {
-      margin: 0 0 16px;
-      font-size: clamp(1.35rem, 2.8vw, 2rem);
+    .tech-card,
+    .step-card,
+    .qa-card,
+    .workflow-note-card {
+      position: relative;
+      padding: 18px;
+      border: var(--border);
+      border-radius: var(--border-radius);
+      background: rgba(255,255,255,0.045);
+    }
+
+    .tech-card h3,
+    .step-tag,
+    .qa-q {
+      display: block;
+      margin: 0 0 8px;
+      color: var(--text-primary);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tech-card p,
+    .workflow-note-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .accent-card {
+      border-color: rgba(176, 152, 104, 0.32);
+      background: rgba(176, 152, 104, 0.08);
+    }
+
+    .mb-card {
+      overflow: hidden;
+      --glow-x: 50%;
+      --glow-y: 50%;
+      --glow-intensity: 0;
+      --glow-radius: 200px;
+      --glow-color: 255, 255, 255;
+      transition: transform 0.15s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+    }
+
+    .mb-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      padding: 4px;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(
+        var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.45)) 30%,
+        transparent 60%
+      );
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+    }
+
+    .mb-ripple {
+      position: absolute;
+      z-index: 10;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: scale(0);
+      opacity: 1;
     }
 
     @media (max-width: 860px) {
-      .workflow-page {
-        width: min(100% - 22px, 1180px);
-        padding-top: 72px;
+      .main-title {
+        font-size: clamp(1.58rem, 7vw, 2.7rem);
+        white-space: normal;
       }
 
-      .demo-grid,
-      .content-grid {
+      .workflow-demo-grid {
         grid-template-columns: 1fr;
       }
 
-      .main-title {
-        font-size: clamp(2.6rem, 14vw, 4.8rem);
+      .nav {
+        padding: 14px 18px;
+      }
+
+      .nav span {
+        text-align: right;
       }
     }
   </style>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feColorMatrix in="blurred" type="saturate" values="1.15" />
+      </filter>
+    </defs>
+  </svg>
 </head>
 <body>
-  <main class="workflow-page">
+  <nav class="nav">
+    <a href="/?home=archive">← HOME</a>
+    <span>Multi-model image workflows</span>
+  </nav>
+
+  <main class="container">
     <header class="hero">
-      <div class="eyebrow">
-        <span>ComfyUI</span>
-        <span>Seedream</span>
-        <span>Nano Banana Pro 2</span>
-        <span>Flux.2 Pro</span>
-        <span>GPT Image 2</span>
-      </div>
-      <h1 class="main-title">四模型图像工作流使用指南</h1>
-      <p class="hero-subtitle">
-        这组工作流包含 Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个版本。四个版本的操作方式一致：单图使用时上传一张参考图，多图联结时上传多张图片建立主体、场景、风格或结构关系。视频演示使用 GPT Image 2 工作流录制，其他三个工作流按同样步骤操作。
-      </p>
-      <div class="hero-actions">
-        <a class="pill-link" href="/workflows/">返回工作流列表</a>
-        <a class="pill-link" href="/assets/downloads/gpt-image-2.json" download>下载 GPT Image 2</a>
+      <div>
+        <p class="kicker line-reveal">
+          <span class="line-reveal-item">COMFYUI / IMAGE WORKFLOW GUIDE</span>
+        </p>
+        <h1 class="main-title line-reveal" aria-label="Multi-model image workflows">
+          <span class="line-reveal-item">四模型图像工作流</span>
+        </h1>
+        <p class="hero-subtitle line-reveal">
+          <span class="line-reveal-item">单图使用 / 多图联结</span>
+        </p>
+        <p class="lede line-reveal">
+          <span class="line-reveal-item">这组工作流包含 Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个版本。四个版本的使用方式一致，只是底层模型与节点配置不同。</span>
+          <span class="line-reveal-item">视频演示使用 GPT Image 2 工作流录制；其他三个工作流按照同样步骤操作即可。单图模式适合一张参考图，多图联结适合把主体、场景、风格或结构拆成多张图输入。</span>
+        </p>
       </div>
     </header>
 
-    <section class="demo-grid" aria-label="视频演示">
-      <article class="demo-card">
-        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-video" aria-label="单图使用演示">
+    <section class="workflow-demo-grid" aria-label="multi-model image workflow demos">
+      <article class="workflow-demo-wrap">
+        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="单图使用演示">
           <source src="/assets/images/workflows/multi-model-image-single.mp4" type="video/mp4">
         </video>
-        <div class="demo-card__body">
+        <div class="demo-caption">
           <h2>单图使用</h2>
-          <p>对应演示文件：Cap 2026-05-27 at 14.19.09 单图。适合只有一张产品图、人物图、场景图或参考图时使用。把图片接入对应输入节点，再按工作流默认顺序生成。</p>
+          <p>只有一张产品图、人物图、场景图或参考图时使用。把图片接入对应输入节点，保持默认连接关系，先跑通基础生成。</p>
         </div>
       </article>
 
-      <article class="demo-card">
-        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-video" aria-label="多图联结演示">
+      <article class="workflow-demo-wrap">
+        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="多图联结演示">
           <source src="/assets/images/workflows/multi-model-image-link.mp4" type="video/mp4">
         </video>
-        <div class="demo-card__body">
+        <div class="demo-caption">
           <h2>多图联结</h2>
-          <p>对应演示文件：Cap 2026-05-27 at 14.25.21 多图联结。适合把主体、参考风格、场景氛围或局部细节拆成多张图输入，让模型在同一次生成里融合多图信息。</p>
+          <p>把主体、参考风格、场景氛围或局部细节分配到多张输入图，让模型在同一次生成中融合多图信息。</p>
         </div>
       </article>
     </section>
 
-    <section class="content-grid">
-      <article class="chapter">
-        <h2>四个工作流</h2>
-        <ul>
-          <li>Seedream：适合快速图像生成与参考图延展。</li>
-          <li>Nano Banana Pro 2：适合轻量、快速、多图联结测试。</li>
-          <li>Flux.2 Pro：适合更完整的商业图像生成链路。</li>
-          <li>GPT Image 2：本页视频演示所用版本。</li>
-        </ul>
-      </article>
-
-      <article class="chapter">
-        <h2>共同使用方式</h2>
-        <ul>
-          <li>单图：只接入一张输入图，保持节点默认连接。</li>
-          <li>多图：按主体、场景、风格、细节分配输入图。</li>
-          <li>四个 JSON 的操作入口一致，只是模型与节点配置不同。</li>
-        </ul>
-      </article>
-
-      <article class="chapter">
-        <h2>使用建议</h2>
-        <ul>
-          <li>先用单图跑通，再测试多图联结。</li>
-          <li>多图输入时保持图片意图清晰，避免互相冲突。</li>
-          <li>视频演示可直接套用到四个工作流。</li>
-        </ul>
-      </article>
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">工作流定位</h2>
+        <p class="section-subtitle">One usage pattern across four image models</p>
+      </div>
+      <p class="step-desc">这页不是单独讲某一个模型，而是统一说明四个图像工作流的使用方式。Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 都按同一套输入逻辑操作：先判断是单图还是多图，再根据目标把参考图放入对应输入位置。</p>
+      <div class="tech-grid">
+        <div class="tech-card accent-card">
+          <h3>GPT Image 2</h3>
+          <p>本页两个视频演示所用工作流。用于说明单图输入和多图联结的实际操作节奏。</p>
+        </div>
+        <div class="tech-card">
+          <h3>Seedream</h3>
+          <p>使用方式相同，适合快速图像生成、参考图延展和视觉方向探索。</p>
+        </div>
+        <div class="tech-card">
+          <h3>Nano Banana Pro 2</h3>
+          <p>使用方式相同，适合轻量、多图关系测试和快速迭代。</p>
+        </div>
+        <div class="tech-card">
+          <h3>Flux.2 Pro</h3>
+          <p>使用方式相同，适合更完整的商业图像生成链路和高质量输出方向。</p>
+        </div>
+      </div>
     </section>
 
-    <section class="download-section" aria-label="工作流下载">
-      <h2>下载工作流 JSON</h2>
-      <div class="download-grid">
-        <a class="pill-link" href="/assets/downloads/seedream.json" download>Seedream.json</a>
-        <a class="pill-link" href="/assets/downloads/nano-banana-pro-2.json" download>Nano Banana Pro 2.json</a>
-        <a class="pill-link" href="/assets/downloads/flux2-pro.json" download>Flux.2 Pro.json</a>
-        <a class="pill-link" href="/assets/downloads/gpt-image-2.json" download>GPT Image 2.json</a>
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">两种输入方式</h2>
+        <p class="section-subtitle">Single image first, multi-image when relationship matters</p>
+      </div>
+      <div class="workflow-extra-grid">
+        <div class="workflow-note-card">
+          <span class="step-tag">单图</span>
+          <p>适合只有一个明确参考对象时使用。输入图承担主体、构图、材质或风格参考，工作流负责生成新的画面结果。</p>
+        </div>
+        <div class="workflow-note-card">
+          <span class="step-tag">多图联结</span>
+          <p>适合把多个信息源合并：一张给主体，一张给场景，一张给风格，一张给细节。每张图都要有清晰职责。</p>
+        </div>
+        <div class="workflow-note-card">
+          <span class="step-tag">共用逻辑</span>
+          <p>四个工作流的入口和操作顺序保持一致。区别只在模型能力、节点配置和输出倾向。</p>
+        </div>
+        <div class="workflow-note-card">
+          <span class="step-tag">推荐顺序</span>
+          <p>先用单图跑通，再切到多图联结。这样更容易判断问题来自模型、输入图还是多图关系。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-header">
+        <h2 class="chapter-title">操作要点</h2>
+        <p class="section-subtitle">Keep inputs clean and relationships explicit</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">准备输入图</span>
+        <p class="step-desc">单图模式只需要一张清晰参考图；多图模式需要提前决定每张图的角色，避免多张图同时表达相互冲突的主体、构图或风格。</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">先跑默认连接</span>
+        <p class="step-desc">不要一开始就大幅调整节点。先按默认连接跑一版，确认图像能正常进入工作流，再根据结果调整输入图和提示词。</p>
+      </div>
+      <div class="step-card">
+        <span class="step-tag">复用视频步骤</span>
+        <p class="step-desc">两个视频以 GPT Image 2 为例，但拖图、接图、切换单图或多图联结的操作逻辑对 Seedream、Nano Banana Pro 2、Flux.2 Pro 同样适用。</p>
       </div>
     </section>
   </main>
 
-  <script src="/assets/js/nav.js" defer></script>
   <script src="/assets/js/utils.js" defer></script>
   <script src="/assets/js/cmdk.js" defer></script>
-  <script src="/assets/js/footer.js" defer></script>
+  <script src="/assets/js/smooth-scroll.js" defer></script>
+  <script src="/assets/js/reveal-motion.js" defer></script>
+  <script>
+    (function initLightRays() {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;overflow:hidden;';
+      document.body.appendChild(wrap);
+
+      var canvas = document.createElement('canvas');
+      canvas.style.cssText = 'width:100%;height:100%;display:block;';
+      wrap.appendChild(canvas);
+
+      var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) return;
+
+      var vert = [
+        'attribute vec2 a_pos;',
+        'void main(){gl_Position=vec4(a_pos,0.,1.);}',
+      ].join('\n');
+
+      var frag = [
+        'precision highp float;',
+        'uniform float iTime;',
+        'uniform vec2 iRes;',
+        'uniform vec2 rayPos;',
+        'uniform vec2 rayDir;',
+        'uniform vec2 mousePos;',
+        'uniform float mouseInfluence;',
+        'uniform float lightSpread;',
+        'uniform float rayLength;',
+        'uniform float fadeDistance;',
+        'uniform float raysSpeed;',
+        'float rayStrength(vec2 src,vec2 refDir,vec2 coord,float sA,float sB,float spd){',
+        '  vec2 d=coord-src;',
+        '  float cosA=dot(normalize(d),refDir);',
+        '  float spread=pow(max(cosA,0.),1./max(lightSpread,0.001));',
+        '  float dist=length(d);',
+        '  float maxD=iRes.x*rayLength;',
+        '  float lenFall=clamp((maxD-dist)/maxD,0.,1.);',
+        '  float fadeFall=clamp((iRes.x*fadeDistance-dist)/(iRes.x*fadeDistance),0.5,1.);',
+        '  float base=clamp((0.45+0.15*sin(cosA*sA+iTime*spd))+(0.3+0.2*cos(-cosA*sB+iTime*spd)),0.,1.);',
+        '  return base*lenFall*fadeFall*spread;',
+        '}',
+        'void main(){',
+        '  vec2 coord=vec2(gl_FragCoord.x,iRes.y-gl_FragCoord.y);',
+        '  vec2 dir=rayDir;',
+        '  if(mouseInfluence>0.){vec2 mp=mousePos*iRes;dir=normalize(mix(rayDir,normalize(mp-rayPos),mouseInfluence));}',
+        '  float r1=rayStrength(rayPos,dir,coord,36.2214,21.1135,1.5*raysSpeed);',
+        '  float r2=rayStrength(rayPos,dir,coord,22.3991,18.0234,1.1*raysSpeed);',
+        '  float v=r1*0.5+r2*0.4;',
+        '  float bright=1.-(coord.y/iRes.y);',
+        '  float tone=0.55+bright*0.45;',
+        '  gl_FragColor=vec4(v*tone,v*tone,v*tone,v*0.7);',
+        '}',
+      ].join('\n');
+
+      function compile(type, src) {
+        var shader = gl.createShader(type);
+        gl.shaderSource(shader, src);
+        gl.compileShader(shader);
+        return shader;
+      }
+
+      var prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, vert));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, frag));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      var buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      var aPos = gl.getAttribLocation(prog, 'a_pos');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      var uTime = gl.getUniformLocation(prog, 'iTime');
+      var uRes = gl.getUniformLocation(prog, 'iRes');
+      var uRayPos = gl.getUniformLocation(prog, 'rayPos');
+      var uRayDir = gl.getUniformLocation(prog, 'rayDir');
+      var uMouse = gl.getUniformLocation(prog, 'mousePos');
+      var uMouseInf = gl.getUniformLocation(prog, 'mouseInfluence');
+      var uSpread = gl.getUniformLocation(prog, 'lightSpread');
+      var uLength = gl.getUniformLocation(prog, 'rayLength');
+      var uFade = gl.getUniformLocation(prog, 'fadeDistance');
+      var uSpeed = gl.getUniformLocation(prog, 'raysSpeed');
+
+      gl.uniform1f(uMouseInf, 0.1);
+      gl.uniform1f(uSpread, 0.5);
+      gl.uniform1f(uLength, 3.0);
+      gl.uniform1f(uFade, 1.0);
+      gl.uniform1f(uSpeed, 1.0);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+
+      var mouse = { x: 0.5, y: 0.5 };
+      var smoothMouse = { x: 0.5, y: 0.5 };
+      window.addEventListener('mousemove', function (event) {
+        mouse.x = event.clientX / window.innerWidth;
+        mouse.y = event.clientY / window.innerHeight;
+      });
+
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio, 2);
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform2f(uRayPos, canvas.width * 0.5, -canvas.height * 0.2);
+        gl.uniform2f(uRayDir, 0.0, 1.0);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      var start = performance.now();
+      (function loop() {
+        var t = (performance.now() - start) * 0.001;
+        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+        gl.uniform1f(uTime, t);
+        gl.uniform2f(uMouse, smoothMouse.x, 1.0 - smoothMouse.y);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        requestAnimationFrame(loop);
+      })();
+    })();
+
+    (function initLiquidGlassMap() {
+      var feImage = document.getElementById('lg-disp-image');
+      if (!feImage) return;
+      var canvas = document.createElement('canvas');
+      var size = 128;
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext('2d');
+      var imageData = ctx.createImageData(size, size);
+      var data = imageData.data;
+      for (var y = 0; y < size; y += 1) {
+        for (var x = 0; x < size; x += 1) {
+          var i = (y * size + x) * 4;
+          var wave = Math.sin(x * 0.14) * 18 + Math.cos(y * 0.16) * 18;
+          data[i] = 128 + wave;
+          data[i + 1] = 128 - wave;
+          data[i + 2] = 128;
+          data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      feImage.setAttribute('href', canvas.toDataURL());
+    })();
+
+    (function initDemoMagnetism() {
+      document.querySelectorAll('.workflow-demo-wrap').forEach(function (card) {
+        var target = card.querySelector('.workflow-demo-gif') || card;
+        var tiltX = 0;
+        var tiltY = 0;
+        var magX = 0;
+        var magY = 0;
+        var animRaf;
+        function lerp(a, b, n) { return (1 - n) * a + n * b; }
+        function applyTransform() {
+          target.style.transform = [
+            'perspective(1200px)',
+            'rotateX(' + tiltX.toFixed(2) + 'deg)',
+            'rotateY(' + tiltY.toFixed(2) + 'deg)',
+            'translate(' + magX.toFixed(2) + 'px,' + magY.toFixed(2) + 'px)'
+          ].join(' ');
+        }
+        function releaseRiseAnimation() { card.style.animation = 'none'; }
+        card.addEventListener('animationend', releaseRiseAnimation, { once: true });
+        window.setTimeout(releaseRiseAnimation, 3600);
+        card.addEventListener('mousemove', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var cx = rect.width / 2;
+          var cy = rect.height / 2;
+          tiltX = ((y - cy) / cy) * -6;
+          tiltY = ((x - cx) / cx) * 6;
+          magX = lerp(magX, (x - cx) * 0.04, 0.15);
+          magY = lerp(magY, (y - cy) * 0.04, 0.15);
+          applyTransform();
+        });
+        card.addEventListener('mouseleave', function () {
+          function springBack() {
+            tiltX = lerp(tiltX, 0, 0.15);
+            tiltY = lerp(tiltY, 0, 0.15);
+            magX = lerp(magX, 0, 0.15);
+            magY = lerp(magY, 0, 0.15);
+            applyTransform();
+            if (Math.abs(tiltX) > 0.01 || Math.abs(tiltY) > 0.01 || Math.abs(magX) > 0.01 || Math.abs(magY) > 0.01) {
+              animRaf = requestAnimationFrame(springBack);
+            } else {
+              tiltX = tiltY = magX = magY = 0;
+              target.style.transform = '';
+            }
+          }
+          cancelAnimationFrame(animRaf);
+          springBack();
+        });
+      });
+    })();
+
+    (function initMagicBento() {
+      var glowColor = '255, 255, 255';
+      var radius = 200;
+      var cards = [];
+      document.querySelectorAll('.tech-card, .step-card, .qa-card, .workflow-note-card, .workflow-demo-wrap').forEach(function (card) {
+        card.classList.add('mb-card');
+        card.style.setProperty('--glow-color', glowColor);
+        cards.push(card);
+      });
+      if (!cards.length) return;
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function updateGlow(card, mx, my, intensity) {
+        var rect = card.getBoundingClientRect();
+        card.style.setProperty('--glow-x', (((mx - rect.left) / rect.width) * 100) + '%');
+        card.style.setProperty('--glow-y', (((my - rect.top) / rect.height) * 100) + '%');
+        card.style.setProperty('--glow-intensity', intensity.toFixed(3));
+        card.style.setProperty('--glow-radius', radius + 'px');
+      }
+      document.addEventListener('mousemove', function (event) {
+        cards.forEach(function (card) {
+          var rect = card.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dist = Math.hypot(event.clientX - cx, event.clientY - cy) - Math.max(rect.width, rect.height) / 2;
+          dist = Math.max(0, dist);
+          var intensity = dist <= 100 ? 1 : dist <= 150 ? (150 - dist) / 50 : 0;
+          updateGlow(card, event.clientX, event.clientY, intensity);
+        });
+      });
+      document.addEventListener('mouseleave', function () {
+        cards.forEach(function (card) { card.style.setProperty('--glow-intensity', '0'); });
+      });
+      cards.forEach(function (card) {
+        var tiltX = 0;
+        var tiltY = 0;
+        var magX = 0;
+        var magY = 0;
+        var animRaf;
+        function applyTransform() {
+          card.style.transform = [
+            'perspective(1200px)',
+            'rotateX(' + tiltX.toFixed(2) + 'deg)',
+            'rotateY(' + tiltY.toFixed(2) + 'deg)',
+            'translate(' + magX.toFixed(2) + 'px,' + magY.toFixed(2) + 'px)'
+          ].join(' ');
+        }
+        card.addEventListener('mousemove', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var cx = rect.width / 2;
+          var cy = rect.height / 2;
+          tiltX = lerp(tiltX, ((y - cy) / cy) * -6, 0.25);
+          tiltY = lerp(tiltY, ((x - cx) / cx) * 6, 0.25);
+          magX = lerp(magX, (x - cx) * 0.04, 0.15);
+          magY = lerp(magY, (y - cy) * 0.04, 0.15);
+          applyTransform();
+        });
+        card.addEventListener('mouseleave', function () {
+          function springBack() {
+            tiltX = lerp(tiltX, 0, 0.15);
+            tiltY = lerp(tiltY, 0, 0.15);
+            magX = lerp(magX, 0, 0.15);
+            magY = lerp(magY, 0, 0.15);
+            applyTransform();
+            if (Math.abs(tiltX) > 0.01 || Math.abs(tiltY) > 0.01 || Math.abs(magX) > 0.01 || Math.abs(magY) > 0.01) {
+              animRaf = requestAnimationFrame(springBack);
+            } else {
+              card.style.transform = '';
+            }
+          }
+          cancelAnimationFrame(animRaf);
+          springBack();
+        });
+        card.addEventListener('click', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = event.clientX - rect.left;
+          var y = event.clientY - rect.top;
+          var maxR = Math.max(
+            Math.hypot(x, y),
+            Math.hypot(x - rect.width, y),
+            Math.hypot(x, y - rect.height),
+            Math.hypot(x - rect.width, y - rect.height)
+          );
+          var ripple = document.createElement('div');
+          ripple.className = 'mb-ripple';
+          ripple.style.cssText = [
+            'width:' + (maxR * 2) + 'px',
+            'height:' + (maxR * 2) + 'px',
+            'left:' + (x - maxR) + 'px',
+            'top:' + (y - maxR) + 'px',
+            'background:radial-gradient(circle,rgba(' + glowColor + ',0.35) 0%,rgba(' + glowColor + ',0.15) 30%,transparent 70%)'
+          ].join(';');
+          card.appendChild(ripple);
+          ripple.animate(
+            [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+            { duration: 750, easing: 'ease-out' }
+          ).onfinish = function () { ripple.remove(); };
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

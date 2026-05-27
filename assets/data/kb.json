@@ -70,7 +70,7 @@
       "summary": "Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个图像工作流的统一使用方式，包含单图使用与多图联结两段 MP4 演示。",
       "url": "/workflows/multi-model-image-workflows/",
       "prerequisites": ["ComfyUI", "Seedream", "Nano Banana Pro 2", "Flux.2 Pro", "GPT Image 2"],
-      "outputs": ["单图生成", "多图联结", "工作流 JSON"],
+      "outputs": ["单图生成", "多图联结", "视频演示"],
       "external": false
     }
   ]
