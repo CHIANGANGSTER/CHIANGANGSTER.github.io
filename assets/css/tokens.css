@@ -44,4 +44,17 @@
   --nav-height: 56px;
   --content-max: 880px;
   --hub-grid-min: 280px;
+
+  /* Workflow detail layout/glass tokens. Neutral only — NO color bias.
+     The site's main visual language is black / dark / glass / minimal-tech;
+     new pages reuse the global neutral tokens above, never a colored theme.
+     The gold/red (#B09868 / #7B1E25) found inline in workflows/*/index.html is
+     LEGACY residue, not a future standard, so no --wf accent tokens exist here.
+     During migration, map that legacy gold/red to the global neutral palette
+     (--text-*, --bg-*, rgba white glass); only keep it temporarily if a page
+     would otherwise break, marked legacy-migration-only — never institutionalize it. */
+  --wf-page-max: 1120px;
+  --wf-card-bg: rgba(255, 255, 255, 0.055);
+  --wf-glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --wf-glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
 }
