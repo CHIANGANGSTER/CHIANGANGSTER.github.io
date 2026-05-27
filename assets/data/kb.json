@@ -72,6 +72,24 @@
       "prerequisites": ["ComfyUI", "Seedream", "Nano Banana Pro 2", "Flux.2 Pro", "GPT Image 2"],
       "outputs": ["单图生成", "多图联结", "视频演示"],
       "external": false
+    },
+    {
+      "id": "view-angle-transform",
+      "title": "视角转换微调工作流",
+      "domain": "workflows",
+      "type": "workflow",
+      "tags": ["平面设计", "ComfyUI", "Flux"],
+      "phase": 1,
+      "status": "published",
+      "difficulty": 3,
+      "timeCost": "10-20min",
+      "owner": "Corvin",
+      "updated": "2026-05-27",
+      "summary": "用 Qwen Image Edit、多角度相机控制 LoRA 和 SeedVR2 放大节点，对单张图做水平角度、垂直角度和镜头距离微调。",
+      "url": "/workflows/view-angle-transform/",
+      "prerequisites": ["ComfyUI", "Qwen Image Edit", "Multiangle Camera LoRA", "SeedVR2"],
+      "outputs": ["视角微调图", "放大输出图", "工作流 JSON"],
+      "external": false
     }
   ]
 }
