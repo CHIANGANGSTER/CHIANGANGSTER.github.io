@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/assets/css/base.css">
   <link rel="stylesheet" href="/assets/css/card.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link rel="stylesheet" href="/assets/css/reveal-motion.css">
   <style>
     @font-face {
       font-family: 'AaFengKuangYuanShiRen';
@@ -18,89 +19,113 @@
     }
     :root {
       color-scheme: dark;
-      --bg-page: #06090f;
-      --bg-card: rgba(255, 255, 255, 0.075);
-      --border: 1px solid rgba(255, 255, 255, 0.14);
-      --border-radius: 22px;
-      --text-primary: #f5f7fb;
-      --text-secondary: rgba(245, 247, 251, 0.72);
-      --text-muted: rgba(245, 247, 251, 0.48);
-      --accent: #9fe7ff;
+      --bg-page: #0a0a0a;
+      --bg-card: rgba(255, 255, 255, 0.06);
+      --border: 1px solid rgba(255, 255, 255, 0.1);
+      --border-radius: 16px;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.72);
+      --text-muted: rgba(255, 255, 255, 0.42);
+      --accent: #B09868;
+      --accent-soft: #B08A62;
+      --accent-red: #7B1E25;
     }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,
     body {
-      margin: 0;
       min-height: 100vh;
       color: var(--text-primary);
+      background: var(--bg-page);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+      overscroll-behavior: none;
+    }
+    body {
       background:
-        radial-gradient(circle at 15% 8%, rgba(110, 190, 255, 0.22), transparent 34rem),
-        radial-gradient(circle at 82% 16%, rgba(255, 205, 120, 0.16), transparent 30rem),
-        linear-gradient(180deg, #07101b 0%, var(--bg-page) 52%, #05070b 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        radial-gradient(circle at 20% -10%, rgba(176, 152, 104, 0.18), transparent 34rem),
+        radial-gradient(circle at 86% 20%, rgba(123, 30, 37, 0.14), transparent 28rem),
+        #0a0a0a;
     }
     .workflow-page {
-      width: min(1180px, calc(100% - 32px));
+      position: relative;
+      z-index: 2;
+      width: min(1120px, calc(100vw - 32px));
       margin: 0 auto;
-      padding: 88px 0 72px;
+      padding: clamp(112px, 14vh, 150px) 0 12vh;
     }
     .hero {
-      display: grid;
-      gap: 24px;
-      padding: 28px 0 40px;
+      display: block;
+      margin-bottom: 34px;
     }
     .eyebrow {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      color: var(--accent);
-      font-size: 0.78rem;
+      margin: 0 0 12px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
     .main-title {
       max-width: 980px;
       margin: 0;
-      font-family: 'AaFengKuangYuanShiRen', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: clamp(3.1rem, 8vw, 7rem);
+      font-family: inherit;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5.5vw, 4.7rem);
       line-height: 0.98;
-      font-weight: 900;
+      font-weight: 800;
       letter-spacing: 0;
+      text-transform: uppercase;
     }
     .hero-subtitle {
       max-width: 880px;
-      margin: 0;
+      margin: 24px 0 0;
       color: var(--text-secondary);
-      font-size: clamp(1.05rem, 2vw, 1.34rem);
-      line-height: 1.82;
+      font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+      line-height: 1.85;
     }
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
+      margin-top: 24px;
     }
     .pill-link {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 0 18px;
+      min-height: 38px;
+      padding: 0 14px;
       border: var(--border);
       border-radius: 999px;
       color: var(--text-primary);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.055);
       text-decoration: none;
+      font-size: 0.78rem;
       font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
     }
     .workflow-demo-wrap,
     .chapter {
       position: relative;
       width: 100%;
       margin: 0 0 26px;
-      border: var(--border);
       border-radius: var(--border-radius);
-      background: var(--bg-card);
-      overflow: hidden;
+      animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) 0.72s both;
       transform-style: preserve-3d;
+    }
+    .chapter {
+      border: var(--border);
+      background: var(--bg-card);
+      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+    }
+    .workflow-demo-wrap,
+    .chapter {
       transition: transform 0.15s ease;
       will-change: transform;
     }
@@ -115,7 +140,22 @@
       display: block;
       width: 100%;
       height: auto;
-      background: #000;
+      border-radius: inherit;
+      transition: transform 0.15s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    @keyframes workflow-demo-rise {
+      0% {
+        opacity: 0;
+        filter: blur(16px);
+        transform: translateY(70px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+      }
     }
     .chapter {
       padding: clamp(20px, 3vw, 34px);
@@ -166,14 +206,22 @@
     }
     @media (max-width: 780px) {
       .workflow-page {
-        width: min(100% - 22px, 1180px);
-        padding-top: 72px;
+        width: min(100vw - 32px, 1120px);
+        padding-top: 104px;
       }
       .main-title {
-        font-size: clamp(2.6rem, 14vw, 4.8rem);
+        font-size: clamp(1.58rem, 7vw, 2.7rem);
       }
     }
   </style>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="5" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
 </head>
 <body>
   <main class="workflow-page">
@@ -183,8 +231,13 @@
         <span>Multiangle Camera</span>
         <span>SeedVR2 Upscale</span>
       </div>
-      <h1 class="main-title">视角转换微调工作流</h1>
-      <p class="hero-subtitle">这个工作流用 Qwen Image Edit 做画面重绘，用多角度相机控制 LoRA 调整视角，再用 SeedVR2 放大结果。你只改三个相机参数：水平角度、垂直角度、镜头距离。它适合轻量视角微调，不适合大幅重建主体。</p>
+      <h1 class="main-title line-reveal" aria-label="View angle transform workflow">
+        <span class="line-reveal-item">视角转换微调工作流</span>
+      </h1>
+      <p class="hero-subtitle line-reveal">
+        <span class="line-reveal-item">这个工作流用 Qwen Image Edit 做画面重绘，用多角度相机控制 LoRA 调整视角，再用 SeedVR2 放大结果。</span>
+        <span class="line-reveal-item">你只改三个相机参数：水平角度、垂直角度、镜头距离。它适合轻量视角微调，不适合大幅重建主体。</span>
+      </p>
       <div class="hero-actions">
         <a class="pill-link" href="/assets/downloads/view-angle-transform.json" download>下载工作流 JSON</a>
         <a class="pill-link" href="/workflows/">返回工作流列表</a>
@@ -255,6 +308,62 @@
   <script src="/assets/js/nav.js" defer></script>
   <script src="/assets/js/utils.js" defer></script>
   <script src="/assets/js/cmdk.js" defer></script>
+  <script src="/assets/js/smooth-scroll.js" defer></script>
+  <script src="/assets/js/reveal-motion.js" defer></script>
   <script src="/assets/js/footer.js" defer></script>
+  <script>
+    (function initLiquidGlassMap() {
+      var feImage = document.getElementById('lg-disp-image');
+      if (!feImage) return;
+      var canvas = document.createElement('canvas');
+      var size = 128;
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext('2d');
+      var imageData = ctx.createImageData(size, size);
+      var data = imageData.data;
+      for (var y = 0; y < size; y += 1) {
+        for (var x = 0; x < size; x += 1) {
+          var i = (y * size + x) * 4;
+          var wave = Math.sin(x * 0.14) * 18 + Math.cos(y * 0.16) * 18;
+          data[i] = 128 + wave;
+          data[i + 1] = 128 - wave;
+          data[i + 2] = 128;
+          data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      feImage.setAttribute('href', canvas.toDataURL());
+    })();
+
+    (function initDemoMagnetism() {
+      document.querySelectorAll('.workflow-demo-wrap, .chapter').forEach(function (card) {
+        var target = card.querySelector('.workflow-demo-video') || card;
+        var tiltX = 0;
+        var tiltY = 0;
+        var raf = 0;
+
+        function render() {
+          target.style.transform = 'perspective(1200px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg)';
+          raf = 0;
+        }
+
+        card.addEventListener('mousemove', function (event) {
+          var rect = card.getBoundingClientRect();
+          var x = (event.clientX - rect.left) / rect.width - 0.5;
+          var y = (event.clientY - rect.top) / rect.height - 0.5;
+          tiltX = y * -3.5;
+          tiltY = x * 3.5;
+          if (!raf) raf = requestAnimationFrame(render);
+        });
+
+        card.addEventListener('mouseleave', function () {
+          tiltX = 0;
+          tiltY = 0;
+          if (!raf) raf = requestAnimationFrame(render);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
