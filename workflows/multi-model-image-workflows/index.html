@@ -131,8 +131,8 @@
 
     .workflow-demo-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: 1fr;
+      gap: 28px;
       margin: 0 0 26px;
     }
 
@@ -149,12 +149,18 @@
       backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
     }
 
+    .workflow-demo-title {
+      margin: 0;
+      padding: 18px 18px 14px;
+      text-align: center;
+      font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+      line-height: 1.2;
+    }
+
     .workflow-demo-gif {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      background: #000;
+      height: auto;
       transition: transform 0.15s ease;
       transform-style: preserve-3d;
       will-change: transform;
@@ -376,21 +382,21 @@
 
     <section class="workflow-demo-grid" aria-label="multi-model image workflow demos">
       <article class="workflow-demo-wrap">
+        <h2 class="workflow-demo-title">单图生成</h2>
         <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="单图使用演示">
           <source src="/assets/images/workflows/multi-model-image-single.mp4" type="video/mp4">
         </video>
         <div class="demo-caption">
-          <h2>单图使用</h2>
           <p>只有一张产品图、人物图、场景图或参考图时使用。把图片接入对应输入节点，保持默认连接关系，先跑通基础生成。</p>
         </div>
       </article>
 
       <article class="workflow-demo-wrap">
+        <h2 class="workflow-demo-title">多图联结</h2>
         <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="多图联结演示">
           <source src="/assets/images/workflows/multi-model-image-link.mp4" type="video/mp4">
         </video>
         <div class="demo-caption">
-          <h2>多图联结</h2>
           <p>把主体、参考风格、场景氛围或局部细节分配到多张输入图，让模型在同一次生成中融合多图信息。</p>
         </div>
       </article>
