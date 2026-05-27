@@ -129,14 +129,7 @@
       transition: transform 0.15s ease;
       will-change: transform;
     }
-    .workflow-demo-title {
-      margin: 0;
-      padding: 18px 18px 14px;
-      text-align: center;
-      font-size: clamp(1.25rem, 2.4vw, 1.9rem);
-      line-height: 1.2;
-    }
-    .workflow-demo-video {
+    .workflow-demo-gif {
       display: block;
       width: 100%;
       height: auto;
@@ -284,8 +277,7 @@
       </div>
     </header>
     <section class="workflow-demo-wrap" aria-label="视角转换演示">
-      <h2 class="workflow-demo-title">视角转换演示</h2>
-      <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-video" aria-label="视角转换工作流演示">
+      <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="视角转换工作流演示">
         <source src="/assets/images/workflows/view-angle-transform.mp4" type="video/mp4">
       </video>
     </section>
@@ -379,7 +371,7 @@
     (function initDemoMagnetism() {
       var card = document.querySelector('.workflow-demo-wrap');
       if (!card) return;
-      var target = card.querySelector('.workflow-demo-video') || card;
+      var target = card.querySelector('.workflow-demo-gif') || card;
       var tiltX = 0;
       var tiltY = 0;
       card.addEventListener('mousemove', function (event) {
