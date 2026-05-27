@@ -54,6 +54,24 @@
       "prerequisites": ["ComfyUI", "Flux.2 Klein 9B", "qwen_3_8b_fp8mixed", "flux2-vae", "BiRefNet-General"],
       "outputs": ["光影融合图", "产品溶图", "重打光场景图"],
       "external": false
+    },
+    {
+      "id": "multi-model-image-workflows",
+      "title": "四模型图像工作流使用指南",
+      "domain": "workflows",
+      "type": "workflow",
+      "tags": ["平面设计", "ComfyUI", "Flux"],
+      "phase": 1,
+      "status": "published",
+      "difficulty": 2,
+      "timeCost": "10-20min",
+      "owner": "Corvin",
+      "updated": "2026-05-27",
+      "summary": "Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个图像工作流的统一使用方式，包含单图使用与多图联结两段 MP4 演示。",
+      "url": "/workflows/multi-model-image-workflows/",
+      "prerequisites": ["ComfyUI", "Seedream", "Nano Banana Pro 2", "Flux.2 Pro", "GPT Image 2"],
+      "outputs": ["单图生成", "多图联结", "工作流 JSON"],
+      "external": false
     }
   ]
 }

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>四模型图像工作流使用指南</title>
+  <meta name="description" content="Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个图像工作流的统一使用方式：单图生成与多图联结。">
+  <link rel="canonical" href="/workflows/multi-model-image-workflows/">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/card.css">
+  <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <style>
+    @font-face {
+      font-family: 'AaFengKuangYuanShiRen';
+      src: url('/fonts/aafengkuangyuanshiren/aafengkuangyuanshiren-2.subset.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: dark;
+      --page-bg: #06090f;
+      --panel: rgba(255, 255, 255, 0.065);
+      --panel-strong: rgba(255, 255, 255, 0.1);
+      --line: rgba(255, 255, 255, 0.14);
+      --text: #f4f7fb;
+      --muted: rgba(244, 247, 251, 0.68);
+      --soft: rgba(244, 247, 251, 0.44);
+      --accent: #98e6ff;
+      --accent-2: #ffd48a;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 8%, rgba(98, 180, 255, 0.2), transparent 34rem),
+        radial-gradient(circle at 88% 18%, rgba(255, 196, 108, 0.18), transparent 30rem),
+        linear-gradient(180deg, #07101b 0%, var(--page-bg) 50%, #05070b 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .workflow-page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 88px 0 72px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 24px;
+      padding: 28px 0 40px;
+    }
+
+    .eyebrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      max-width: 980px;
+      margin: 0;
+      font-family: 'AaFengKuangYuanShiRen', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(3.15rem, 8vw, 7.1rem);
+      line-height: 0.98;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .hero-subtitle {
+      max-width: 860px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      line-height: 1.82;
+    }
+
+    .hero-actions,
+    .download-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .pill-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(152, 230, 255, 0.65);
+      background: rgba(152, 230, 255, 0.12);
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin: 26px 0 56px;
+    }
+
+    .demo-card,
+    .chapter {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+    }
+
+    .demo-card__body {
+      padding: 20px 20px 22px;
+    }
+
+    .demo-card h2,
+    .chapter h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.8vw, 2rem);
+      line-height: 1.18;
+    }
+
+    .demo-card p,
+    .chapter p,
+    .chapter li {
+      color: var(--muted);
+      line-height: 1.78;
+    }
+
+    .workflow-demo-video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      object-fit: cover;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .chapter {
+      padding: 24px;
+    }
+
+    .chapter ul {
+      margin: 16px 0 0;
+      padding-left: 1.15rem;
+    }
+
+    .download-section {
+      margin-top: 18px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel-strong);
+    }
+
+    .download-section h2 {
+      margin: 0 0 16px;
+      font-size: clamp(1.35rem, 2.8vw, 2rem);
+    }
+
+    @media (max-width: 860px) {
+      .workflow-page {
+        width: min(100% - 22px, 1180px);
+        padding-top: 72px;
+      }
+
+      .demo-grid,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .main-title {
+        font-size: clamp(2.6rem, 14vw, 4.8rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="workflow-page">
+    <header class="hero">
+      <div class="eyebrow">
+        <span>ComfyUI</span>
+        <span>Seedream</span>
+        <span>Nano Banana Pro 2</span>
+        <span>Flux.2 Pro</span>
+        <span>GPT Image 2</span>
+      </div>
+      <h1 class="main-title">四模型图像工作流使用指南</h1>
+      <p class="hero-subtitle">
+        这组工作流包含 Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 四个版本。四个版本的操作方式一致：单图使用时上传一张参考图，多图联结时上传多张图片建立主体、场景、风格或结构关系。视频演示使用 GPT Image 2 工作流录制，其他三个工作流按同样步骤操作。
+      </p>
+      <div class="hero-actions">
+        <a class="pill-link" href="/workflows/">返回工作流列表</a>
+        <a class="pill-link" href="/assets/downloads/gpt-image-2.json" download>下载 GPT Image 2</a>
+      </div>
+    </header>
+
+    <section class="demo-grid" aria-label="视频演示">
+      <article class="demo-card">
+        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-video" aria-label="单图使用演示">
+          <source src="/assets/images/workflows/multi-model-image-single.mp4" type="video/mp4">
+        </video>
+        <div class="demo-card__body">
+          <h2>单图使用</h2>
+          <p>对应演示文件：Cap 2026-05-27 at 14.19.09 单图。适合只有一张产品图、人物图、场景图或参考图时使用。把图片接入对应输入节点，再按工作流默认顺序生成。</p>
+        </div>
+      </article>
+
+      <article class="demo-card">
+        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-video" aria-label="多图联结演示">
+          <source src="/assets/images/workflows/multi-model-image-link.mp4" type="video/mp4">
+        </video>
+        <div class="demo-card__body">
+          <h2>多图联结</h2>
+          <p>对应演示文件：Cap 2026-05-27 at 14.25.21 多图联结。适合把主体、参考风格、场景氛围或局部细节拆成多张图输入，让模型在同一次生成里融合多图信息。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="chapter">
+        <h2>四个工作流</h2>
+        <ul>
+          <li>Seedream：适合快速图像生成与参考图延展。</li>
+          <li>Nano Banana Pro 2：适合轻量、快速、多图联结测试。</li>
+          <li>Flux.2 Pro：适合更完整的商业图像生成链路。</li>
+          <li>GPT Image 2：本页视频演示所用版本。</li>
+        </ul>
+      </article>
+
+      <article class="chapter">
+        <h2>共同使用方式</h2>
+        <ul>
+          <li>单图：只接入一张输入图，保持节点默认连接。</li>
+          <li>多图：按主体、场景、风格、细节分配输入图。</li>
+          <li>四个 JSON 的操作入口一致，只是模型与节点配置不同。</li>
+        </ul>
+      </article>
+
+      <article class="chapter">
+        <h2>使用建议</h2>
+        <ul>
+          <li>先用单图跑通，再测试多图联结。</li>
+          <li>多图输入时保持图片意图清晰，避免互相冲突。</li>
+          <li>视频演示可直接套用到四个工作流。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="download-section" aria-label="工作流下载">
+      <h2>下载工作流 JSON</h2>
+      <div class="download-grid">
+        <a class="pill-link" href="/assets/downloads/seedream.json" download>Seedream.json</a>
+        <a class="pill-link" href="/assets/downloads/nano-banana-pro-2.json" download>Nano Banana Pro 2.json</a>
+        <a class="pill-link" href="/assets/downloads/flux2-pro.json" download>Flux.2 Pro.json</a>
+        <a class="pill-link" href="/assets/downloads/gpt-image-2.json" download>GPT Image 2.json</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="/assets/js/nav.js" defer></script>
+  <script src="/assets/js/utils.js" defer></script>
+  <script src="/assets/js/cmdk.js" defer></script>
+  <script src="/assets/js/footer.js" defer></script>
+</body>
+</html>
