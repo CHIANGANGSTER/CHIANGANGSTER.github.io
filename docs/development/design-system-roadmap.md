@@ -233,14 +233,11 @@
 
 这些目录**当前无法发布**到 GitHub Pages（Jekyll 默认忽略 `_` 开头路径）。
 
-⚠️ **现存可访问性问题**：
-- `assets/data/style-system.json` 包含 `_imports/product-style-guide*.{pdf,txt}` 引用
-- `assets/data/prompts.json` 包含 `_imports/prompts-before-xlsx-import-2026-05-18.json` 引用
-- 这些资源在 GitHub Pages 上返回 404，若页面使用这些 JSON 字段会失败
-
-**解决方案**（择一）：
-1. 在仓库根目录添加 `.nojekyll` 文件，让 GitHub Pages 发布所有路径（包括 `_imports`）
-2. 从 JSON 中删除 `_imports` 引用，或移至可发布位置（如 `assets/data/imports/`）
+**最终策略**：
+- `_imports/` 保持 dev-only，不发布到 GitHub Pages。
+- 前端 JSON 不再暴露 `_imports/` 路径。
+- 不添加 `.nojekyll`。
+- 不迁移 `_imports/` 文件。
 
 ---
 
