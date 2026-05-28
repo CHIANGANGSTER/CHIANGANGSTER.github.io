@@ -55,8 +55,6 @@
 | `smooth-scroll.js` | 滚轮平滑 | 幂等守卫 + reduced-motion 退出 |
 | `progress.js` | 阅读进度条 | 仅在存在 `.progress-bar` 时启动 |
 | `copy.js` | 代码块复制按钮 | 内容页用 |
-| `magic-bento.js` | **（Phase 3A.2 新增）** 卡片光晕跟随 + 3D 倾斜 + 磁吸 + 点击涟漪 | 计划幂等、无目标元素安全退出、reduced-motion 降级 |
-| `liquid-glass.js` | **（Phase 3A.2 新增）** 注入 SVG 位移滤镜 + 生成位移图 | 计划避免重复注入同名 filter |
 
 ### 数据（`assets/data/`）
 
@@ -91,13 +89,12 @@
 ### 毛玻璃
 - 标准卡：`card.css` 的 `backdrop-filter: blur(18px)`。
 - 弹窗/面板：`cmdk.css` 的 `blur(8px)`。
-- workflow 液态玻璃：`var(--wf-glass-filter)`（`url(#liquid-glass-filter) blur(8px) ...`），SVG 滤镜由 `liquid-glass.js` 注入。
+- workflow 液态玻璃：`var(--wf-glass-filter)`（`url(#liquid-glass-filter) blur(8px) ...`）。
 - ❌ 不在每页 inline 复制 `<svg><filter id="liquid-glass-filter">` 定义。
 
 ### 动画
 - 滚动揭示：给元素加 `line-reveal`/`line-reveal-item` 或卡片 class，`reveal-motion.js` 自动接管，无需写脚本。
 - 平滑滚轮：引入 `smooth-scroll.js` 即可。
-- 卡片光晕/倾斜/涟漪：引入 `magic-bento.js`（Phase 3A.2 起）。
 - 所有动画必须遵守 `prefers-reduced-motion: reduce` 降级（`base.css` 已全局兜底，自定义脚本需自行判断）。
 - 缓动/时长用 `--easing-*` / `--duration-*` token。
 
@@ -141,8 +138,6 @@ Phase 3A.2 完成后，workflow 详情页标准引用：
 <script src="/assets/js/cmdk.js" defer></script>
 <script src="/assets/js/smooth-scroll.js" defer></script>
 <script src="/assets/js/reveal-motion.js" defer></script>
-<script src="/assets/js/liquid-glass.js" defer></script>
-<script src="/assets/js/magic-bento.js" defer></script>
 <script src="/assets/js/footer.js" defer></script>
 ```
 
@@ -160,8 +155,6 @@ Phase 3A.2 完成后，workflow 详情页标准引用：
 | 毛玻璃 | `card.css` / `cmdk.css` / `--wf-glass-filter` | ❌ 禁止 inline 复制 SVG filter |
 | 滚动揭示 | `reveal-motion.css` + `reveal-motion.js`（加 class 即可） | ❌ 禁止 inline 写 observer |
 | 平滑滚动 | `smooth-scroll.js` | ❌ 禁止 inline |
-| Magic Bento | `magic-bento.js` | ❌ 禁止 inline 复制 ~100 行脚本 |
-| 液态玻璃位移图 | `liquid-glass.js` | ❌ 禁止 inline `initLiquidGlassMap` |
 | cmdk / nav / footer | 共享 CSS + JS | ❌ 禁止另写 |
 
 **唯一例外：** `index.html`（首页 WebGL / intro 体验）是特殊页面，自带 inline token、字体、加载动画，**暂不纳入统一**，不要重构它。
@@ -179,7 +172,6 @@ Phase 3A.2 完成后，workflow 详情页标准引用：
 3. `cmdk.js`
 4. `smooth-scroll.js`
 5. `reveal-motion.js`
-6. （详情页）`liquid-glass.js` → `magic-bento.js`
 7. （内容页）`progress.js`、`copy.js`
 8. `footer.js`
 
@@ -227,7 +219,7 @@ python -m http.server 8080
 | 阶段 | 内容 | 状态 |
 |---|---|---|
 | 3A.1 | 本文档 + `tokens.css` 追加 `--wf-*` | 进行中 |
-| 3A.2 | `view-angle-transform` 单页试点（新增 `workflow-detail.css` / `magic-bento.js` / `liquid-glass.js`） | 待批准 |
+| 3A.2 | `view-angle-transform` 单页试点（新增 `workflow-detail.css`） | 待批准 |
 | 后续 | 其余 4 个详情页迁移（逐页） | 未开始 |
 
 > 首页 `index.html` 永久排除在统一重构之外。

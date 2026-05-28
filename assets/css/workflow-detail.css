@@ -184,8 +184,7 @@ body.workflow-detail li {
   padding-left: 1.1rem;
 }
 
-/* Magic Bento interaction surface (glow + tilt + ripple).
-   Behaviour lives in magic-bento.js; these are the visual hooks. */
+/* Interaction surface visual hooks. */
 .mb-card {
   overflow: hidden;
   --glow-x: 50%;
