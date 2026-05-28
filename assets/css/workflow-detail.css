@@ -1,0 +1,292 @@
+/* Shared styling for workflow DETAIL pages (workflows/<slug>/index.html).
+   Neutral black / dark / glass system — reuses global tokens from tokens.css.
+   Scoped to body.workflow-detail; does NOT reset global html/body, and does
+   NOT touch nav / cmdk / footer. No gold/red theme here (see tokens.css note). */
+
+body.workflow-detail {
+  color-scheme: dark;
+  line-height: 1.8;
+  overscroll-behavior: none;
+  background: var(--bg-primary);
+}
+
+/* Scoped reset so default UA margins/padding don't shift the content rhythm.
+   Limited to detail-page content elements — not a global reset. */
+body.workflow-detail h1,
+body.workflow-detail h2,
+body.workflow-detail h3,
+body.workflow-detail p,
+body.workflow-detail ul,
+body.workflow-detail li {
+  margin: 0;
+  padding: 0;
+}
+
+.workflow-page {
+  position: relative;
+  z-index: 2;
+  width: min(var(--wf-page-max), calc(100vw - 32px));
+  margin: 0 auto;
+  padding: clamp(112px, 14vh, 150px) 0 12vh;
+}
+
+/* Hero */
+.hero {
+  display: block;
+  margin-bottom: 34px;
+}
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.main-title {
+  max-width: 980px;
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 5.5vw, 4.7rem);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.hero-subtitle {
+  max-width: 880px;
+  margin: 24px 0 0;
+  color: var(--text-secondary);
+  font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+  line-height: 1.85;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: var(--border);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--wf-card-bg);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  -webkit-backdrop-filter: var(--wf-glass-filter);
+  backdrop-filter: var(--wf-glass-filter);
+}
+
+/* Demo + chapter shells (glass) */
+.workflow-demo-wrap,
+.chapter {
+  position: relative;
+  width: 100%;
+  margin: 0 0 26px;
+  border-radius: var(--radius-lg);
+  animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) 0.72s both;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease;
+  will-change: transform;
+}
+.chapter {
+  border: var(--border);
+  background: var(--bg-card);
+  padding: clamp(20px, 3vw, 34px);
+  overflow: visible;
+  -webkit-backdrop-filter: var(--wf-glass-filter);
+  backdrop-filter: var(--wf-glass-filter);
+}
+.workflow-demo-title {
+  margin: 0;
+  padding: 18px 18px 14px;
+  text-align: center;
+  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+  line-height: 1.2;
+}
+.workflow-demo-gif {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+  transition: transform 0.15s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+@keyframes workflow-demo-rise {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+    transform: translateY(70px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Chapter internals */
+.chapter-header {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: var(--border);
+}
+.chapter-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.25;
+}
+.section-subtitle {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+.step-desc,
+.info-card p,
+.info-card li {
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.78;
+}
+
+/* Info cards */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.info-card {
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--wf-card-bg);
+}
+.info-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+.info-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+/* Magic Bento interaction surface (glow + tilt + ripple).
+   Behaviour lives in magic-bento.js; these are the visual hooks. */
+.mb-card {
+  overflow: hidden;
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 200px;
+  --glow-color: 255, 255, 255;
+  transition: transform 0.15s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+.mb-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 4px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.45)) 30%,
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+.mb-ripple {
+  position: absolute;
+  z-index: 10;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 1;
+}
+
+@media (max-width: 780px) {
+  .workflow-page {
+    width: min(100vw - 32px, var(--wf-page-max));
+    padding-top: 104px;
+  }
+  .main-title {
+    font-size: clamp(1.58rem, 7vw, 2.7rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workflow-demo-wrap,
+  .chapter {
+    animation: none;
+  }
+}
+
+/* Unified demo media: label/note stay outside the transformed surface. */
+.demo-media {
+  position: relative;
+  width: 100%;
+  margin: 0 0 26px;
+  animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) 0.72s both;
+}
+.demo-media__label {
+  margin: 0 0 12px;
+  color: var(--text-primary);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.demo-media__motion {
+  width: 100%;
+  transition: transform 0.15s ease;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.demo-media__frame {
+  overflow: hidden;
+  border-radius: var(--border-radius, var(--radius-lg));
+}
+.demo-media__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.demo-media__note {
+  margin: 12px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-media {
+    animation: none;
+  }
+}

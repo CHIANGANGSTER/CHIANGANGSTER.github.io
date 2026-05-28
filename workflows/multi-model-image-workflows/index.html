@@ -8,6 +8,7 @@
   <link rel="canonical" href="/workflows/multi-model-image-workflows/">
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link rel="stylesheet" href="/assets/css/workflow-detail.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -136,57 +137,6 @@
       margin: 0 0 26px;
     }
 
-    .workflow-demo-wrap {
-      position: relative;
-      width: 100%;
-      border-radius: var(--border-radius);
-      animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) 0.72s both;
-      transform-style: preserve-3d;
-      overflow: hidden;
-      border: var(--border);
-      background: var(--bg-card);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-    }
-
-    .workflow-demo-title {
-      margin: 0;
-      padding: 18px 18px 14px;
-      text-align: center;
-      font-size: clamp(1.25rem, 2.4vw, 1.9rem);
-      line-height: 1.2;
-    }
-
-    .workflow-demo-gif {
-      display: block;
-      width: 100%;
-      height: auto;
-      transition: transform 0.15s ease;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    .demo-caption {
-      padding: 16px 18px 18px;
-      border-top: var(--border);
-    }
-
-    .demo-caption h2 {
-      margin: 0 0 8px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .demo-caption p {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 0.92rem;
-      line-height: 1.75;
-    }
-
     @keyframes workflow-demo-rise {
       0% {
         opacity: 0;
@@ -270,15 +220,6 @@
       color: var(--text-secondary);
       font-size: 0.95rem;
       line-height: 1.75;
-    }
-
-    .credit-video {
-      display: block;
-      width: 100%;
-      height: auto;
-      margin-top: 16px;
-      border-radius: 16px;
-      background: #000;
     }
 
     .tech-card,
@@ -417,24 +358,28 @@
     </header>
 
     <section class="workflow-demo-grid" aria-label="multi-model image workflow demos">
-      <article class="workflow-demo-wrap">
-        <h2 class="workflow-demo-title">单图生成</h2>
-        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="单图使用演示">
-          <source src="/assets/images/workflows/multi-model-image-single.mp4" type="video/mp4">
-        </video>
-        <div class="demo-caption">
-          <p>只有一张产品图、人物图、场景图或参考图时使用。把图片接入对应输入节点，保持默认连接关系，先跑通基础生成。</p>
+      <article class="demo-media">
+        <h2 class="demo-media__label">单图生成</h2>
+        <div class="demo-media__motion" data-demo-magnet>
+          <div class="demo-media__frame">
+            <video autoplay loop muted playsinline preload="metadata" class="demo-media__video" aria-label="单图使用演示">
+              <source src="/assets/images/workflows/multi-model-image-single.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
+        <p class="demo-media__note">只有一张产品图、人物图、场景图或参考图时使用。把图片接入对应输入节点，保持默认连接关系，先跑通基础生成。</p>
       </article>
 
-      <article class="workflow-demo-wrap">
-        <h2 class="workflow-demo-title">多图联结</h2>
-        <video autoplay loop muted playsinline preload="metadata" class="workflow-demo-gif" aria-label="多图联结演示">
-          <source src="/assets/images/workflows/multi-model-image-link.mp4" type="video/mp4">
-        </video>
-        <div class="demo-caption">
-          <p>把主体、参考风格、场景氛围或局部细节分配到多张输入图，让模型在同一次生成中融合多图信息。</p>
+      <article class="demo-media">
+        <h2 class="demo-media__label">多图联结</h2>
+        <div class="demo-media__motion" data-demo-magnet>
+          <div class="demo-media__frame">
+            <video autoplay loop muted playsinline preload="metadata" class="demo-media__video" aria-label="多图联结演示">
+              <source src="/assets/images/workflows/multi-model-image-link.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
+        <p class="demo-media__note">把主体、参考风格、场景氛围或局部细节分配到多张输入图，让模型在同一次生成中融合多图信息。</p>
       </article>
     </section>
 
@@ -464,13 +409,19 @@
       </div>
     </section>
 
-    <section class="credit-note magnet-card" aria-label="积分使用说明">
+    <section class="credit-note" aria-label="积分使用说明">
       <h2 class="chapter-title">积分使用说明</h2>
       <p>这类节点调用的是闭源模型 API，需要消耗 ComfyUI 账户积分。当前换算约为 211 积分 ≈ 1 美元。使用前先估算生成次数，避免在测试阶段浪费积分。</p>
       <p>建议先用 <a href="/workflows/flux2-klein-text-to-image/">Flux.2 文生图工作流</a> 优化提示词，把画面方向、主体描述和风格定稿。确认提示词后，再回到这四个节点生成正式图片。</p>
-      <video autoplay loop muted playsinline preload="metadata" class="credit-video" aria-label="积分使用说明演示">
-        <source src="/assets/images/workflows/multi-model-image-credits.mp4" type="video/mp4">
-      </video>
+      <div class="demo-media">
+        <div class="demo-media__motion" data-demo-magnet>
+          <div class="demo-media__frame">
+            <video autoplay loop muted playsinline preload="metadata" class="demo-media__video" aria-label="积分使用说明演示">
+              <source src="/assets/images/workflows/multi-model-image-credits.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="chapter">
@@ -673,8 +624,10 @@
     })();
 
     (function initDemoMagnetism() {
-      document.querySelectorAll('.workflow-demo-wrap, .magnet-card').forEach(function (card) {
-        var target = card.querySelector('.workflow-demo-gif') || card;
+      document.querySelectorAll('[data-demo-magnet]').forEach(function (target) {
+        if (target.dataset.demoMagBound === 'true') return;
+        target.dataset.demoMagBound = 'true';
+        var card = target;
         var tiltX = 0;
         var tiltY = 0;
         var magX = 0;
@@ -728,7 +681,7 @@
       var glowColor = '255, 255, 255';
       var radius = 200;
       var cards = [];
-      document.querySelectorAll('.tech-card, .step-card, .qa-card, .workflow-note-card, .workflow-demo-wrap').forEach(function (card) {
+      document.querySelectorAll('.tech-card, .step-card, .qa-card, .workflow-note-card').forEach(function (card) {
         card.classList.add('mb-card');
         card.style.setProperty('--glow-color', glowColor);
         cards.push(card);
