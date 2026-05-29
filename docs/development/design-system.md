@@ -337,3 +337,7 @@ All 5 workflow page video displays have been unified to the shared `demo-media` 
 
 - 该例外**不得复制到新页面**。新页面一律引用公共 `magic-bento.js`。
 - 后续若 `magic-bento.js` 新增图片目标 `data-*` 配置（如 `data-img-selectors`），应回收此 inline 实现。
+
+## LiquidGlass Status
+
+- multi-model: LiquidGlass confirmed dead code, removed in Phase 3F.1

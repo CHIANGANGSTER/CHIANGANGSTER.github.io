@@ -41,7 +41,6 @@
       --accent-red: #7B1E25;
       --border-radius: 16px;
       --border: 1px solid rgba(255,255,255,0.1);
-      --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
       --glass-border: var(--border);
       --card-surface-bg: rgba(255,255,255,0.045);
       --card-surface-radius: var(--border-radius);
@@ -259,16 +258,6 @@
       }
     }
   </style>
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
-        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
-        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
-        <feColorMatrix in="blurred" type="saturate" values="1.15" />
-      </filter>
-    </defs>
-  </svg>
 </head>
 <body>
   <nav class="nav">
@@ -537,29 +526,6 @@
       })();
     })();
 
-    (function initLiquidGlassMap() {
-      var feImage = document.getElementById('lg-disp-image');
-      if (!feImage) return;
-      var canvas = document.createElement('canvas');
-      var size = 128;
-      canvas.width = size;
-      canvas.height = size;
-      var ctx = canvas.getContext('2d');
-      var imageData = ctx.createImageData(size, size);
-      var data = imageData.data;
-      for (var y = 0; y < size; y += 1) {
-        for (var x = 0; x < size; x += 1) {
-          var i = (y * size + x) * 4;
-          var wave = Math.sin(x * 0.14) * 18 + Math.cos(y * 0.16) * 18;
-          data[i] = 128 + wave;
-          data[i + 1] = 128 - wave;
-          data[i + 2] = 128;
-          data[i + 3] = 255;
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      feImage.setAttribute('href', canvas.toDataURL());
-    })();
   </script>
 </body>
 </html>
