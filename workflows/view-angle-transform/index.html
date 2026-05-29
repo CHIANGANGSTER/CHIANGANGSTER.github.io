@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
   <link rel="stylesheet" href="../../assets/css/glass.css">
   <link rel="stylesheet" href="../../assets/css/card.css">
+  <link rel="stylesheet" href="../../assets/css/magic-bento.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     @font-face {
@@ -260,50 +261,6 @@
       letter-spacing: 0.08em;
       text-align: right;
       text-transform: uppercase;
-    }
-
-    .mb-card {
-      overflow: hidden;
-      --glow-x: 50%;
-      --glow-y: 50%;
-      --glow-intensity: 0;
-      --glow-radius: 200px;
-      --glow-color: 255, 255, 255;
-      transition: transform 0.15s ease, box-shadow 0.3s ease;
-      transform-style: preserve-3d;
-    }
-
-    .mb-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      padding: 4px;
-      border-radius: inherit;
-      pointer-events: none;
-      background: radial-gradient(
-        var(--glow-radius) circle at var(--glow-x) var(--glow-y),
-        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
-        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.45)) 30%,
-        transparent 60%
-      );
-      -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-      mask-composite: exclude;
-    }
-
-    .mb-ripple {
-      position: absolute;
-      z-index: 10;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: scale(0);
-      opacity: 1;
     }
 
     @media (max-width: 860px) {
