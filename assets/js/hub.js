@@ -16,7 +16,6 @@
   let tagsById = {};
   let statusBound = false;
   let tagBound = false;
-  let cardRiseTimer = 0;
 
   Promise.all([
     fetch('/assets/data/kb.json').then(r => r.json()),
@@ -93,12 +92,11 @@
   }
 
   function scheduleCardRise() {
-    window.clearTimeout(cardRiseTimer);
-    cardRiseTimer = window.setTimeout(() => {
-      grid.querySelectorAll('.kb-card').forEach(card => {
-        card.classList.add('card-rise', 'is-visible');
-      });
-    }, 1080);
+    if (!grid) return;
+    const reveal = window.KBReveal || window.KBRevealMotion;
+    // Animation class/styles come from the shared reveal-motion module; the hub
+    // only owns the delay so cards rise after the hero line-reveal finishes.
+    reveal?.revealCards?.('.kb-card', { root: grid, delay: 1080 });
   }
 
   function cardHtml(entry) {

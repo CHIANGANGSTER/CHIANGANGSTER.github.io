@@ -72,8 +72,46 @@
     initCardReveal(root);
   }
 
+  /* Public reveal for dynamically rendered content (e.g. hub cards). Applies the
+     shared .card-rise / .is-visible system; callers own the trigger timing only. */
+  function revealCards(target, options = {}) {
+    const root = options.root || document;
+    let cards;
+    if (typeof target === 'string') {
+      cards = [...root.querySelectorAll(target)];
+    } else if (target instanceof Element) {
+      cards = [target];
+    } else {
+      cards = [...(target || [])];
+    }
+    if (!cards.length) return;
+
+    const stagger = options.stagger != null ? Number(options.stagger) : 55;
+    const delay = Number(options.delay) || 0;
+
+    cards.forEach((card, index) => {
+      // Mark handled so the IntersectionObserver path does not double-bind.
+      card.dataset.cardRevealReady = 'true';
+      card.classList.add('card-rise');
+      if (!card.style.getPropertyValue('--card-rise-delay')) {
+        card.style.setProperty('--card-rise-delay', `${Math.min(index % 8, 7) * stagger}ms`);
+      }
+    });
+
+    const show = () => cards.forEach(card => card.classList.add('is-visible'));
+
+    if (reduceMotion) {
+      show();
+    } else if (delay > 0) {
+      window.setTimeout(show, delay);
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(show));
+    }
+  }
+
   window.__kbRevealMotion = true;
-  window.KBRevealMotion = { refresh };
+  window.KBRevealMotion = { refresh, revealCards };
+  window.KBReveal = window.KBRevealMotion;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => refresh());
