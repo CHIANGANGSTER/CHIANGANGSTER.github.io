@@ -128,6 +128,18 @@
 * `assets/css/workflows-index.css`
   workflows 列表页样式。
 
+* `assets/css/glass.css`
+  公共毛玻璃契约（Phase 3C）：`.glass` 及变体。
+
+* `assets/css/media.css`
+  DemoMedia 共享样式（Phase 3D）：`.demo-media*`、`workflow-demo-rise`。
+
+* `assets/css/magic-bento.css`
+  MagicBento 卡片样式（Phase 3E）：`.mb-card` / `.mb-ripple`。
+
+* `assets/css/image-modal.css`
+  图片放大/灯箱样式（Phase 3B）。
+
 ### JS
 
 * `assets/js/utils.js`
@@ -162,6 +174,18 @@
 
 * `assets/js/validate-kb.js`
   数据验证工具。
+
+* `assets/js/image-modal.js`
+  图片放大/灯箱（Phase 3B）；接管 `[data-image-modal]`。
+
+* `assets/js/magic-bento.js`
+  卡片 hover/glow/tilt/ripple（Phase 3E，**已重建**）；`window.__kbMagicBento` 守卫。
+
+* `assets/js/light-rays.js`
+  WebGL god-rays 背景（Phase 3F）；`window.__kbLightRays` 守卫。
+
+* `assets/js/liquid-glass.js`
+  SVG displacement map（Phase 3F，**已重建**）；`window.__kbLiquidGlass` 守卫。
 
 ### Data
 
@@ -198,14 +222,14 @@
 
 ---
 
-### 5.2 已删除的死共享文件
+### 5.2 magic-bento.js / liquid-glass.js 历史
 
-以下文件曾存在但未被运行时引用，已在 Phase 3A 删除并提交：
+这两个文件曾在 Phase 3A 作为未引用死文件删除，**但已在后续阶段基于真实页面 class 重新设计并重建**：
 
-* `assets/js/magic-bento.js`
-* `assets/js/liquid-glass.js`
+* `assets/js/magic-bento.js` —— Phase 3E 重建（接管标准 4 页卡片 hover/glow/tilt/ripple + `[data-demo-magnet]`）。
+* `assets/js/liquid-glass.js` —— Phase 3F 重建（SVG displacement map，view/text/fusion 3 页引用）。
 
-后续如果要重新公共化 MagicBento / LiquidGlass，必须根据当前页面真实 class 和需求重新设计，不要尝试恢复旧文件。
+**当前状态：两文件均存在并被运行时引用。** 不要再把它们描述为已删除。comfy/multi 的 inline 变体见 design-system.md §3E.3 / §3F 例外清单。
 
 ---
 
@@ -448,9 +472,7 @@ python -m http.server 8080
 
 统一卡片 hover / glow / ripple / tilt。
 
-注意：
-
-旧 `magic-bento.js` 已删除。后续如需重建，必须根据 Phase 3C 定义的卡片 class 重新设计，不要盲目合并其他方案。
+状态：**已完成（Phase 3E）**。`magic-bento.css` + `magic-bento.js` 已重建并接入标准 4 页；comfy 保留 inline 变体（见 design-system.md §3E.3）。
 
 可能目标 class：
 
@@ -483,9 +505,7 @@ python -m http.server 8080
 
 统一 liquid glass filter / displacement map。
 
-注意：
-
-旧 `liquid-glass.js` 已删除。当前页面多处仍有 inline SVG filter 和 inline `initLiquidGlassMap`。
+状态：**已完成（Phase 3F）**。`liquid-glass.js` + `light-rays.js` 已重建并接入 view/text/fusion 3 页；comfy（SDF）与 multi（shader 格式）保留 inline 变体（见 design-system.md §3F）。SVG filter 定义仍 inline（liquid-glass.js 依赖）。
 
 执行顺序：
 

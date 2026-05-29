@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+  WORKFLOW DETAIL PAGE TEMPLATE
+  ================================================================
+  Copy this file as the starting point for a new workflow detail page.
+  Fill in content, paths, and class names only.
+  Do NOT copy inline effect code from older pages.
+
+  REQUIRED vs OPTIONAL is annotated on every line.
+  Delete the OPTIONAL lines you do not need; keep all REQUIRED lines.
+
+  [X] Forbidden inline logic on new pages (always use the public JS):
+     - initLightRays         -> light-rays.js
+     - initLiquidGlassMap    -> liquid-glass.js (needs the inline SVG filter below)
+     - initMagicBento        -> magic-bento.js
+     - initDemoMagnetism     -> magic-bento.js ([data-demo-magnet])
+     - image zoom / lightbox -> image-modal.js ([data-image-modal])
+  [X] Do NOT re-implement inline: .mb-card / .mb-ripple / .demo-media* / glass / card / :root tokens
+  [OK] Only inline allowed: the liquid-glass SVG <filter id="liquid-glass-filter"> (the filter id must live in the DOM)
+  ================================================================
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title - CHIANGANGSTER</title>
+
+  <!-- ===== CSS (order: base -> specific -> motion) ===== -->
+  <link rel="stylesheet" href="/assets/css/tokens.css">          <!-- REQUIRED -->
+  <link rel="stylesheet" href="/assets/css/base.css">            <!-- REQUIRED reset -->
+  <link rel="stylesheet" href="/assets/css/nav.css">             <!-- REQUIRED when using shared nav -->
+  <link rel="stylesheet" href="/assets/css/card.css">            <!-- REQUIRED -->
+  <link rel="stylesheet" href="/assets/css/glass.css">           <!-- REQUIRED -->
+  <link rel="stylesheet" href="/assets/css/workflow-detail.css"> <!-- REQUIRED (workflow page) -->
+  <link rel="stylesheet" href="/assets/css/media.css">           <!-- OPTIONAL: has demo video -->
+  <link rel="stylesheet" href="/assets/css/magic-bento.css">     <!-- OPTIONAL: bento card hover/glow -->
+  <link rel="stylesheet" href="/assets/css/image-modal.css">     <!-- OPTIONAL: zoomable images -->
+  <link rel="stylesheet" href="/assets/css/reveal-motion.css">   <!-- REQUIRED -->
+  <link rel="stylesheet" href="/assets/css/cmdk.css">            <!-- REQUIRED -->
+
+  <!-- OPTIONAL: keep this inline SVG filter ONLY when liquid-glass.js is enabled.
+       The filter id must exist in the DOM; this is the only inline SVG allowed. -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="liquid-glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feImage id="lg-disp-image" width="100%" height="100%" result="dispMap" />
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feColorMatrix in="blurred" type="saturate" values="1.15" />
+      </filter>
+    </defs>
+  </svg>
+</head>
+
+<body>
+  <!-- nav is injected by nav.js (shared). Do NOT hardcode an inline nav. -->
+
+  <main class="workflow-page">
+
+    <!-- ===== HERO ===== -->
+    <header class="hero">
+      <p class="eyebrow">Category / EYEBROW</p>
+      <h1 class="main-title">Page main title</h1>
+      <p class="hero-subtitle">One-line subtitle.</p>
+    </header>
+
+    <!-- ===== GLASS / CARD example ===== -->
+    <!-- .chapter = glass chapter container (workflow-detail.css).
+         Add a magic-bento target class for bento hover. -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-number">01</span>
+        <h2 class="chapter-title">Chapter title</h2>
+      </div>
+
+      <!-- magic-bento target classes: .tech-card / .step-card / .qa-card / .workflow-note-card / .workflow-shot
+           magic-bento.js auto-binds hover/glow/tilt/ripple; no script needed. -->
+      <div class="info-grid">
+        <article class="tech-card">Card content</article>
+        <article class="step-card">Step content</article>
+        <article class="qa-card">Q&amp;A content</article>
+      </div>
+    </section>
+
+    <!-- ===== DEMO MEDIA example (OPTIONAL, needs media.css) ===== -->
+    <!-- [data-demo-magnet] is bound by magic-bento.js for tilt/magnetism.
+         The structure is fixed; do NOT add inline styles. -->
+    <section class="demo-media" aria-label="Demo title">
+      <h2 class="demo-media__label">DEMO LABEL</h2>
+      <div class="demo-media__motion" data-demo-magnet>
+        <div class="demo-media__frame">
+          <video autoplay loop muted playsinline preload="none" class="demo-media__video" aria-label="Demo description">
+            <source src="/assets/images/workflows/your-demo.mp4" type="video/mp4">
+            <img loading="lazy" src="/assets/images/workflows/your-demo-fallback.jpg" alt="Demo description" class="demo-media__video">
+          </video>
+        </div>
+      </div>
+      <p class="demo-media__note">Demo description text</p>
+    </section>
+
+    <!-- ===== IMAGE MODAL example (OPTIONAL, needs image-modal.css + image-modal.js) ===== -->
+    <!-- Just add the data-image-modal attribute; zoom/backdrop/close/ESC are all handled by image-modal.js. -->
+    <figure class="workflow-shot">
+      <img loading="lazy" src="/assets/images/workflows/your-image.png" alt="Image description" data-image-modal>
+      <figcaption class="img-caption">Image caption</figcaption>
+    </figure>
+
+  </main>
+
+  <!-- footer is injected by footer.js (shared). -->
+
+  <!-- ===== JS (before </body>, all deferred) ===== -->
+  <script src="/assets/js/nav.js" defer></script>          <!-- REQUIRED -->
+  <script src="/assets/js/utils.js" defer></script>        <!-- REQUIRED must come before cmdk -->
+  <script src="/assets/js/cmdk.js" defer></script>         <!-- REQUIRED -->
+  <script src="/assets/js/smooth-scroll.js" defer></script><!-- OPTIONAL -->
+  <script src="/assets/js/reveal-motion.js" defer></script><!-- REQUIRED -->
+  <script src="/assets/js/magic-bento.js" defer></script>  <!-- OPTIONAL: bento cards. Can add data-selectors to override default selectors -->
+  <script src="/assets/js/light-rays.js" defer></script>   <!-- OPTIONAL: WebGL god-rays background -->
+  <script src="/assets/js/liquid-glass.js" defer></script> <!-- OPTIONAL: needs the inline SVG filter above -->
+  <script src="/assets/js/image-modal.js" defer></script>  <!-- OPTIONAL: pairs with [data-image-modal] -->
+  <script src="/assets/js/footer.js" defer></script>       <!-- REQUIRED last -->
+</body>
+</html>

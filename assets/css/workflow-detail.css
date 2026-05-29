@@ -88,8 +88,7 @@ body.workflow-detail li {
   backdrop-filter: var(--wf-glass-filter);
 }
 
-/* Demo + chapter shells (glass) */
-.workflow-demo-wrap,
+/* Chapter shell (glass) */
 .chapter {
   position: relative;
   width: 100%;
@@ -107,22 +106,6 @@ body.workflow-detail li {
   overflow: visible;
   -webkit-backdrop-filter: var(--wf-glass-filter);
   backdrop-filter: var(--wf-glass-filter);
-}
-.workflow-demo-title {
-  margin: 0;
-  padding: 18px 18px 14px;
-  text-align: center;
-  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
-  line-height: 1.2;
-}
-.workflow-demo-gif {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: inherit;
-  transition: transform 0.15s ease;
-  transform-style: preserve-3d;
-  will-change: transform;
 }
 @keyframes workflow-demo-rise {
   0% {
@@ -238,7 +221,6 @@ body.workflow-detail li {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .workflow-demo-wrap,
   .chapter {
     animation: none;
   }
