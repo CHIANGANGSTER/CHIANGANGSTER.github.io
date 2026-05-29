@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
   <link rel="stylesheet" href="/assets/css/image-modal.css">
+  <link rel="stylesheet" href="../../assets/css/glass.css">
+  <link rel="stylesheet" href="../../assets/css/card.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
   <style>
@@ -36,6 +38,11 @@
       --border-radius: 16px;
       --border-radius-sm: 8px;
       --border: 1px solid rgba(255,255,255,0.1);
+      --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-border: var(--border);
+      --card-surface-bg: rgba(255,255,255,0.06);
+      --card-surface-radius: var(--border-radius);
+      --card-surface-shadow: none;
     }
 
     .brand-yahee { color: #B09868; }
@@ -141,13 +148,10 @@
 
     /* Chapter */
     .chapter {
-      background: var(--bg-card);
-      border: var(--border);
-      border-radius: 20px;
       padding: 2rem;
       margin-bottom: 2.5rem;
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-bg: var(--bg-card);
+      --glass-radius: 20px;
     }
 
     .chapter-header {
@@ -180,9 +184,6 @@
     }
 
     .tech-card {
-      background: var(--bg-card);
-      border: var(--border);
-      border-radius: var(--border-radius);
       padding: 1.2rem;
     }
 
@@ -591,19 +592,19 @@
     <p class="main-subtitle">Flux.2 Workflow: Industrial Precision Design & Execution</p>
 
     <!-- COMPLIANCE: 生产合规与模型授权说明 -->
-    <section class="chapter license-header">
+    <section class="chapter glass glass--panel glass--card license-header">
       <div class="chapter-header">
         <span class="chapter-number">COMPLIANCE</span>
         <h2 class="chapter-title">生产合规与模型授权说明</h2>
         <p class="section-subtitle">Production Compliance & Model Licensing</p>
       </div>
       <div class="tech-grid">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>4B 型号 (基础商用)</h3>
           <p><strong>协议：</strong><a href="https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">Apache 2.0</a></p>
           <p>开源协议保障，支持全渠道商业化分发，适用于对生成速度有较高要求的生产场景。</p>
         </div>
-        <div class="tech-card accent-green">
+        <div class="tech-card card-surface glass glass--card accent-green">
           <h3>9B 型号 (核心高精生产)</h3>
           <p><strong>协议：</strong><a href="https://github.com/black-forest-labs/flux2/blob/main/model_licenses/LICENSE-FLUX-DEV" target="_blank" rel="noopener noreferrer" style="color: var(--accent-green);">FLUX.2-dev 验证版</a></p>
           <p>经过内部全链路验证，9B 模型生成的图像资产已达到商业交付级精度。支持在当前企业工作流框架下进行大规模数字资产产出。</p>
@@ -615,7 +616,7 @@
     </section>
 
     <!-- 影像重构逻辑 -->
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">影像重构逻辑：基于 Flux.2 的编辑范式</h2>
         <p class="section-subtitle">Neural Imaging Principles: Flux.2 Editing Paradigm</p>
@@ -627,11 +628,11 @@
         模型地址：<a href="https://github.com/black-forest-labs/flux2" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">https://github.com/black-forest-labs/flux2</a>
       </p>
       <div class="tech-grid">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>身份锚点 (Anchor)</h3>
           <p>保持产品外形、几何比例和工业细节绝对不变，通过像素级重新编码实现场景切换。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>物理融合 (Physical Fusion)</h3>
           <p>AI 理解产品材质与体积后，重新编写环境脚本，确保真实的光影反弹与反射。</p>
         </div>
@@ -643,7 +644,7 @@
     </section>
 
     <!-- 核心架构逻辑总览 -->
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">FLUX.2工作流步骤</h2>
         <p class="section-subtitle">Master Workflow Architecture</p>
@@ -661,7 +662,7 @@
     </section>
 
     <!-- 双文本编码器深度解析 -->
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">双文本编码器深度解析</h2>
         <p class="section-subtitle">Dual Text Encoder Deep Dive</p>
@@ -670,11 +671,11 @@
         FLUX.2 里有两个文字入口，可以把它理解成“一个负责讲清楚要做什么，一个负责告诉画面长什么样”。<strong>T5XXL</strong> 更像项目说明书，负责读懂空间、位置、动作和限制；<strong>CLIP_L</strong> 更像视觉风格板，负责摄影感、光影、材质和整体审美。把两边分清楚，提示词会更稳定，也更容易让没有技术背景的人复用。
       </p>
       <div class="tech-grid">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>T5XXL</h3>
           <p>把它当成“需求说明”来写。节点 <strong>#93</strong> 里适合放清楚、具体、像给同事交代任务一样的话：产品在画面哪里、要保留什么结构、哪些地方不能变、背景和光线要怎么配合。比如“椅子在画面正中，椅脚比例不变，阴影落在右后方”。它主要保证画面的<strong>空间关系和任务逻辑</strong>不跑偏。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>CLIP_L</h3>
           <p>把它当成“视觉参考”来写。节点 <strong>#77</strong> 里不要塞太多复杂句子，放更短、更像关键词的画面要求：高端商业摄影、柔和棚拍光、清晰边缘、真实反光、干净白底等。它主要负责画面的<strong>质感、风格和摄影语言</strong>，让结果看起来像可交付的商品图。</p>
         </div>
@@ -696,17 +697,17 @@
     </section>
 
     <!-- 效率与模式选择 -->
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">效率与模式选择</h2>
         <p class="section-subtitle">Efficiency & Mode Selection</p>
       </div>
       <div class="tech-grid">
-        <div class="tech-card accent-green">
+        <div class="tech-card card-surface glass glass--card accent-green">
           <h3>快速模式 (关闭放大)</h3>
           <p>出图均在 <strong>1min</strong> 左右，适合快速迭代</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>商业模式 (开启放大)</h3>
           <p>出图约 <strong>91s</strong>，产出 4K 级商业资产</p>
         </div>
@@ -732,7 +733,7 @@
     </section>
 
     <!-- 物理保真度深度解析 -->
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">物理保真度深度解析</h2>
         <p class="section-subtitle">Fidelity vs. Refinement</p>
@@ -741,11 +742,11 @@
         物理保真度可以简单理解为：修图可以把产品变干净、变高级，但不能把产品修成另一个东西。产品的比例、结构、支撑关系、材质逻辑都要保留，灰尘、划痕、褶皱、脏污和拍摄瑕疵可以清理。这样生成图既更适合电商展示，也不会丢掉真实产品的可信度。
       </p>
       <div class="tech-grid" style="margin-bottom: 1.5rem;">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>节点 #93 — 主提示词 <span style="color:var(--text-muted);font-weight:400;">(T5XXL)</span></h3>
           <p>Non-destructive retouch. 保留产品原来的形状、比例、连接方式和受力关系，只清理表面的灰尘、污点、划痕、褶皱和拍摄瑕疵。目标是让产品看起来像刚完成专业棚拍，而不是重新设计一件新产品。</p>
         </div>
-        <div class="tech-card accent-green">
+        <div class="tech-card card-surface glass glass--card accent-green">
           <h3>节点 #77 — 画风提示词 <span style="color:var(--text-muted);font-weight:400;">(CLIP_L)</span></h3>
           <p>Commercial High-End Furniture Photography, <strong>isolated on pure white background</strong>, neutral studio lighting, realistic material reflection, clean product edges, sharp catalog-ready output. 这一栏负责告诉模型“最终成片应该像专业商品图”。</p>
         </div>

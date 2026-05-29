@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link rel="stylesheet" href="../../assets/css/glass.css">
+  <link rel="stylesheet" href="../../assets/css/card.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     @font-face {
@@ -33,6 +35,11 @@
       --accent-red: #7B1E25;
       --border-radius: 16px;
       --border: 1px solid rgba(255,255,255,0.1);
+      --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-border: var(--border);
+      --card-surface-bg: rgba(255,255,255,0.045);
+      --card-surface-radius: var(--border-radius);
+      --card-surface-shadow: none;
     }
 
     html,
@@ -189,11 +196,8 @@
     .chapter {
       margin-bottom: 26px;
       padding: clamp(20px, 3vw, 34px);
-      border: var(--border);
-      border-radius: 20px;
-      background: var(--bg-card);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-bg: var(--bg-card);
+      --glass-radius: 20px;
     }
 
     .chapter-header {
@@ -238,9 +242,6 @@
     .workflow-shot {
       position: relative;
       padding: 18px;
-      border: var(--border);
-      border-radius: var(--border-radius);
-      background: rgba(255,255,255,0.045);
     }
 
     .tech-card h3,
@@ -392,141 +393,141 @@
       </video>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">工作流定位</h2>
         <p class="section-subtitle">Relight and blend images without rebuilding everything from zero</p>
       </div>
       <p class="step-desc">这条链路更像“产品溶图和重打光”的中间工序。输入图负责提供主体结构、原始透视和基础细节；工作流里的参考潜空间、遮罩、LoRA 和采样参数负责统一光源方向、阴影状态、反射规律和局部遮挡。它特别适合家具、家居、产品海报、电商场景和需要统一光感的合成图。</p>
       <div class="tech-grid">
-        <div class="tech-card accent-card">
+        <div class="tech-card card-surface glass glass--card accent-card">
           <h3>适用任务</h3>
           <p>把已有产品或参考图放进新的光影环境里，修正阴影、遮挡、材质反射和局部透视，让主体与场景看起来像同一张照片。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>不适合任务</h3>
           <p>如果需要从零生成完整场景，优先使用 Klein 文生图页面；如果已经选定最终画面并需要商业级收尾，再进入产品精修工作流。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">核心节点与参数</h2>
         <p class="section-subtitle">What the attached workflow actually uses</p>
       </div>
       <div class="tech-grid">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>模型链路</h3>
           <p>UNET 使用 FLUX.2 Klein 9B FP8，CLIP 使用 qwen_3_8b_fp8mixed，VAE 使用 flux2-vae。整体配置偏轻，方便快速验证溶图与打光方向。</p>
         </div>
-        <div class="tech-card accent-card">
+        <div class="tech-card card-surface glass glass--card accent-card">
           <h3>重打光 LoRA</h3>
           <p>工作流加载“溶图重打光自纠正透视”LoRA，强度为 0.85。它负责强化光影融合、透视校正和局部遮挡关系，是这条流程的关键控制点。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>参考潜空间</h3>
           <p>输入图先经过比例缩放、VAEEncode 和 ReferenceLatent，用来约束主体位置、构图和基础细节，减少模型把原图结构重新画乱的概率。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>抠图与边缘</h3>
           <p>BiRefNet-General + VITMatte 负责提取主体遮罩，MaskGrow 当前为 -3，用轻微收缩处理边缘，避免溶图时出现发白、脏边或浮在场景上的感觉。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>采样设置</h3>
           <p>KSampler 当前为 steps 4、CFG 1.2、Euler、Simple、Denoise 1。它强调速度和方向验证，适合先多跑几版，再挑图进入精修。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>细节恢复</h3>
           <p>HLFrequencyDetailRestore 用于补回高频细节，让产品边缘、材质纹理和局部层次更稳，减少重打光后画面发糊的问题。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">输入图与遮罩准备</h2>
         <p class="section-subtitle">Let the workflow read structure, matte and light direction</p>
       </div>
       <p class="step-desc">这个流程的重点不是让同事额外写文字，而是把输入图准备干净，让 ReferenceLatent 读到稳定构图，让 BiRefNet 抠出可靠主体，让重打光 LoRA 只处理光影、遮挡、投影和反射。前期把图片条件处理好，比临时补充描述更稳定。</p>
       <div class="workflow-extra-grid">
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">主体图</span>
           <p>选择轮廓完整、遮挡少、主体边缘清楚的图片。产品不要贴边，也不要被复杂背景吞掉，否则遮罩和透视约束都会变得不稳定。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">参考光感</span>
           <p>用参考图或当前场景确定主光方向、软硬程度、阴影落点和反射强弱。目标不是重画主体，而是让主体像被同一个现场光源照亮。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">遮罩边缘</span>
           <p>当前 MaskGrow 为 -3，适合轻微收边，减少白边和脏边。如果主体边缘被吃掉，就调回更温和的数值，再重新跑一版。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">尺寸比例</span>
           <p>先保持输入图的合理比例，再用 ImageScaleByAspectRatio 控制长边尺寸。不要一开始就压到过小，否则材质纹理和边缘层次会丢失。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">推荐使用步骤</h2>
         <p class="section-subtitle">A practical relighting loop</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">准备输入图</span>
         <p class="step-desc">先选一张主体清晰、轮廓完整、透视关系可用的产品图或参考图。输入图越干净，BiRefNet 遮罩和 ReferenceLatent 的约束越稳定。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">确定光影目标</span>
         <p class="step-desc">先定参考光感：主光从哪来、阴影落在哪里、反射应该强还是弱、背景需要保留多少。这个步骤由参考图和节点参数承担，同事只需要替换输入图并确认目标光感。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">小批量跑图</span>
         <p class="step-desc">保持输入图、尺寸和 LoRA 强度不变，先改 seed 或少量节点参数，一次跑多张。第一轮只看主体是否稳、阴影是否贴地、光感是否统一。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">挑图后精修</span>
         <p class="step-desc">选到方向后，再把结果交给产品精修、局部重绘或放大链路。Klein 负责快速找到融合方向，精修流程负责把画面推到交付标准。</p>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">优势与注意事项</h2>
         <p class="section-subtitle">Why this workflow is useful for design production</p>
       </div>
       <div class="workflow-extra-grid">
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">出图快</span>
           <p>4 steps 配合 Klein 9B，适合前期快速试光、试背景、试风格，不必每次都走高成本精修链路。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">主体更稳</span>
           <p>ReferenceLatent 与遮罩链路共同约束主体，能降低产品轮廓被重绘、比例漂移或细节丢失的概率。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">真实性更强</span>
           <p>ReferenceLatent、遮罩和重打光 LoRA 都围绕光影、投影、反射和遮挡展开，输出重点是“像合成进同一环境”，不是单纯换风格。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">仍需筛选</span>
           <p>这不是最终修图按钮。遇到边缘脏、阴影错位或材质过度变化时，先回到输入图、遮罩、LoRA 强度和 seed，而不是直接放大。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">文件与交付</h2>
         <p class="section-subtitle">Keep the workflow reusable</p>
       </div>
-      <div class="qa-card">
+      <div class="qa-card card-surface glass glass--card">
         <p class="qa-q">工作流 JSON</p>
         <div class="qa-a">页面顶部按钮可下载附件中的 ComfyUI JSON。导入后检查本机模型名、LoRA 名称、VAE 路径和自定义节点是否一致。</div>
       </div>
-      <div class="qa-card">
+      <div class="qa-card card-surface glass glass--card">
         <p class="qa-q">建议保存内容</p>
         <div class="qa-a">每次稳定输出后，保存原图、参考图、seed、输出图和对应 JSON 版本。这样下次只需要替换输入图或调整节点参数，就能复用同一套打光逻辑。</div>
       </div>

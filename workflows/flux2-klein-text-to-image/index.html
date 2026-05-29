@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link rel="stylesheet" href="../../assets/css/glass.css">
+  <link rel="stylesheet" href="../../assets/css/card.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     @font-face {
@@ -33,6 +35,11 @@
       --accent-red: #7B1E25;
       --border-radius: 16px;
       --border: 1px solid rgba(255,255,255,0.1);
+      --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-border: var(--border);
+      --card-surface-bg: rgba(255,255,255,0.045);
+      --card-surface-radius: var(--border-radius);
+      --card-surface-shadow: none;
     }
 
     html,
@@ -189,11 +196,8 @@
     .chapter {
       margin-bottom: 26px;
       padding: clamp(20px, 3vw, 34px);
-      border: var(--border);
-      border-radius: 20px;
-      background: var(--bg-card);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-bg: var(--bg-card);
+      --glass-radius: 20px;
     }
 
     .chapter-header {
@@ -238,9 +242,6 @@
     .workflow-shot {
       position: relative;
       padding: 18px;
-      border: var(--border);
-      border-radius: var(--border-radius);
-      background: rgba(255,255,255,0.045);
     }
 
     .tech-card h3,
@@ -396,103 +397,103 @@
       </video>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">工作流定位</h2>
         <p class="section-subtitle">From prompt structure to scene generation</p>
       </div>
       <p class="step-desc">这个流程适合从零生成产品场景：先用提示词库或插件把参考图拆成空间、主体、材质、光影、构图等结构，再把这些信息交给 Flux.2 Klein 9B。它更像一个快速场景草图机，适合做方向探索、客户提案、产品氛围图和批量风格测试。</p>
       <div class="tech-grid">
-        <div class="tech-card accent-card">
+        <div class="tech-card card-surface glass glass--card accent-card">
           <h3>提示词来源</h3>
           <p>可以直接使用 prompts 页面里的 JSON PROMPT，也可以用 Framia Clipper 在浏览器里反推任意参考图的提示词结构，再改成自己的产品场景。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>输出目标</h3>
           <p>生成有空间感、材质关系和商业摄影质感的场景图，用于筛选构图、测试风格、建立后续精修或放大的基础。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">核心节点与参数</h2>
         <p class="section-subtitle">Klein 9B quick generation path</p>
       </div>
       <div class="tech-grid">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>模型</h3>
           <p>UNET 使用 FLUX.2 Klein 9B FP8 版本，CLIP 使用 qwen_3_8b_fp8mixed，VAE 使用 flux2-vae。整体链路偏轻，适合快速迭代。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>采样</h3>
           <p>KSampler 当前配置为 steps 4、CFG 1.2、Euler、Simple。它强调速度和方向验证，适合先跑多张图挑方向。</p>
         </div>
-        <div class="tech-card accent-card">
+        <div class="tech-card card-surface glass glass--card accent-card">
           <h3>LoRA 质感</h3>
           <p>工作流包含 UnifiedReward-Flex LoRA，作为质感和可用性增强。它帮助输出更接近商业图，而不是停留在粗糙草图阶段。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">为什么适合场景搭建</h2>
         <p class="section-subtitle">Fast, open, realistic enough for design iteration</p>
       </div>
       <div class="workflow-extra-grid">
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">出图快</span>
           <p>少步数采样让它更适合前期找方向。先用低成本判断空间、风格和产品气质，再决定是否进入精修链路。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">开源链路</span>
           <p>模型、VAE、LoRA 和节点都可以在本地 ComfyUI 管理，团队可以保存版本、复用工作流，并沉淀成内部资产。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">真实性</span>
           <p>Flux.2 Klein 对空间结构、光影层次和材质关系有较好的理解，适合做室内、电商、家具和生活方式场景。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">提示词兼容</span>
           <p>结构化提示词可以直接沿用 prompts 页的主体、空间、CMF、摄影和构图维度，减少每次从零写提示词的成本。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">推荐使用步骤</h2>
         <p class="section-subtitle">A practical scene-building loop</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">整理参考</span>
         <p class="step-desc">从 Pinterest、品牌页面、竞品图或 prompts 页面挑一个方向。先确认场景类型、主体位置、材质和光线，不要一开始就追求完整大段自然语言。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">生成结构化提示词</span>
         <p class="step-desc">用插件反推参考图，或复制 prompts 页面里的 JSON PROMPT。保留空间、CMF、摄影、构图、负面词这些关键字段，再替换成自己的产品和场景需求。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">小批量跑图</span>
         <p class="step-desc">固定宽高和核心提示词，先改 seed 和局部描述，一次跑多张。重点看构图、真实感和风格方向，而不是第一轮就看细节完美度。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">进入精修</span>
         <p class="step-desc">选出方向后，再把结果交给产品精修、局部重绘、放大或后期修图流程。Klein 负责找方向，精修流程负责把图推到交付标准。</p>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">文件与交付</h2>
         <p class="section-subtitle">Keep the workflow reusable</p>
       </div>
-      <div class="qa-card">
+      <div class="qa-card card-surface glass glass--card">
         <p class="qa-q">工作流文件</p>
         <div class="qa-a">页面顶部的下载按钮会保存当前 Flux.2 Klein 文生图 JSON。导入 ComfyUI 后，按本机模型路径调整模型名、LoRA 和 VAE。</div>
       </div>
-      <div class="qa-card">
+      <div class="qa-card card-surface glass glass--card">
         <p class="qa-q">提示词资产</p>
         <div class="qa-a">建议把稳定输出的提示词保存回 prompts 页面对应分类，记录场景、CMF、构图和负面词，方便下次直接复用。</div>
       </div>
