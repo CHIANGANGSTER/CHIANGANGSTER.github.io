@@ -122,9 +122,9 @@
       </div>
     `;
     if (navigable) {
-      return `<a class="kb-card card-rise" data-status="${escapeHtml(entry.status)}" href="${escapeHtml(entry.url)}" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</a>`;
+      return `<a class="kb-card card-rise" data-card-reveal-ready="true" data-status="${escapeHtml(entry.status)}" href="${escapeHtml(entry.url)}" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</a>`;
     }
-    return `<div class="kb-card card-rise" data-status="${escapeHtml(entry.status)}" role="article" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</div>`;
+    return `<div class="kb-card card-rise" data-card-reveal-ready="true" data-status="${escapeHtml(entry.status)}" role="article" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</div>`;
   }
 
   function statusLabel(status) {
