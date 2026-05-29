@@ -1,3 +1,17 @@
+/* Canonical entrance keyframe — shared with .demo-media (media.css) and .chapter (workflow-detail.css). */
+@keyframes workflow-demo-rise {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+    transform: translateY(70px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
 .line-reveal .line-reveal-item {
   display: block;
   opacity: 0;
@@ -17,29 +31,23 @@
   transform: translateY(0);
 }
 
+/* Cards start paused; adding .is-visible unpauses the animation.
+   animation-delay per card (--card-rise-delay) staggers the reveal. */
 .card-rise {
-  opacity: 0;
-  filter: blur(8px);
-  transform: translateY(34px);
-  transition:
-    opacity 0.78s ease,
-    filter 0.78s ease,
-    transform 0.78s cubic-bezier(0.19, 1, 0.22, 1),
-    background 0.25s ease,
-    box-shadow 0.3s ease;
-  transition-delay: var(--card-rise-delay, 0ms);
+  animation: workflow-demo-rise 2.65s cubic-bezier(0.19, 1, 0.22, 1) var(--card-rise-delay, 0ms) both;
+  animation-play-state: paused;
+  transition: background 0.25s ease, box-shadow 0.3s ease;
   will-change: opacity, filter, transform;
 }
 
 .card-rise.is-visible {
-  opacity: 1;
-  filter: blur(0);
-  transform: translateY(0);
+  animation-play-state: running;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .line-reveal .line-reveal-item,
   .card-rise {
+    animation: none;
     opacity: 1;
     filter: none;
     transform: none;
