@@ -86,6 +86,22 @@
   transition: opacity 0.3s ease;
 }
 
+.kb-card.card-rise {
+  opacity: 0;
+  transform: translateY(46px);
+  filter: blur(12px);
+  transition:
+    opacity 1.05s ease,
+    transform 1.05s ease,
+    filter 1.05s ease;
+}
+
+.kb-card.card-rise.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
 .workflow-resource-section .mb-ripple {
   position: absolute;
   border-radius: 50%;

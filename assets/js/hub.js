@@ -16,6 +16,7 @@
   let tagsById = {};
   let statusBound = false;
   let tagBound = false;
+  let cardRiseTimer = 0;
 
   Promise.all([
     fetch('/assets/data/kb.json').then(r => r.json()),
@@ -88,6 +89,16 @@
     if (empty) empty.classList.toggle('is-visible', visible.length === 0);
     if (!grid) return;
     grid.innerHTML = visible.map(cardHtml).join('');
+    scheduleCardRise();
+  }
+
+  function scheduleCardRise() {
+    window.clearTimeout(cardRiseTimer);
+    cardRiseTimer = window.setTimeout(() => {
+      grid.querySelectorAll('.kb-card').forEach(card => {
+        card.classList.add('card-rise', 'is-visible');
+      });
+    }, 1080);
   }
 
   function cardHtml(entry) {
@@ -113,9 +124,9 @@
       </div>
     `;
     if (navigable) {
-      return `<a class="kb-card" data-status="${escapeHtml(entry.status)}" href="${escapeHtml(entry.url)}" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</a>`;
+      return `<a class="kb-card card-rise" data-status="${escapeHtml(entry.status)}" href="${escapeHtml(entry.url)}" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</a>`;
     }
-    return `<div class="kb-card" data-status="${escapeHtml(entry.status)}" role="article" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</div>`;
+    return `<div class="kb-card card-rise" data-status="${escapeHtml(entry.status)}" role="article" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</div>`;
   }
 
   function statusLabel(status) {
