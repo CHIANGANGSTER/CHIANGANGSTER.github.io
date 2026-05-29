@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/workflow-detail.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link rel="stylesheet" href="../../assets/css/glass.css">
+  <link rel="stylesheet" href="../../assets/css/card.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     @font-face {
@@ -36,6 +38,11 @@
       --accent-red: #7B1E25;
       --border-radius: 16px;
       --border: 1px solid rgba(255,255,255,0.1);
+      --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-border: var(--border);
+      --card-surface-bg: rgba(255,255,255,0.045);
+      --card-surface-radius: var(--border-radius);
+      --card-surface-shadow: none;
     }
 
     html,
@@ -155,11 +162,8 @@
     .chapter {
       margin-bottom: 26px;
       padding: clamp(20px, 3vw, 34px);
-      border: var(--border);
-      border-radius: 20px;
-      background: var(--bg-card);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-bg: var(--bg-card);
+      --glass-radius: 20px;
     }
 
     .chapter-header {
@@ -202,9 +206,9 @@
       width: 100%;
       margin: 0 0 26px;
       padding: clamp(18px, 2.4vw, 26px);
-      border: var(--border);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.06);
+      --card-surface-bg: rgba(255, 255, 255, 0.06);
+      --card-surface-radius: 18px;
+      --glass-radius: 18px;
       transform-style: preserve-3d;
       transition: transform 0.15s ease;
       will-change: transform;
@@ -230,9 +234,6 @@
     .workflow-note-card {
       position: relative;
       padding: 18px;
-      border: var(--border);
-      border-radius: var(--border-radius);
-      background: rgba(255,255,255,0.045);
     }
 
     .tech-card h3,
@@ -385,33 +386,33 @@
       </article>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">工作流定位</h2>
         <p class="section-subtitle">One usage pattern across four image models</p>
       </div>
       <p class="step-desc">这页不是单独讲某一个模型，而是统一说明四个图像工作流的使用方式。Seedream、Nano Banana Pro 2、Flux.2 Pro、GPT Image 2 都按同一套输入逻辑操作：先判断是单图还是多图，再根据目标把参考图放入对应输入位置。</p>
       <div class="tech-grid">
-        <div class="tech-card accent-card">
+        <div class="tech-card card-surface glass glass--card accent-card">
           <h3>GPT Image 2</h3>
           <p>本页两个视频演示所用工作流。用于说明单图输入和多图联结的实际操作节奏。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>Seedream</h3>
           <p>使用方式相同，适合快速图像生成、参考图延展和视觉方向探索。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>Nano Banana Pro 2</h3>
           <p>使用方式相同，适合轻量、多图关系测试和快速迭代。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>Flux.2 Pro</h3>
           <p>使用方式相同，适合更完整的商业图像生成链路和高质量输出方向。</p>
         </div>
       </div>
     </section>
 
-    <section class="credit-note" aria-label="积分使用说明">
+    <section class="credit-note card-surface glass glass--card" aria-label="积分使用说明">
       <h2 class="chapter-title">积分使用说明</h2>
       <p>这类节点调用的是闭源模型 API，需要消耗 ComfyUI 账户积分。当前换算约为 211 积分 ≈ 1 美元。使用前先估算生成次数，避免在测试阶段浪费积分。</p>
       <p>建议先用 <a href="/workflows/flux2-klein-text-to-image/">Flux.2 文生图工作流</a> 优化提示词，把画面方向、主体描述和风格定稿。确认提示词后，再回到这四个节点生成正式图片。</p>
@@ -426,45 +427,45 @@
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">两种输入方式</h2>
         <p class="section-subtitle">Single image first, multi-image when relationship matters</p>
       </div>
       <div class="workflow-extra-grid">
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">单图</span>
           <p>适合只有一个明确参考对象时使用。输入图承担主体、构图、材质或风格参考，工作流负责生成新的画面结果。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">多图联结</span>
           <p>适合把多个信息源合并：一张给主体，一张给场景，一张给风格，一张给细节。每张图都要有清晰职责。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">共用逻辑</span>
           <p>四个工作流的入口和操作顺序保持一致。区别只在模型能力、节点配置和输出倾向。</p>
         </div>
-        <div class="workflow-note-card">
+        <div class="workflow-note-card card-surface glass glass--card">
           <span class="step-tag">推荐顺序</span>
           <p>先用单图跑通，再切到多图联结。这样更容易判断问题来自模型、输入图还是多图关系。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">操作要点</h2>
         <p class="section-subtitle">Keep inputs clean and relationships explicit</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">准备输入图</span>
         <p class="step-desc">单图模式只需要一张清晰参考图；多图模式需要提前决定每张图的角色，避免多张图同时表达相互冲突的主体、构图或风格。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">先跑默认连接</span>
         <p class="step-desc">不要一开始就大幅调整节点。先按默认连接跑一版，确认图像能正常进入工作流，再根据结果调整输入图和提示词。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">复用视频步骤</span>
         <p class="step-desc">两个视频以 GPT Image 2 为例，但拖图、接图、切换单图或多图联结的操作逻辑对 Seedream、Nano Banana Pro 2、Flux.2 Pro 同样适用。</p>
       </div>

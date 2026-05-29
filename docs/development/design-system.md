@@ -224,3 +224,43 @@ python -m http.server 8080
 
 > 首页 `index.html` 永久排除在统一重构之外。
 > `workflows/comfy-flux2-retouch.html` 保持 redirect，不迁移。
+
+---
+
+## Phase 3C.1 Shared Glass/Card Contract
+
+### `assets/css/glass.css`
+
+Public glass utilities:
+
+| Class | Use | Override variables |
+|---|---|---|
+| `.glass` | Base translucent surface with backdrop blur. | `--glass-blur`, `--glass-bg`, `--glass-border`, `--glass-radius`, optional `--glass-filter` |
+| `.glass--panel` | Slightly stronger panel tint for larger grouped surfaces. | Same variables as `.glass` |
+| `.glass--card` | Card-shaped glass surface with shared radius and border. | `--glass-radius`, `--glass-border` |
+| `.glass--media` | Tighter media container with hidden overflow. | `--glass-media-padding`, plus glass variables |
+| `.glass--subtle` | Low-tint secondary surface with minimal blur. | Same variables as `.glass` |
+
+Use page-level variables when a legacy page needs its existing liquid-glass SVG filter:
+
+```css
+:root {
+  --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+  --glass-border: var(--border);
+}
+```
+
+### `assets/css/card.css`
+
+New shared card helpers:
+
+| Class | Use | Override variables |
+|---|---|---|
+| `.card-surface` | Neutral reusable card surface with background, radius, and shadow. | `--card-surface-bg`, `--card-surface-radius`, `--card-surface-shadow` |
+| `.card-hover` | Standard lift/shadow hover state. | `--card-hover-shadow` |
+| `.section-card` | Larger section-level card spacing. | `--section-card-padding`, `--section-card-gap` |
+
+### Phase 3C.1 onboarded pages
+
+- `workflows/view-angle-transform/index.html`
+- `workflows/multi-model-image-workflows/index.html`

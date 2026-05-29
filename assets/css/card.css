@@ -89,3 +89,26 @@ div.kb-card { cursor: default; }
 .kb-status[data-status="testing"]::before { background: var(--accent-amber); }
 .kb-status[data-status="planned"]::before { background: var(--accent-pink); }
 .kb-status[data-status="archived"]::before { background: var(--text-muted); }
+
+/* Shared neutral surfaces for pages that are being moved off one-off card CSS. */
+.card-surface {
+  background: var(--card-surface-bg, var(--bg-card, rgba(255,255,255,0.06)));
+  border-radius: var(--card-surface-radius, var(--radius-lg, 16px));
+  box-shadow: var(--card-surface-shadow, 0 18px 60px rgba(0,0,0,0.22));
+}
+
+.card-hover {
+  transition: transform var(--duration-fast, 160ms) var(--easing-standard, ease), box-shadow var(--duration-fast, 160ms) var(--easing-standard, ease);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-hover-shadow, 0 24px 80px rgba(0,0,0,0.28));
+}
+
+.section-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-card-gap, 18px);
+  padding: var(--section-card-padding, clamp(20px, 3vw, 34px));
+}

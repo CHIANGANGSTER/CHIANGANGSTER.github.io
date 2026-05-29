@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/workflow-detail.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link rel="stylesheet" href="../../assets/css/glass.css">
+  <link rel="stylesheet" href="../../assets/css/card.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     @font-face {
@@ -36,6 +38,11 @@
       --accent-red: #7B1E25;
       --border-radius: 16px;
       --border: 1px solid rgba(255,255,255,0.1);
+      --glass-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-border: var(--border);
+      --card-surface-bg: rgba(255,255,255,0.045);
+      --card-surface-radius: var(--border-radius);
+      --card-surface-shadow: none;
     }
 
     html,
@@ -173,11 +180,8 @@
     .chapter {
       margin-bottom: 26px;
       padding: clamp(20px, 3vw, 34px);
-      border: var(--border);
-      border-radius: 20px;
-      background: var(--bg-card);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
+      --glass-bg: var(--bg-card);
+      --glass-radius: 20px;
     }
 
     .chapter-header {
@@ -222,9 +226,6 @@
     .workflow-shot {
       position: relative;
       padding: 18px;
-      border: var(--border);
-      border-radius: var(--border-radius);
-      background: rgba(255,255,255,0.045);
     }
 
     .tech-card h3,
@@ -255,7 +256,6 @@
     .workflow-shot {
       margin-top: 18px;
       padding: 0;
-      overflow: hidden;
       line-height: 0;
     }
 
@@ -382,67 +382,67 @@
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">工作流定位</h2>
         <p class="section-subtitle">Small camera move, not a full redesign</p>
       </div>
       <p class="step-desc">你把原图交给工作流，让它在保持主体和画面关系的前提下换一个观察角度。工作流不负责重新设计产品、替换材质或生成全新场景。它更像一次相机微调：换一点水平角度，抬低一点视线，或者拉近镜头。</p>
       <div class="tech-grid">
-        <div class="tech-card accent-card">
+        <div class="tech-card card-surface glass glass--card accent-card">
           <h3>核心模型</h3>
           <p>主模型使用 Qwen Image Edit。工作流用图像编辑链路读取原图，再按相机控制参数生成新角度。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>控制 LoRA</h3>
           <p>多角度相机控制 LoRA 负责相机运动。Lightning LoRA 把采样压到 4 steps，适合快速预览。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>后处理</h3>
           <p>SeedVR2 负责放大。工作流先把结果送进放大节点，再保存输出图，减少低分辨率预览带来的误判。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">三个相机参数</h2>
         <p class="section-subtitle">Start small, then compare</p>
       </div>
       <div class="tech-grid">
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>horizontal_angle</h3>
           <p>调水平角度。范围可到 360 度。先从小幅度开始，例如 15、30、45，再看主体结构是否稳定。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>vertical_angle</h3>
           <p>调垂直角度。范围约 60 度。你用它控制俯视、平视、仰视，不要一次拉满。</p>
         </div>
-        <div class="tech-card">
+        <div class="tech-card card-surface glass glass--card">
           <h3>zoom</h3>
           <p>调镜头距离。0 接近远景，10 接近特写。产品图建议先用中间值，避免裁掉关键轮廓。</p>
         </div>
       </div>
     </section>
 
-    <section class="chapter">
+    <section class="chapter glass glass--panel glass--card">
       <div class="chapter-header">
         <h2 class="chapter-title">使用顺序</h2>
         <p class="section-subtitle">One input image, one controlled camera move</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">放入原图</span>
         <p class="step-desc">先放入清晰原图。主体边缘、透视线和材质反光越清楚，视角微调越稳。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">先调水平角度</span>
         <p class="step-desc">先只改 horizontal_angle。确认主体没有变形后，再调整 vertical_angle。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">最后调镜头距离</span>
         <p class="step-desc">最后调 zoom。镜头距离会影响裁切，先保存中景版本再做特写。</p>
       </div>
-      <div class="step-card">
+      <div class="step-card card-surface glass glass--card">
         <span class="step-tag">结构漂移就回退</span>
         <p class="step-desc">如果主体结构开始漂移，退回上一个参数值。不要用提示词硬拉回结构。</p>
       </div>
