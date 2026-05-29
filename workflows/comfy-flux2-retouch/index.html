@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
   <link rel="stylesheet" href="/assets/css/reveal-motion.css">
+  <link rel="stylesheet" href="/assets/css/image-modal.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
   <style>
@@ -507,41 +508,9 @@
       }
     }
 
-    /* 图片点击放大样式 */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(255,255,255,0.08);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(8px) contrast(1.08) brightness(1.04) saturate(1.1);
-      cursor: zoom-out;
-    }
-    .modal-content {
-      margin: auto;
-      display: block;
-      max-width: 90%;
-      max-height: 90%;
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0.9);
-      transition: transform 0.3s ease;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    }
-    .modal.show .modal-content {
-      transform: translate(-50%, -50%) scale(1);
-    }
-    html.image-modal-open,
-    body.image-modal-open {
-      overflow: hidden;
-    }
     .chapter img,
     .arch-section img {
       cursor: zoom-in;
-      transition: opacity 0.3s;
     }
     .chapter img:hover,
     .arch-section img:hover {
@@ -668,7 +637,7 @@
         </div>
       </div>
       <div class="rounded-img" style="margin-top: 1.5rem;">
-        <img loading="lazy" src="/tutorial-imgs/teaser_editing.png" alt="影像重构原理" class="img-fluid">
+        <img loading="lazy" src="/tutorial-imgs/teaser_editing.png" alt="影像重构原理" class="img-fluid" data-image-modal>
       </div>
       <p class="img-caption">保持产品锚点不变，实现环境与氛围的像素级重写</p>
     </section>
@@ -713,13 +682,13 @@
       <div class="img-grid cols-2" style="margin-top: 1.5rem; align-items: start;">
         <div>
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-06_15-47-06.png" alt="T5XXL">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-06_15-47-06.png" alt="T5XXL" data-image-modal>
           </div>
           <p class="img-caption">Fig 3-1. Node #93 — T5XXL Spatial Logic Input</p>
         </div>
         <div>
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/c2e85f0713994345ac7ac6a0fe8870d4.png" alt="CLIP_L">
+            <img loading="lazy" src="/tutorial-imgs/c2e85f0713994345ac7ac6a0fe8870d4.png" alt="CLIP_L" data-image-modal>
           </div>
           <p class="img-caption">Fig 3-2. Node #77 — CLIP_L Aesthetic Style Input</p>
         </div>
@@ -743,19 +712,19 @@
         </div>
       </div>
       <div class="rounded-img" style="margin-top: 1.5rem;">
-        <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_14-55-53.png" alt="SeedVR2 Module" class="img-fluid">
+        <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_14-55-53.png" alt="SeedVR2 Module" class="img-fluid" data-image-modal>
       </div>
       <p class="img-caption">SeedVR2 Upscale 模块</p>
       <div class="img-grid cols-2" style="margin-top: 1.5rem;">
         <div>
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_15-00-50.png" alt="Fast Mode">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_15-00-50.png" alt="Fast Mode" data-image-modal>
           </div>
           <p class="img-caption">关闭效率</p>
         </div>
         <div>
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_15-02-31.png" alt="HQ Mode">
+            <img loading="lazy" src="/tutorial-imgs/screenshot_2026-04-07_15-02-31.png" alt="HQ Mode" data-image-modal>
           </div>
           <p class="img-caption">开启效率</p>
         </div>
@@ -784,13 +753,13 @@
       <div class="comparison-grid">
         <div style="text-align: center;">
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/lqlpjxwdlucizmxnc8dneacwmwvbvufbs-kjolrzzvqtaa_4096_3008.png" alt="Tent Raw">
+            <img loading="lazy" src="/tutorial-imgs/lqlpjxwdlucizmxnc8dneacwmwvbvufbs-kjolrzzvqtaa_4096_3008.png" alt="Tent Raw" data-image-modal>
           </div>
           <p class="comparison-label">Raw — 原始褶皱：光影逻辑混乱</p>
         </div>
         <div style="text-align: center;">
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/lqlpkh-_0-keqqxnbtdnbxcwnkxy6-cu-nqjolvm-cxyaa_1808_1328.png" alt="Tent Refined">
+            <img loading="lazy" src="/tutorial-imgs/lqlpkh-_0-keqqxnbtdnbxcwnkxy6-cu-nqjolvm-cxyaa_1808_1328.png" alt="Tent Refined" data-image-modal>
           </div>
           <p class="comparison-label">Refined — 提纯输出：完美的布料张力</p>
         </div>
@@ -798,13 +767,13 @@
       <div class="comparison-grid" style="margin-top: 1.5rem;">
         <div style="text-align: center;">
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/md9a2321.jpg" alt="Wheel Raw">
+            <img loading="lazy" src="/tutorial-imgs/md9a2321.jpg" alt="Wheel Raw" data-image-modal>
           </div>
           <p class="comparison-label">Wheel Raw — 实拍原图：充斥物理划痕</p>
         </div>
         <div style="text-align: center;">
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/lqlpkhfl2ckj6oxneadneacw5gx8zz_ialojolzagjfzaa_4096_4096.png" alt="Wheel Refined">
+            <img loading="lazy" src="/tutorial-imgs/lqlpkhfl2ckj6oxneadneacw5gx8zz_ialojolzagjfzaa_4096_4096.png" alt="Wheel Refined" data-image-modal>
           </div>
           <p class="comparison-label">Wheel Refined — 商业级重构：完美橡胶PBR</p>
         </div>
@@ -812,13 +781,13 @@
       <div class="comparison-grid" style="margin-top: 1.5rem;">
         <div style="text-align: center;">
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/md9a2313.jpg" alt="Chair Raw">
+            <img loading="lazy" src="/tutorial-imgs/md9a2313.jpg" alt="Chair Raw" data-image-modal>
           </div>
           <p class="comparison-label">Raw — 原始工业实物：金属疲劳</p>
         </div>
         <div style="text-align: center;">
           <div class="rounded-img">
-            <img loading="lazy" src="/tutorial-imgs/chair_refined.png" alt="Chair Refined">
+            <img loading="lazy" src="/tutorial-imgs/chair_refined.png" alt="Chair Refined" data-image-modal>
           </div>
           <p class="comparison-label">Refined — 商业级重构：金属推车PBR质感</p>
         </div>
@@ -827,48 +796,6 @@
 
   </div>
 
-  <!-- Image Modal -->
-  <div id="imageModal" class="modal" onclick="this.style.display='none'">
-    <img class="modal-content" id="imgFull">
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('imgFull');
-
-      const images = document.querySelectorAll('.chapter img, .arch-section img');
-
-      images.forEach(img => {
-        img.onclick = function() {
-          modal.style.display = "block";
-          modalImg.src = this.src;
-          document.documentElement.classList.add('image-modal-open');
-          document.body.classList.add('image-modal-open');
-          setTimeout(() => modal.classList.add('show'), 10);
-        }
-      });
-
-      modal.onclick = function() {
-        modal.classList.remove('show');
-        setTimeout(() => {
-          modal.style.display = "none";
-          modalImg.removeAttribute('src');
-          document.documentElement.classList.remove('image-modal-open');
-          document.body.classList.remove('image-modal-open');
-        }, 300);
-      };
-      modal.addEventListener('wheel', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }, { passive: false });
-      window.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.style.display === 'block') {
-          modal.click();
-        }
-      });
-    });
-  </script>
 
   <script>
     // Liquid Glass displacement map
@@ -1223,5 +1150,6 @@
   <script src="/assets/js/reveal-motion.js" defer></script>
   <script src="/assets/js/utils.js" defer></script>
   <script src="/assets/js/cmdk.js" defer></script>
+  <script src="/assets/js/image-modal.js" defer></script>
 </body>
 </html>
