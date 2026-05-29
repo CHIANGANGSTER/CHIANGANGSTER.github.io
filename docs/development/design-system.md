@@ -341,3 +341,35 @@ All 5 workflow page video displays have been unified to the shared `demo-media` 
 ## LiquidGlass Status
 
 - multi-model: LiquidGlass confirmed dead code, removed in Phase 3F.1
+
+---
+
+## Phase 3F LightRays / LiquidGlass 公共化
+
+### `assets/js/light-rays.js`
+
+WebGL god-rays 背景。全局幂等守卫 `window.__kbLightRays`，无 WebGL context 时安全退出。自插入 fixed `<div>` + `<canvas>`。
+
+### `assets/js/liquid-glass.js`
+
+SVG displacement map 生成器。全局幂等守卫 `window.__kbLiquidGlass`，无 `#lg-disp-image` 时安全退出。依赖页面 inline `<svg><filter id="liquid-glass-filter">` 定义存在。
+
+### 已接入公共 JS 的页面（实现完全相同）
+
+| 页面 | light-rays.js | liquid-glass.js |
+|---|---|---|
+| `view-angle-transform` | ✅ | ✅ |
+| `flux2-klein-text-to-image` | ✅ | ✅ |
+| `flux2-klein-light-fusion` | ✅ | ✅ |
+
+这 3 页的 inline `initLightRays` / `initLiquidGlassMap` 已删除，改引用公共 JS。SVG filter 定义仍 inline（liquid-glass.js 需要它）。
+
+### 保留 inline 的变体（temporary exception）
+
+| 页面 | 效果 | 原因 |
+|---|---|---|
+| `multi-model-image-workflows` | LightRays | shader 字符串格式不同（单行压缩 vs 多行），实现非逐字符相同，保留 inline |
+| `comfy-flux2-retouch` | LightRays | 紧凑格式变体（对齐变量、压缩 Float32Array），保留 inline |
+| `comfy-flux2-retouch` | LiquidGlass | SDF-based displacement map（`W=200,H=100` + `sdf()`），与 sine map 不同，保留 inline |
+
+**约束：** 变体不得复制到新页面。新页面引用公共 `light-rays.js` / `liquid-glass.js`。后续若变体经视觉确认可统一，再回收 inline。
