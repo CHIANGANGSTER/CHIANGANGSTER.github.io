@@ -22,8 +22,8 @@
 @keyframes card-reveal-motion {
   0% {
     opacity: 0;
-    filter: blur(16px);
-    transform: translateY(70px) scale(0.985);
+    filter: blur(12px);
+    transform: translateY(46px) scale(0.99);
   }
   100% {
     opacity: 1;
