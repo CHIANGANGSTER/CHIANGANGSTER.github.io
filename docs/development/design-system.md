@@ -295,3 +295,45 @@ All 5 workflow page video displays have been unified to the shared `demo-media` 
 - `workflows/view-angle-transform/index.html`
 - `workflows/multi-model-image-workflows/index.html`
 - `workflows/comfy-flux2-retouch/index.html`
+
+---
+
+## Phase 3E MagicBento 公共化状态
+
+### `assets/css/magic-bento.css`
+
+`.mb-card` / `.mb-card::after` / `.mb-ripple` 样式已从 5 个 workflow 详情页抽取到共享文件。所有页面通过 `<link>` 引用，不再 inline。
+
+### `assets/js/magic-bento.js`
+
+公共 API：
+
+| 函数 | 说明 |
+|---|---|
+| `initDemoMagnetism()` | 绑定 `[data-demo-magnet]` 元素的 tilt / magnetism；`dataset.demoMagBound` 幂等守卫 |
+| `initMagicBento()` | 读取 `script[src*="magic-bento"]` 的 `data-selectors` 属性，缺省值 `.tech-card,.step-card,.qa-card,.workflow-note-card,.workflow-shot` |
+
+全局幂等守卫：`window.__kbMagicBento`。`prefers-reduced-motion` 下全部禁用 tilt / magnetism / ripple。
+
+### Phase 3E.1–3E.2 已接入页面
+
+标准 4 个 workflow 页面已使用公共 `magic-bento.css` + `magic-bento.js`：
+
+- `workflows/view-angle-transform/index.html`（默认选择器）
+- `workflows/flux2-klein-text-to-image/index.html`（默认选择器）
+- `workflows/flux2-klein-light-fusion/index.html`（默认选择器）
+- `workflows/multi-model-image-workflows/index.html`（`data-selectors=".tech-card,.step-card,.qa-card,.workflow-note-card"`，去掉 `.workflow-shot`）
+
+### Phase 3E.3 临时例外：comfy-flux2-retouch
+
+`workflows/comfy-flux2-retouch/index.html` **暂保留 inline MagicBento 变体**，不迁移到公共 `magic-bento.js`。
+
+原因：
+1. 该页选择器不同（`.tech-card,.path-step,.rounded-img,.shortcut-item,.qa-card,.comparison-item,.stage-card,.compliance-box`，且不含 `.step-card`）。
+2. 该页包含图片补选逻辑：额外查询 `.chapter img, .arch-section img`，跳过已在 `.mb-card` 内的图片，并给图片本身写入 `display:block`、`position:relative`、`borderRadius`。
+3. 公共 `magic-bento.js` 当前仅支持 `data-selectors`，无法表达该图片补选行为。
+
+**约束：**
+
+- 该例外**不得复制到新页面**。新页面一律引用公共 `magic-bento.js`。
+- 后续若 `magic-bento.js` 新增图片目标 `data-*` 配置（如 `data-img-selectors`），应回收此 inline 实现。
