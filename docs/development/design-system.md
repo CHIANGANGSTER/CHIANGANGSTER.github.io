@@ -40,6 +40,7 @@
 | `cmdk.css` | 命令面板 | `.cmdk-modal`（blur(8px) 背景） |
 | `reveal-motion.css` | 滚动揭示动画 | `.line-reveal`/`.line-reveal-item`、`.card-rise` + reduced-motion 降级 |
 | `workflow-detail.css` | **（Phase 3A.2 新增）** workflow 详情页共享样式 | 计划承载 `.workflow-page` 布局、`.hero`、`.chapter`、`.info-card`、`.mb-card/.mb-ripple` |
+| `media.css` | **（Phase 3D.2 新增）** DemoMedia 共享样式 | 承载 `.demo-media*`、`.workflow-demo-grid` 与 `workflow-demo-rise` |
 
 ### JS（`assets/js/`）
 
@@ -131,6 +132,7 @@ Phase 3A.2 完成后，workflow 详情页标准引用：
 <link rel="stylesheet" href="/assets/css/cmdk.css">
 <link rel="stylesheet" href="/assets/css/reveal-motion.css">
 <link rel="stylesheet" href="/assets/css/workflow-detail.css">
+<link rel="stylesheet" href="/assets/css/media.css">
 
 <!-- JS（顺序见 §4） -->
 <script src="/assets/js/nav.js" defer></script>
@@ -264,3 +266,22 @@ New shared card helpers:
 
 - `workflows/view-angle-transform/index.html`
 - `workflows/multi-model-image-workflows/index.html`
+
+---
+
+## Phase 3D.2 Shared DemoMedia Contract
+
+### `assets/css/media.css`
+
+Public demo media selectors:
+
+| Selector | Use |
+|---|---|
+| `@keyframes workflow-demo-rise` | Shared entrance animation for workflow demo media. |
+| `.workflow-demo-grid` | Vertical grid wrapper for multiple demo media blocks. |
+| `.demo-media` | Outer demo media block; label and note stay outside the transformed surface. |
+| `.demo-media__label` | Demo label heading. |
+| `.demo-media__motion` | Transform target for demo magnetism. |
+| `.demo-media__frame` | Clipped rounded media frame. |
+| `.demo-media__video` | Responsive demo video element. |
+| `.demo-media__note` | Supporting demo note text. |
