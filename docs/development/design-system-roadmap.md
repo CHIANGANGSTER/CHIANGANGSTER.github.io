@@ -700,7 +700,7 @@ refactor: unify demo media structure
 当前下一步建议：
 
 1. 先执行只读审计，确认当前 workflow detail 页面真实重复点。
-2. 不恢复已删除的 JS 文件。
+2. 不要恢复历史废弃版本的 JS 文件；`magic-bento.js` / `liquid-glass.js` 已在 Phase 3E / 3F 重新设计并重建，当前以公共模块清单为准。
 3. 不继续旧 WIP。
 4. 优先考虑 Image Modal / Lightbox 公共化，或重新设计 DemoMedia。
 5. 每次只做一个模块。
