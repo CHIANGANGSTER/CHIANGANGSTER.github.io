@@ -288,5 +288,10 @@ Public demo media selectors:
 
 ### Phase 3D.3 migrated pages
 
+All 5 workflow page video displays have been unified to the shared `demo-media` structure.
+
 - `workflows/flux2-klein-text-to-image/index.html`
 - `workflows/flux2-klein-light-fusion/index.html`
+- `workflows/view-angle-transform/index.html`
+- `workflows/multi-model-image-workflows/index.html`
+- `workflows/comfy-flux2-retouch/index.html`
