@@ -285,3 +285,8 @@ Public demo media selectors:
 | `.demo-media__frame` | Clipped rounded media frame. |
 | `.demo-media__video` | Responsive demo video element. |
 | `.demo-media__note` | Supporting demo note text. |
+
+### Phase 3D.3 migrated pages
+
+- `workflows/flux2-klein-text-to-image/index.html`
+- `workflows/flux2-klein-light-fusion/index.html`
