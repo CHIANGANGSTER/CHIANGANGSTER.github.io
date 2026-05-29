@@ -279,7 +279,6 @@
       display: block;
       width: 100%;
       height: auto;
-      cursor: zoom-in;
     }
 
     .img-caption {
@@ -334,32 +333,6 @@
       transform: scale(0);
       opacity: 1;
     }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 4vh 4vw;
-      background: rgba(0,0,0,0.72);
-      -webkit-backdrop-filter: url(#liquid-glass-filter) blur(12px) contrast(1.05) saturate(1.1);
-      backdrop-filter: url(#liquid-glass-filter) blur(12px) contrast(1.05) saturate(1.1);
-    }
-
-    .modal.show { display: flex; }
-
-    .modal-content {
-      max-width: min(94vw, 1500px);
-      max-height: 90vh;
-      border-radius: 14px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
-      transform: scale(0.94);
-      transition: transform 0.3s ease;
-    }
-
-    .modal.show .modal-content { transform: scale(1); }
 
     @media (max-width: 860px) {
       .hero {
@@ -526,10 +499,6 @@
     </section>
   </main>
 
-  <div id="imageModal" class="modal">
-    <img class="modal-content" id="imgFull" alt="">
-  </div>
-
   <script src="/assets/js/utils.js" defer></script>
   <script src="/assets/js/cmdk.js" defer></script>
   <script src="/assets/js/smooth-scroll.js" defer></script>
@@ -693,26 +662,6 @@
       }
       ctx.putImageData(imageData, 0, 0);
       feImage.setAttribute('href', canvas.toDataURL());
-    })();
-
-    (function initImageModal() {
-      var modal = document.getElementById('imageModal');
-      var modalImg = document.getElementById('imgFull');
-      document.querySelectorAll('.workflow-shot img, .workflow-demo-gif').forEach(function (img) {
-        img.addEventListener('click', function () {
-          modalImg.src = img.src;
-          modalImg.alt = img.alt || '';
-          modal.classList.add('show');
-          document.documentElement.style.overflow = 'hidden';
-          document.body.style.overflow = 'hidden';
-        });
-      });
-      modal.addEventListener('click', function () {
-        modal.classList.remove('show');
-        modalImg.src = '';
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-      });
     })();
 
     (function initDemoMagnetism() {
