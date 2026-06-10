@@ -19,22 +19,21 @@
 
 .card-rise {
   opacity: 0;
-  filter: blur(8px);
-  transform: translateY(34px);
+  filter: blur(18px);
+  transform: translate3d(0, 72px, 0) scale(0.985);
   transition:
-    opacity 0.78s ease,
-    filter 0.78s ease,
-    transform 0.78s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 1.85s cubic-bezier(0.16, 1, 0.3, 1) var(--card-rise-delay, 0ms),
+    filter 2.15s cubic-bezier(0.16, 1, 0.3, 1) var(--card-rise-delay, 0ms),
+    transform 2.15s cubic-bezier(0.16, 1, 0.3, 1) var(--card-rise-delay, 0ms),
     background 0.25s ease,
     box-shadow 0.3s ease;
-  transition-delay: var(--card-rise-delay, 0ms);
   will-change: opacity, filter, transform;
 }
 
 .card-rise.is-visible {
   opacity: 1;
   filter: blur(0);
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
