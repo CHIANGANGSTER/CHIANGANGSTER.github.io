@@ -88,15 +88,7 @@
     if (empty) empty.classList.toggle('is-visible', visible.length === 0);
     if (!grid) return;
     grid.innerHTML = visible.map(cardHtml).join('');
-    scheduleCardRise();
-  }
-
-  function scheduleCardRise() {
-    if (!grid) return;
-    const reveal = window.KBReveal || window.KBRevealMotion;
-    // Animation class/styles come from the shared reveal-motion module; the hub
-    // only owns the delay so cards rise after the hero line-reveal finishes.
-    reveal?.revealCards?.('.kb-card', { root: grid, delay: 720, stagger: 130 });
+    window.KBRevealMotion?.refresh(grid);
   }
 
   function cardHtml(entry) {
@@ -122,9 +114,9 @@
       </div>
     `;
     if (navigable) {
-      return `<a class="kb-card card-rise" data-status="${escapeHtml(entry.status)}" href="${escapeHtml(entry.url)}" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</a>`;
+      return `<a class="kb-card" data-status="${escapeHtml(entry.status)}" href="${escapeHtml(entry.url)}" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</a>`;
     }
-    return `<div class="kb-card card-rise" data-status="${escapeHtml(entry.status)}" role="article" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</div>`;
+    return `<div class="kb-card" data-status="${escapeHtml(entry.status)}" role="article" aria-label="${escapeHtml(entry.title)} - ${statusText}">${inner}</div>`;
   }
 
   function statusLabel(status) {

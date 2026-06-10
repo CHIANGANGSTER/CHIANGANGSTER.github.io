@@ -20,6 +20,14 @@
 a.kb-card {
   transition: transform var(--duration-fast) var(--easing-standard), background var(--duration-fast) var(--easing-standard), border-color var(--duration-fast) var(--easing-standard);
 }
+a.kb-card.card-rise {
+  transition:
+    opacity 1.85s cubic-bezier(0.16, 1, 0.3, 1) var(--card-rise-delay, 0ms),
+    filter 2.15s cubic-bezier(0.16, 1, 0.3, 1) var(--card-rise-delay, 0ms),
+    transform 2.15s cubic-bezier(0.16, 1, 0.3, 1) var(--card-rise-delay, 0ms),
+    background 0.25s ease,
+    box-shadow 0.3s ease;
+}
 a.kb-card:hover {
   transform: translateY(-2px);
   background: var(--bg-card-hover);
