@@ -151,10 +151,8 @@
     }
     body.intro-pending #hero-behind,
     body.intro-pending main,
-    body.intro-pending .Archive,
     body.intro-pending .About,
     body.intro-pending #unicorn-section,
-    body.intro-pending #archive-front,
     body.intro-pending .Footer {
       opacity: 0;
       visibility: hidden;
@@ -202,7 +200,7 @@
       letter-spacing: 0;
       line-height: 1;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: clamp(9px, 0.72vw, 12px);
+      font-size: clamp(17px, 1.4vw, 21px);
       font-weight: 760;
       opacity: 0;
       will-change: transform, opacity, filter;
@@ -249,7 +247,7 @@
       left: var(--intro-enter-x, 50vw);
       top: var(--intro-enter-y, calc(100vh - clamp(2rem, 9vh, 6rem)));
       z-index: 60;
-      width: clamp(54px, 4.8vw, 74px);
+      width: clamp(68px, 5.6vw, 88px);
       aspect-ratio: 1;
       transform: translate(-50%, -50%) scale(0.94);
       display: grid;
@@ -259,7 +257,7 @@
       background: transparent;
       color: #fff;
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(7px, 0.56vw, 10px);
+      font-size: clamp(8px, 0.64vw, 11px);
       font-weight: 700;
       line-height: 1.05;
       letter-spacing: 0;
@@ -311,13 +309,11 @@
     body.intro-pending .hero-desc-area,
     body.intro-pending #about-text,
     body.intro-pending .about-contacts,
-    body.intro-pending #archive-front,
-    body.returning-home #archive-front,
     body.intro-entering .hero-title,
     body.intro-entering .hero-desc-area,
     body.intro-entering #about-text,
     body.intro-entering .about-contacts,
-    body.intro-entering #archive-front {
+    body.intro-entering .Footer {
       opacity: 0;
     }
     body.site-entered .hero-title-long {
@@ -509,150 +505,6 @@
       text-transform: uppercase;
       white-space: nowrap;
     }
-
-    /* ---- ARCHIVE ---- */
-    .Archive {
-      margin-bottom: 20vh;
-    }
-    #archive-front {
-      margin-top: 35vh;
-    }
-    #archive-behind {
-      position: relative;
-      z-index: 20;
-      margin-top: 42vh;
-      display: none;
-    }
-    #archive-behind .archive-item {
-      cursor: pointer;
-    }
-    .archive-heading {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .archive-heading h2 {
-      font-weight: bold;
-      font-style: italic;
-      font-size: 18px;
-    }
-    .archive-list {
-      list-style: none;
-      padding: 0;
-    }
-    .archive-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      padding-bottom: 0.5rem;
-      cursor: pointer;
-      opacity: 1;
-      transition: none;
-      text-transform: uppercase;
-    }
-    .archive-item:hover {
-      opacity: 1;
-      transition: none;
-    }
-    #archive-front.archive-at-cta {
-      display: block;
-      position: relative;
-      z-index: 20;
-      margin-top: -3vh;
-    }
-    #archive-front.archive-at-cta .archive-item {
-      opacity: 1;
-    }
-    #archive-front.archive-at-cta .archive-item-meta-inner p {
-      white-space: nowrap;
-    }
-    .archive-link {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #fefefe;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .archive-item-title {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      font-weight: 400;
-      font-size: 5vw;
-      line-height: 0.9em;
-      text-align: center;
-      max-width: 80vw;
-      text-transform: uppercase;
-    }
-    @media (max-width: 768px) {
-      .archive-item-title { font-size: 10vw; }
-    }
-    .archive-item-title .year {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(12px, 1.3vw, 16px);
-      vertical-align: middle;
-      margin-left: 0.5em;
-      color: rgba(255,255,255,0.55);
-      letter-spacing: 0.08em;
-    }
-    @media (max-width: 768px) {
-      .archive-item-title .year { display: none; }
-    }
-    .archive-item-meta {
-      display: flex;
-      justify-content: center;
-      margin-top: 1rem;
-      margin-bottom: 2rem;
-    }
-    .archive-item-meta-inner {
-      display: flex;
-      width: 50vw;
-      justify-content: space-between;
-      gap: 1.5rem;
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(12px, 1.1vw, 15px);
-      letter-spacing: 0.04em;
-      text-transform: none;
-      color: rgba(255,255,255,0.72);
-    }
-    .archive-item-meta-inner .desktop-only {
-      display: block;
-    }
-    @media (max-width: 768px) {
-      .archive-item-meta-inner .desktop-only { display: none; }
-    }
-    .archive-item-meta a {
-      color: #fefefe;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-weight: 400;
-      font-size: 12px;
-    }
-    #archive-behind .archive-item-meta-inner h3 {
-      font-weight: 400;
-    }
-    #archive-behind .archive-item-meta-inner p {
-      white-space: nowrap;
-    }
-    .archive-item-meta-inner.meta-left {
-      justify-content: flex-start;
-    }
-    .archive-item-meta-inner.meta-right {
-      justify-content: flex-end;
-      text-align: right;
-    }
-    @media (max-width: 768px) {
-      .archive-item-meta-inner {
-        width: min(82vw, 520px);
-        justify-content: center;
-        flex-wrap: wrap;
-        row-gap: 0.5rem;
-      }
-      #archive-behind .archive-item-meta-inner p {
-        white-space: normal;
-      }
-    }
     .start-tutorial-wrap {
       position: relative;
       display: inline-block;
@@ -685,13 +537,6 @@
       position: relative;
       width: 100%;
       height: 100%;
-      display: flex;
-      align-items: center;
-    }
-    .archive-pressure {
-      position: relative;
-      width: min(82vw, 1180px);
-      height: clamp(96px, 12vw, 190px);
       display: flex;
       align-items: center;
     }
@@ -834,6 +679,13 @@
       font-weight: bold;
       width: 10vw;
       margin-right: 2rem;
+    }
+    .about-contacts .label-en {
+      color: #1456CC;
+    }
+    .about-contacts .label-cn {
+      color: #E8212D;
+      margin-left: 0.35em;
     }
 
     /* ---- FOOTER ---- */
@@ -1096,18 +948,22 @@
   </svg>
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/cmdk.css">
+  <link rel="stylesheet" href="/assets/css/site-nav.css?v=20260622-staggeredmenu-fix">
 </head>
 <body class="intro-pending" style="background:#111;">
   <div id="boot-mask" aria-hidden="true"></div>
   <script>
     const homeParams = new URLSearchParams(window.location.search);
-    window.__HOME_RETURN_ARCHIVE = homeParams.get('home') === 'archive' || window.location.hash === '#archive-front';
+    window.__HOME_RETURN_HERO = homeParams.get('home') === 'hero';
+    if (window.__HOME_RETURN_HERO && (window.location.search || window.location.hash)) {
+      history.replaceState(null, '', '/');
+    }
     document.documentElement.style.background = '#111';
     document.documentElement.style.colorScheme = 'dark';
     document.body.classList.remove('site-entered', 'intro-ready', 'intro-entering', 'cursor-chair', 'cursor-grab');
     document.body.classList.add('intro-pending');
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    if (window.__HOME_RETURN_ARCHIVE) {
+    if (window.__HOME_RETURN_HERO) {
       document.body.classList.add('returning-home');
     } else {
       window.scrollTo(0, 0);
@@ -1126,9 +982,6 @@
         document.body.classList.remove('intro-pending', 'intro-ready', 'intro-entering', 'cursor-chair', 'cursor-grab');
         document.body.classList.add('site-entered');
         window.dispatchEvent(new CustomEvent('site:entered'));
-        if (window.__HOME_RETURN_ARCHIVE) {
-          window.dispatchEvent(new CustomEvent('home:return-archive'));
-        }
       }
     };
     window.__HOME_BOOT_TIMEOUT = window.setTimeout(function () {
@@ -1224,68 +1077,6 @@
   <main>
   </main>
 
-  <!-- ARCHIVE (behind chair) -->
-  <section class="Section Archive" id="archive-behind">
-      <div class="c">
-        <ul class="archive-list">
-          <li class="archive-item" data-index="1">
-            <a class="archive-link" href="/workflows/">
-              <div><h2 class="archive-item-title blur-text" data-blur-text="COMFYUI WORKFLOWS" data-blur-by="words">COMFYUI WORKFLOWS</h2></div>
-              <div class="archive-item-meta">
-                <div class="archive-item-meta-inner meta-right">
-                  <p class="blur-text" data-blur-text="沉淀可复用的节点流程，让产品精修稳定复现。" data-blur-by="words">沉淀可复用的节点流程，让产品精修稳定复现。</p>
-                </div>
-              </div>
-            </a>
-          </li>
-
-          <li class="archive-item" data-index="2">
-            <a class="archive-link" href="/prompts/">
-              <div><h2 class="archive-item-title blur-text" data-blur-text="PROMPTS" data-blur-by="words">PROMPTS</h2></div>
-              <div class="archive-item-meta">
-                <div class="archive-item-meta-inner meta-left">
-                  <p class="blur-text" data-blur-text="整理高命中提示词模板，减少从零试错的时间。" data-blur-by="words">整理高命中提示词模板，减少从零试错的时间。</p>
-                </div>
-              </div>
-            </a>
-          </li>
-
-          <li class="archive-item" data-index="3">
-            <a class="archive-link" href="/research/">
-              <div><h2 class="archive-item-title blur-text" data-blur-text="RESEARCH" data-blur-by="words">RESEARCH</h2></div>
-              <div class="archive-item-meta">
-                <div class="archive-item-meta-inner meta-right">
-                  <p class="blur-text" data-blur-text="梳理调研路径与判断依据，把趋势线索转成设计输入。" data-blur-by="words">梳理调研路径与判断依据，把趋势线索转成设计输入。</p>
-                </div>
-              </div>
-            </a>
-          </li>
-
-          <li class="archive-item" data-index="4">
-            <a class="archive-link" href="/marketing/">
-              <div><h2 class="archive-item-title blur-text" data-blur-text="MARKETING" data-blur-by="words">MARKETING</h2></div>
-              <div class="archive-item-meta">
-                <div class="archive-item-meta-inner meta-left">
-                  <p class="blur-text" data-blur-text="把产品卖点转成画面故事、脚本结构和投放素材。" data-blur-by="words">把产品卖点转成画面故事、脚本结构和投放素材。</p>
-                </div>
-              </div>
-            </a>
-          </li>
-
-          <li class="archive-item" data-index="5">
-            <a class="archive-link" href="/resources/">
-              <div><h2 class="archive-item-title blur-text" data-blur-text="RESOURCES" data-blur-by="words">RESOURCES</h2></div>
-              <div class="archive-item-meta">
-                <div class="archive-item-meta-inner meta-right">
-                  <p class="blur-text" data-blur-text="汇总工具、案例和关键词库，作为竞组共享索引。" data-blur-by="words">汇总工具、案例和关键词库，作为竞组共享索引。</p>
-                </div>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-
     <!-- ABOUT (in front of chair) -->
     <section class="Section About" id="contact" style="position:relative;z-index:20;">
       <div class="c" data-layer="top">
@@ -1298,11 +1089,11 @@
         </div>
         <ul class="about-contacts">
           <li>
-            <p class="label">KNOWLEDGE / 知识</p>
+            <p class="label"><span class="label-en">KNOWLEDGE</span> <span class="label-cn">知识</span></p>
             <p>WORKFLOWS <span class="font-gs">(+)</span> PROMPTS <span class="font-gs">(+)</span> RESEARCH</p>
           </li>
           <li>
-            <p class="label">OUTPUT / 输出</p>
+            <p class="label"><span class="label-en">OUTPUT</span> <span class="label-cn">输出</span></p>
             <p>营销素材 <span class="font-gs">(VIA)</span> 跨组资源索引</p>
           </li>
         </ul>
@@ -1319,12 +1110,7 @@
         </div>
       </div>
     </section>
-
-    <!-- ARCHIVE CTA SLOT (replaced by the domain navigation block) -->
-    <section class="Section" id="archive-front" style="position:relative;z-index:20;">
-    </section>
-
-    <!-- FOOTER -->
+<!-- FOOTER -->
     <section class="Section Footer" style="position:relative;z-index:20;">
       <div class="c">
         <p class="footer-text blur-text-manual">
@@ -1462,78 +1248,11 @@
         color.rgb  = mix(color.rgb, DARK.rgb, u_a_distort * 0.8);
 
         if (u_chairOverlap > 0.01) {
-          // ── GlassSurface SVG displacement port ──
-          // Generate displacement from position (like SVG linearGradient red/blue)
-          float a = texture2D(u_scene, uv1).a;
-          float isChair = step(0.5, a);
-
-          // Displacement map: horizontal = red gradient, vertical = blue gradient
-          // Mimics the SVG linearGradient displacement of GlassSurface
-          vec2 chairCenter = vec2(0.5, 0.5);
-          vec2 fromCenter = uv1 - chairCenter;
-          float dispStrength = 0.04 * u_chairOverlap;
-
-          // Per-channel displacement (chromatic aberration like GlassSurface)
-          // Red channel: no offset (distortionScale = -180)
-          // Green channel: offset by 10 (distortionScale + greenOffset)
-          // Blue channel: offset by 20 (distortionScale + blueOffset)
-          vec2 dispR = fromCenter * dispStrength * 0.0;
-          vec2 dispG = fromCenter * dispStrength * 0.6;
-          vec2 dispB = fromCenter * dispStrength * 1.2;
-
-          float rCh = texture2D(u_scene, uv1 + dispR).r;
-          float gCh = texture2D(u_scene, uv1 + dispG).g;
-          float bCh = texture2D(u_scene, uv1 + dispB).b;
-          vec3 glassColor = vec3(rCh, gCh, bCh);
-
-          // Glass blur: sample multiple offsets and average (GlassSurface displace=0.7)
-          float blurSize = 3.0 / u_resolution.x * u_chairOverlap;
-          vec3 blur = vec3(0.0);
-          blur += texture2D(u_scene, uv1 + vec2(blurSize, 0.0)).rgb;
-          blur += texture2D(u_scene, uv1 - vec2(blurSize, 0.0)).rgb;
-          blur += texture2D(u_scene, uv1 + vec2(0.0, blurSize)).rgb;
-          blur += texture2D(u_scene, uv1 - vec2(0.0, blurSize)).rgb;
-          blur += texture2D(u_scene, uv1 + vec2(blurSize, blurSize) * 0.7).rgb;
-          blur += texture2D(u_scene, uv1 - vec2(blurSize, blurSize) * 0.7).rgb;
-          blur += texture2D(u_scene, uv1 + vec2(blurSize, -blurSize) * 0.7).rgb;
-          blur += texture2D(u_scene, uv1 - vec2(blurSize, -blurSize) * 0.7).rgb;
-          blur *= 0.125;
-
-          // Mix displaced color with blur
-          glassColor = mix(glassColor, blur, 0.5 * u_chairOverlap);
-
-          // Brightness boost (GlassSurface brightness=80, opacity=0.75)
-          glassColor = mix(glassColor, glassColor * 1.3 + vec3(0.05), u_chairOverlap * 0.3);
-
-          // Glass body: becomes increasingly transparent
-          float glassOpacity = isChair * mix(1.0, 0.12, u_chairOverlap);
-          vec4 glassBody = vec4(glassColor, glassOpacity);
-
-          // Inner glow: subtle white highlight on glass interior edges
-          vec2 px = 1.0 / u_resolution;
-          float aU = texture2D(u_scene, uv1 + vec2(0.0, px.y)).a;
-          float aD = texture2D(u_scene, uv1 - vec2(0.0, px.y)).a;
-          float aL = texture2D(u_scene, uv1 - vec2(px.x, 0.0)).a;
-          float aR = texture2D(u_scene, uv1 + vec2(px.x, 0.0)).a;
-          float minN = min(min(aU, aD), min(aL, aR));
-          float isEdge = isChair * (1.0 - step(0.5, minN));
-
-          // Edge stroke: thin white line
-          float mouseAspect = u_resolution.x / u_resolution.y;
-          vec2 toMouse = (uv1 - u_mouseScreen) * vec2(mouseAspect, 1.0);
-          float mouseGlow = 1.0 - smoothstep(0.1, 0.3, length(toMouse));
-          float edgeAlpha = isEdge * (0.4 + mouseGlow * 0.5) * u_chairOverlap;
-
-          // Composite: glass body + edge stroke
-          vec3 finalRgb = mix(glassBody.rgb, vec3(1.0), edgeAlpha);
-          float finalA = max(glassBody.a, edgeAlpha);
-
-          // Smooth blend from normal chair to glass chair
-          gl_FragColor = mix(color, vec4(finalRgb, finalA), u_chairOverlap);
+          float fade = clamp(u_chairOverlap, 0.0, 1.0);
+          gl_FragColor = vec4(color.rgb, color.a * (1.0 - fade));
         } else {
           gl_FragColor = color;
-        }
-      }
+        }      }
     `;
 
     // ============================================================
@@ -1795,7 +1514,7 @@
           depthWrite: false,
         });
         this._chairOverlap = 0;
-        this._archiveFly = 0;
+        this._chairFade = 0;
         this.postQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.postMaterial);
         this.postScene.add(this.postQuad);
       }
@@ -1853,7 +1572,7 @@
           this.outerContainer.add(this.innerMesh);
           this.scene.add(this.outerContainer);
           this.setIntroPose(0);
-          if (window.__HOME_RETURN_ARCHIVE) {
+          if (window.__HOME_RETURN_HERO) {
             this.completeIntroForReturnHome();
           }
           requestAnimationFrame(() => {
@@ -1867,9 +1586,8 @@
           setTimeout(() => {
             preloader.classList.add('hidden');
             setTimeout(() => preloader.remove(), 600);
-            if (window.__HOME_RETURN_ARCHIVE) {
+            if (window.__HOME_RETURN_HERO) {
               window.dispatchEvent(new CustomEvent('site:entered'));
-              window.dispatchEvent(new CustomEvent('home:return-archive'));
             } else {
               this.intro.flightStart = performance.now();
             }
@@ -1934,7 +1652,7 @@
           const ry = window.innerHeight * 0.22;
           const dx = (e.clientX - cx) / rx;
           const dy = (e.clientY - cy) / ry;
-          const inChair = (dx * dx + dy * dy) <= 1;
+          const inChair = (this._chairFade || 0) < 0.9 && (dx * dx + dy * dy) <= 1;
           document.body.classList.toggle('cursor-chair', inChair);
         });
         window.addEventListener('mousedown', () => {
@@ -1958,7 +1676,7 @@
           const ry = window.innerHeight * 0.22;
           const dx = (lastMouseX - cx) / rx;
           const dy = (lastMouseY - cy) / ry;
-          const inChair = (dx * dx + dy * dy) <= 1;
+          const inChair = (this._chairFade || 0) < 0.9 && (dx * dx + dy * dy) <= 1;
           document.body.classList.toggle('cursor-chair', inChair);
         });
         window.addEventListener('mouseleave', () => {
@@ -2026,19 +1744,14 @@
         };
       }
 
-      getArchiveFlyProgress() {
-        const archive = document.getElementById('archive-front');
-        if (!archive || !document.body.classList.contains('site-entered')) return 0;
-        const rect = archive.getBoundingClientRect();
+      getChairFadeProgress() {
+        const target = document.getElementById('unicorn-section') || document.getElementById('us-reveal');
+        if (!target || !document.body.classList.contains('site-entered')) return 0;
+        const rect = target.getBoundingClientRect();
         const viewH = window.innerHeight;
-        const start = viewH * 0.48;
-        const end = -viewH * 0.18;
+        const start = viewH * 0.82;
+        const end = viewH * 0.32;
         return smoothClamp((start - rect.top) / (start - end));
-      }
-
-      getArchiveFlyTargetX() {
-        const size = this.getViewportWorldSize(this.outerContainer ? this.outerContainer.position.z : 0);
-        return size.width * 0.5 + 2.35;
       }
 
       enterSite() {
@@ -2188,56 +1901,25 @@
           return;
         }
 
-        // Outer container: subtle wobble
-        const archiveFlyTarget = this.getArchiveFlyProgress();
-        const flyEase = Math.max(0.014, Math.min(0.034, 0.034 * (1440 / window.innerWidth)));
-        this._archiveFly = _lerp(this._archiveFly, archiveFlyTarget, flyEase);
-        if (this._archiveFly < 0.002) this._archiveFly = 0;
-        if (this._archiveFly > 0.998) this._archiveFly = 1;
-        this.outerContainer.position.x = _lerp(0, this.getArchiveFlyTargetX(), this._archiveFly);
-        this.outerContainer.position.y = _lerp(0, 0.12, this._archiveFly);
+        // Keep the chair in place; scroll only fades it out near the Unicorn module.
+        const fadeTarget = this.getChairFadeProgress();
+        const fadeEase = Math.max(0.018, Math.min(0.04, 0.04 * (1440 / window.innerWidth)));
+        this._chairFade = _lerp(this._chairFade, fadeTarget, fadeEase);
+        if (this._chairFade < 0.002) this._chairFade = 0;
+        if (this._chairFade > 0.998) { this._chairFade = 1; document.body.classList.remove('cursor-chair'); }
+        this.outerContainer.position.x = 0;
+        this.outerContainer.position.y = 0;
         this.outerContainer.position.z = 0;
         this.outerContainer.rotation.z = this.spinner.mouse.mx;
         this.outerContainer.rotation.x = this.spinner.mouse.mx;
         this.outerContainer.rotation.y = this.spinner.mouse.my;
 
-        // Inner mesh: accumulated spin
+        // Inner mesh: accumulated spin only. No fly-out spin.
         this.innerMesh.rotation.x = this.spinner.spin.y;
         this.innerMesh.rotation.y = this.spinner.spin.x;
-        if (this._archiveFly > 0.002) {
-          const flySpin = Math.abs(this.spinner.scrollSpeed) * 0.026 * this._archiveFly;
-          this.innerMesh.rotation.x += flySpin;
-          this.innerMesh.rotation.y += flySpin;
-        }
 
-        // Chair overlap: glass effect between About contacts and Unicorn Studio bottom
-        // Fade IN (become glass): when About contacts bottom leaves viewport center going up
-        // Fade OUT (become solid): when Unicorn section bottom leaves viewport bottom going up
-        const aboutSection = document.getElementById('contact');
-        const usSection = document.getElementById('unicorn-section');
-        const usFrame = document.querySelector('.us-embed-frame');
-        if (aboutSection && usSection) {
-          const viewH = window.innerHeight;
-          const aboutBottom = aboutSection.getBoundingClientRect().bottom;
-          let usBottom = usSection.getBoundingClientRect().bottom;
-          if (usFrame) {
-            const frameRect = usFrame.getBoundingClientRect();
-            const defaultFrameHeight = 800;
-            usBottom -= Math.max(0, frameRect.height - defaultFrameHeight);
-          }
-
-          // Glass zone: between About bottom leaving viewport and Unicorn bottom leaving viewport
-          // fadeIn:  0→1 as About bottom goes from 60%→20% of viewport
-          // fadeOut: 1→0 as Unicorn bottom goes from 80%→40% of viewport (recover to solid)
-          const fadeIn  = smoothClamp((viewH * 0.6 - aboutBottom) / (viewH * 0.4));
-          const fadeOut = smoothClamp((usBottom - viewH * 0.4) / (viewH * 0.4));
-          const overlapTarget = fadeIn * fadeOut;
-
-          this._chairOverlap = _lerp(this._chairOverlap, overlapTarget, 0.04);
-          if (this._chairOverlap < 0.005) this._chairOverlap = 0;
-          this.postMaterial.uniforms.u_chairOverlap.value = this._chairOverlap;
-        }
-
+        this._chairOverlap = this._chairFade;
+        this.postMaterial.uniforms.u_chairOverlap.value = this._chairOverlap;
         // Pass mouse position to post shader (UV coords: 0-1, Y=0 at bottom for GL textures)
         const mx = (this.spinner.mouse.x + 1) * 0.5;
         const my = (this.spinner.mouse.y + 1) * 0.5;
@@ -2616,45 +2298,6 @@
     // Boot
     new App();
 
-    // Move the domain navigation block to the CTA slot.
-    (function relocateArchiveNav() {
-      var archive = document.getElementById('archive-behind');
-      var slot = document.getElementById('archive-front');
-      if (!archive || !slot) return;
-      var copy = {
-        1: '流程可复用的节点流程，让产品精修稳定复现。',
-        2: '整理高命中提示词模板，减少从零试错的时间。',
-        3: '梳理调研路径与判断依据，把趋势线索转成设计输入。',
-        4: '把产品卖点转成画面故事、脚本结构和投放素材。',
-        5: '汇总工具、案例和关键词库，作为竞组共享索引。'
-      };
-      Object.keys(copy).forEach(function (index) {
-        var text = copy[index];
-        var node = archive.querySelector('.archive-item[data-index="' + index + '"] .archive-item-meta p');
-        if (!node) return;
-        node.textContent = text;
-        node.dataset.blurText = text;
-      });
-      archive.classList.add('archive-at-cta');
-      archive.id = 'archive-front';
-      slot.replaceWith(archive);
-      function scrollToArchiveLinks() {
-        if (!window.__HOME_RETURN_ARCHIVE) return;
-        document.body.classList.remove('returning-home');
-        requestAnimationFrame(function () {
-          var rect = archive.getBoundingClientRect();
-          var target = window.scrollY + rect.top - Math.max(24, (window.innerHeight - rect.height) * 0.5);
-          var max = document.documentElement.scrollHeight - window.innerHeight;
-          window.scrollTo(0, Math.max(0, Math.min(target, max)));
-          history.replaceState(null, '', '/');
-        });
-      }
-      window.addEventListener('home:return-archive', scrollToArchiveLinks);
-      window.addEventListener('load', function () {
-        setTimeout(scrollToArchiveLinks, 120);
-      });
-    })();
-
     // ShapeBlur removed.
 
     // ============================================================
@@ -2960,5 +2603,7 @@
   </script>
   <script src="/assets/js/utils.js" defer></script>
   <script src="/assets/js/cmdk.js" defer></script>
+  <script defer src="/assets/js/vendor/gsap.min.js"></script>
+  <script defer src="/assets/js/site-nav.js?v=20260622-staggeredmenu-fix"></script>
 </body>
 </html>
